@@ -1,0 +1,32 @@
+{
+  "_comment": "The weapon-free reference, PASS 1 of 2: the blade only. The user's rule is that concept art carries no weapons - weapons are generated separately as their own assets - so the machine must be empty-handed, ending in blunt armoured fists. Hand-held weapons only; the row of barrels along the spine is chassis hardware and stays.",
+
+  "_whyTwoPasses": "The first attempt at this asked for BOTH weapons in one instruction and the model replaced the wrong hand, kept the claw and redrew the machine. One change per edit is the rule that holds the design. Pass 1 takes the blade; pass 2 takes the claw, chained from pass 1's output.",
+
+  "_artifactNote": "The reference is CLEAN - the vent unit, the trident emblem, the grid panel and the recessed square were all flattened with tools/clean-reference-artifacts.py - so there is nothing to remove and nothing to name. Naming an artifact in an instruction ADDS that artifact. Artifact words live in the negative prompt only.",
+
+  "_identifyByShape": "The hand-held weapon is identified by WHAT IT IS ('the long sword-like blade'), never by which side of the picture it is on. An earlier revision said 'the machine's right hand' and the model took the other one.",
+
+  "reference": "moss_mech_r04_02_reference_clean.png [output]",
+
+  "width": 960,
+  "height": 1280,
+  "steps": 30,
+  "cfg": 4.0,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "edit_format": "Moss-Image-Edit",
+  "image_strength": 1.0,
+
+  "negative": "nsfw, worst quality, bad anatomy, watermark, jpeg artifact, emblem, insignia, decal, symbol, lettering, numbers, screen, readout",
+
+  "prefix": "moss_mech_r04_02_ref_weaponfree",
+
+  "concepts": [
+    {
+      "name": "01_no_blade",
+      "seed": 234450447434422,
+      "instruction": "Change only the long sword-like blade into a blunt armoured fist: a heavy armoured knuckle and a closed grip, in the same rust orange and charcoal armour as the rest of the machine. Keep its chunky brutalist rust orange and charcoal armour slabs, its rivets and weld seams, its heavy battle damage and soot streaks, its pose, and the plain silver-grey studio backdrop and lighting unchanged."
+    }
+  ]
+}

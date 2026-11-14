@@ -1,0 +1,140 @@
+{
+  "_status": "FAILED - do not reuse. The machines came out as vehicles (forklift, excavator, tunnel cutter, flatbed) instead of mechs, and the hangar backdrop was wrong for character concept art. See moss-mech-r03-failed.md. Round 04 is the corrected version.",
+
+  "_comment": "Round 03 - a deliberately DIFFERENT set from rounds 01 and 02. The machine family changes (industrial / utility chassis: hexapods, tracks, quadrupeds, wheels, masts - no heroic humanoid battle mechs), the setting changes (a dim industrial hangar bay instead of a seamless studio void), the finish changes (weathered working machinery instead of a clean satin hero surface), and the camera language varies per concept. Seeds are RANDOM 48-bit values, drawn once and baked in here so the set stays reproducible.",
+
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r03",
+
+  "promptPrefix": "A concept-art study of ",
+
+  "styleSuffix": ". Standing on a scuffed polished concrete floor inside a dim industrial hangar bay, dark steel wall panels and structural columns receding far into the background, a hard pool of overhead light around the machine falling off into deep shadow at the edges of the frame, cool blue-grey haze hanging in the air and a faint wet reflection of the machine in the floor beneath it. Hard-surface industrial design, weathered working machinery rather than a heroic war machine: chipped enamel paint over a bare steel frame, rust streaks and grime settled in the recesses, exposed hydraulic cylinders and cable runs, scuffed edges and paint chips, painted chevron hazard stripes and abstract stencil shapes - nothing readable on any surface, no letters, no numbers, no words, no signage, no logos, no labels. Functional hard-surface concept art, crisp readable silhouette, matte and semi-gloss surface separation, cool overhead key light with a warm bounce from the floor, subtle volumetric haze, fine mechanical detail, heavy contact shadow, no text, no lettering, no watermark, no scenery beyond the hangar, no extra limbs, no duplicated parts.",
+
+  "backdropDesc": "a dim industrial hangar bay: dark steel wall panels and structural columns receding far into the background, a scuffed polished concrete floor with a faint wet reflection, a hard pool of overhead light, cool blue-grey haze in the air, deep shadow toward the edges of the frame, no signage, no lettering, no logos",
+
+  "concepts": [
+    {
+      "name": "01_hexapod_survey",
+      "seed": 546553125343622,
+      "prompt": "a six-legged survey walker, a low and wide insect-like machine built to cross broken ground and map it. Three-quarter front view from a low camera angle. A flat armoured carapace body with a cluster of sensor pods and a folding mast on top, six long jointed legs splayed out around it, each ending in a broad splayed foot. Faded olive drab and pale industrial yellow enamel over a bare steel frame, chipped along the leg edges, dust caked into the joints, a single amber warning lamp on the mast",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.10, "y": 0.28, "w": 0.80, "h": 0.60, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "02_tracked_breacher",
+      "seed": 307248303195833,
+      "prompt": "a heavy tracked breaching platform, a wide low machine built to smash through barriers. Straight-on front three-quarter view from a low camera angle. Two long tracked bogies under a slab-sided hull, an angled dozer blade across the front, a low armoured cab offset to one side with a single stubby gun mount, exhaust stacks and a radiator grille at the rear. Rust orange and gunmetal enamel, heavy paint chipping across the blade and track guards, road grime caked along the lower hull, bare steel showing through on every edge",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.08, "y": 0.30, "w": 0.84, "h": 0.58, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "03_quadruped_lancer",
+      "seed": 147571537891765,
+      "prompt": "a four-legged combat walker carrying a long lance, a tall narrow machine built to strike from range. Pure side profile view. A narrow vertical body carried high on four long digitigrade legs, a long spear-like lance arm projecting forward at chest height, a small sensor pod instead of a head, hydraulic lines running down the rear of each leg. Desaturated steel blue and faded cream enamel, rust bleeding from every joint, chipped and scratched along the lance shaft, grime packed into the leg actuators",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.24, "y": 0.05, "w": 0.52, "h": 0.86, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "04_pallet_lifter",
+      "seed": 442477195547832,
+      "prompt": "an industrial pallet lifter, a tall upright machine built to shove and hoist cargo pallets around a warehouse. Three-quarter front view. A tall vertical mast frame at the front carrying a broad fork carriage, a compact counterweighted body at the back, a short protective cage around a single seat, chunky rubber-tyred wheels, hydraulic rams running up the mast. Safety yellow and worn black enamel, chipped to bare steel on the fork tips, deep scuffs around the wheel arches, a dirty grease smear along the mast rails",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.26, "y": 0.04, "w": 0.48, "h": 0.88, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "05_salvage_claw_rig",
+      "seed": 211881263277161,
+      "prompt": "a wheeled salvage rig with an articulated claw, a machine built to tear apart wreckage. Three-quarter rear view. A squat four-wheeled chassis with a counterweight at the back, a heavy knuckle-boom arm rising over the roof and folding forward into a three-fingered claw, hydraulic hoses looping along the boom, a rotating warning beacon on the cab. Muted teal and worn white enamel with orange stripe panels, salt-stained and rust-bloomed across the boom, chipped paint on the claw jaws, mud and oil caked into the wheel arches",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.16, "y": 0.16, "w": 0.68, "h": 0.74, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "06_tunnel_cutter",
+      "seed": 165624915461431,
+      "prompt": "a tunnel cutter, a tracked machine with a rotating cutting drum. Pure side profile view. Two low crawler tracks carrying a boxy body, a large horizontal cylindrical drum mounted across the front on a swing arm, rows of cutting teeth around the drum, a spoil chute feeding back into the body, exhaust pipe and cable run along the top. Faded grey-blue enamel over a heavy steel frame, orange stripe panels faded almost to nothing, rust crusting over the drum teeth and the track frames, wet concrete dust ground into the lower panels",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.10, "y": 0.28, "w": 0.80, "h": 0.60, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "07_pressor_rig",
+      "seed": 536605687734961,
+      "prompt": "a hydraulic pressor rig, a squat heavy machine built to crush and flatten scrap. Straight-on front view from a low camera angle. A wide low body on two thick skid feet, a massive vertical pressing ram in the centre of the frame between two guide columns, a broad wedge anvil at the base, hydraulic accumulators bulging at the sides, a small control pod on an arm. Dark gunmetal and worn safety orange enamel, rust bleeding from the ram, paint burned and blistering around the anvil, oil staining down the columns",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.16, "y": 0.36, "w": 0.68, "h": 0.54, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "08_mast_watcher",
+      "seed": 383941366440571,
+      "prompt": "a sensor mast watcher, a very tall narrow machine built to watch and listen rather than fight. Three-quarter rear view. A narrow tripod of three thin braced legs supporting a slim tower, a tall folded sensor array at the top with dish and antenna elements, a small equipment box at the base, ladder rungs up one leg, cables clipped down the frame. Bone white and pale grey enamel, faded and chalky with age, rust at every bracket and bolt, salt haze dulling the upper array, heavy dust on the lower legs",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.30, "y": 0.03, "w": 0.40, "h": 0.90, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "09_sentry_pylon",
+      "seed": 359583990459965,
+      "prompt": "a stationary sentry pylon, a tall armoured post built to hold a firing line. Three-quarter front view. A single thick column anchored into a bolted base plate with four splayed stabiliser struts, a boxy armoured head at the top carrying a twin-barrel gun and a sensor block, hinged access panels halfway up the column, sandbag-like ballast blocks stacked around the base. Olive green and dark grey enamel, sun-bleached on the upper panels and grimy green at the bottom, rust running from every bolt head, chipped bare steel along the firing ports",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.28, "y": 0.10, "w": 0.44, "h": 0.80, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    },
+    {
+      "name": "10_cargo_sled",
+      "seed": 149272245100242,
+      "prompt": "a low cargo sled, a flat machine built to haul stacked supply pods across rough ground. Three-quarter front view from a low camera angle. A very low wide chassis on four fat low-pressure wheels, an open flatbed deck carrying four stacked rectangular cargo pods in a steel rack frame, a small tug arm at the front, a low control blister offset to one side. Worn white and grey enamel with faded orange corner panels, scuffed and dented deck rails, road grime along the lower chassis, dust film over the pod tops",
+      "layout": {
+        "boxes": [
+          { "x": 0.0, "y": 0.0, "w": 1.0, "h": 1.0, "type": "obj", "desc": "BACKDROP" },
+          { "x": 0.08, "y": 0.40, "w": 0.84, "h": 0.50, "type": "obj", "desc": "SUBJECT" }
+        ],
+        "characterBoxes": [2]
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "_comment": "Layout for MOSS-Image. x/y/w/h are FRACTIONS 0..1 of the canvas. Order matters: background first, foreground last. characterBoxes are 1-based indices of the boxes to label as 'character'.",
+  "boxes": [
+    {
+      "x": 0.0,
+      "y": 0.0,
+      "w": 1.0,
+      "h": 1.0,
+      "type": "obj",
+      "desc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient, soft contact shadow pooled on the floor at the bottom, evenly lit with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings"
+    },
+    {
+      "x": 0.0,
+      "y": 0.87,
+      "w": 1.0,
+      "h": 0.13,
+      "type": "obj",
+      "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+    },
+    {
+      "x": 0.22,
+      "y": 0.06,
+      "w": 0.56,
+      "h": 0.86,
+      "type": "obj",
+      "desc": "a single humanoid battle mech, fast and agile, three-quarter front view, whole machine visible from crest to feet, lean forward-leaning silhouette, narrow shoulders, small head with a single visor slit, one long blade arm and one short claw arm, torso tapering to a point at the front, long thin legs, warm cream-white armour with a faint satin sheen and thin dark seam lines, a few large saturated crimson red and gold accent panels, near-black joints and inner frame, broad armour plates flaring outward like petals at the shoulders and hips, a crest fin rising from the head, curved blade-like shin armour, one small abstract emblem on the chest with no lettering"
+    }
+  ],
+  "characterBoxes": [
+    "3"
+  ]
+}

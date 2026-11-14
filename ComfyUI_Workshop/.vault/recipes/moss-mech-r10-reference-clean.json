@@ -1,0 +1,29 @@
+{
+  "_comment": "The reference-cleaning spec for r04_02. Run with: D:\\ComfyUI\\python_embeded\\python.exe tools\\clean-reference-artifacts.py --spec .vault\\recipes\\moss-mech-r10-reference-clean.json",
+
+  "_why": "The MOSS edit LoRA copies the reference's surface faithfully, including the parts you do not want. r04_02 carries four greebles - a raised vent unit on the upper back, a painted orange trident emblem on the chest, a raised grid block on the flank and a small recessed square on the hip plate. Naming them in an edit instruction ADDS them (see the lesson 'never name an artifact'), so they are removed from the reference itself and the clean copy becomes the reference.",
+
+  "_rules": "fill_box must cover the greeble WHOLE plus a margin - a flat face inside a raised rim is a monitor bezel and the model draws a screen. ring_box must NOT overlap fill_box: the ring is where the material is measured from, and the greeble's own bright edge pollutes the measurement. exclude picks the pixels that are NOT the surrounding material: 'dark' drops shadowed pixels, 'saturated' drops painted colour.",
+
+  "image": "V:\\04_Projects\\EpicJam2026\\MechConcept Art\\moss_mech_r04_02_hound_tracker_00001_.png",
+  "out": "V:\\04_Projects\\EpicJam2026\\MechConcept Art\\moss_mech_r04_02_reference_clean.png",
+  "exclude_pad": 2,
+
+  "regions": [
+    { "fill_box": [503, 385, 547, 429], "ring_box": [496, 378, 554, 436], "mode": "flat_grain",
+      "exclude": "dark", "thr": 95, "feather": 5, "max_noise": 3.0,
+      "_what": "the WHOLE vent unit - raised rim and slats - so no bezel rectangle is left" },
+
+    { "fill_box": [518, 462, 554, 505], "ring_box": [513, 457, 559, 510], "mode": "flat_grain",
+      "exclude": "saturated", "thr": 90, "feather": 3, "max_noise": 1.2,
+      "_what": "orange trident emblem -> the bare grey chest plate" },
+
+    { "fill_box": [603, 438, 634, 474], "ring_box": [597, 432, 640, 480], "mode": "flat_grain",
+      "exclude": "dark", "thr": 78, "feather": 5, "max_noise": 3.0,
+      "_what": "the WHOLE raised grid block on the flank - a flat face with a bright rim is a bezel" },
+
+    { "fill_box": [456, 508, 478, 535], "ring_box": [449, 501, 485, 542], "mode": "flat_grain",
+      "exclude": "dark", "thr": 78, "feather": 3, "max_noise": 3.0,
+      "_what": "small recessed square -> the rust plate around it" }
+  ]
+}

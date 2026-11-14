@@ -1,0 +1,130 @@
+{
+  "_comment": "Round 11 - HOUSE-STYLE VERIFICATION, not a new design round. These three renders are the same concept (r08's 04_juggernaut) rendered through the CORRECTED house style - the rim light described as a property of the machine instead of a light source, a layout box for the floor strip, and the stronger negative prompt. They exist to prove and to show that the studio floor is evenly lit. Floor measurement (tools/check-studio-backdrop.py), bottom-left brightness excess against the floor: +1.6, +2.1, +2.1 - the original r04_02 artifact measured +38 bright and +33 warm.",
+  "_notARoundOfNewMachines": "One concept, three seeds. Round 11 did happen as a verification set; r12 was the abandoned r10-correction round (its probes are disposed) and r13 is the S01 class-variation round. So this set keeps its r11 number and the r12 slot is retired.",
+  "_knownLimitation": "These are TEXT-TO-IMAGE renders. The text path cannot hold the r04_02 reference's proportions - it drifts toward generic grimdark power armour (the 'Warhammer' read). The reference-EDIT path (round 10) is the one that holds the reference design.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r11",
+  "promptPrefix": "A full-body concept-art portrait of a heavy armoured battle mech, a bipedal war machine with a low wide armoured head, a single wide visor band across the face, articulated arms and legs and heavy mounted weapon systems, ",
+  "styleSuffix": ". Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its feet. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground, no rubble. Nothing else in the frame except the machine and its shadow. Brutalist heavy war machine design: massive armoured slabs and thick structural ribs, visible rivets and weld seams, exposed hydraulic actuators and cable looms, armour scorched and battle-damaged with soot streaks, chipped paint showing bare steel, scorch marks and paint burns, dust and grit caked into the lower legs, painted chevron hazard stripes on the outer legs that read as plain geometric shapes and never as characters, and nothing readable on any surface - no letters, no numbers, no words, no signage, no logos. Every machine in this set is built to one identical design standard, so the set reads as one production line: the same square bevelled shoulder pauldrons on every unit, each built from two stacked plates with a recessed circular housing on the outer face and a raised ridge running along the top edge, and a hard shoulder cap over the joint; the same low wide head module with a single wide visor band and a pair of short tusk-like armour spurs at the cheeks; the same heavy digitigrade legs ending in broad clawed feet; the same exposed cable looms running down the flanks; and a livery built on the same structure on every unit, one dominant rust and scorched-iron armour colour over a dark charcoal structural colour with a single worn accent colour. Shot identically on every machine: a relaxed upright standing pose with the weight even on both legs and the feet planted slightly apart, the body square and tall, a low three-quarter front view from the left, camera at chest height, a 50mm lens, the whole machine in frame with clear air around it. Heavy military concept art in the same painterly semi-realistic real-robot mecha illustration style as the earlier rounds, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Huge readable silhouette, crisp negative space between the limbs, fine mechanical detail, deep contact shadows. No text, no lettering, no watermark, no scenery, no extra limbs, no duplicated parts.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_juggernaut",
+      "seed": 36732279325405,
+      "prompt": "a squat and blocky bipedal siege juggernaut in a livery of dominant dark ember brown over a matte black structural frame with rust-orange accent trim, its right arm ending in a heavy rotary cannon, a cluster of six short barrels arranged around a central spindle with a boxy breech block and a slotted muzzle shroud, its left arm a heavy gripping claw with three blunt talons, a very deep wide torso carried low between enormous squared pauldrons, short thick legs planted wide and splayed, short tusk spurs at the cheeks of the low head",
+      "subject": "a squat blocky humanoid siege mech with a rotary cannon on its right arm and enormous shoulders",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.08,
+            "w": 0.68,
+            "h": 0.8,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      },
+      "_note": "the final house wording on the seed that originally failed the floor check"
+    },
+    {
+      "name": "02_juggernaut",
+      "seed": 178848738249652,
+      "prompt": "a squat and blocky bipedal siege juggernaut in a livery of dominant dark ember brown over a matte black structural frame with rust-orange accent trim, its right arm ending in a heavy rotary cannon, a cluster of six short barrels arranged around a central spindle with a boxy breech block and a slotted muzzle shroud, its left arm a heavy gripping claw with three blunt talons, a very deep wide torso carried low between enormous squared pauldrons, short thick legs planted wide and splayed, short tusk spurs at the cheeks of the low head",
+      "subject": "a squat blocky humanoid siege mech with a rotary cannon on its right arm and enormous shoulders",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.08,
+            "w": 0.68,
+            "h": 0.8,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      },
+      "_note": "the final house wording on the second probe seed"
+    },
+    {
+      "name": "03_juggernaut",
+      "seed": 148191086857483,
+      "prompt": "a squat and blocky bipedal siege juggernaut in a livery of dominant dark ember brown over a matte black structural frame with rust-orange accent trim, its right arm ending in a heavy rotary cannon, a cluster of six short barrels arranged around a central spindle with a boxy breech block and a slotted muzzle shroud, its left arm a heavy gripping claw with three blunt talons, a very deep wide torso carried low between enormous squared pauldrons, short thick legs planted wide and splayed, short tusk spurs at the cheeks of the low head",
+      "subject": "a squat blocky humanoid siege mech with a rotary cannon on its right arm and enormous shoulders",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.08,
+            "w": 0.68,
+            "h": 0.8,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      },
+      "_note": "the juggernaut's own recipe seed, rendered end to end from the patched recipe"
+    }
+  ]
+}

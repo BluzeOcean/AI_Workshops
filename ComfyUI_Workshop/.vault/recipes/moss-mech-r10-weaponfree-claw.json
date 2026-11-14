@@ -1,0 +1,28 @@
+{
+  "_comment": "The weapon-free reference, PASS 2 of 2: the claw only, chained from pass 1's output. Pass 1 removed the blade from the near hand; this removes the three-talon claw from the far hand and replaces it with the same blunt armoured fist. One change per edit - asking for both weapons at once made the model replace the wrong hand, keep the claw and redraw the machine.",
+
+  "_chained": "The reference is pass 1's output, so the two removals accumulate. LoadImage resolves '<name>.png [output]' against the server's output directory, so no copying is needed.",
+
+  "reference": "moss_mech_r04_02_ref_weaponfree_01_no_blade_00001_.png [output]",
+
+  "width": 960,
+  "height": 1280,
+  "steps": 30,
+  "cfg": 4.0,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "edit_format": "Moss-Image-Edit",
+  "image_strength": 1.0,
+
+  "negative": "nsfw, worst quality, bad anatomy, watermark, jpeg artifact, emblem, insignia, decal, symbol, lettering, numbers, screen, readout",
+
+  "prefix": "moss_mech_r04_02_reference_weaponfree",
+
+  "concepts": [
+    {
+      "name": "01_empty_handed",
+      "seed": 230846890498152,
+      "instruction": "Change only the three-talon claw into a blunt armoured fist: a heavy armoured knuckle and a closed grip, in the same rust orange and charcoal armour as the rest of the machine. Keep its chunky brutalist rust orange and charcoal armour slabs, its rivets and weld seams, its heavy battle damage and soot streaks, its pose, and the plain silver-grey studio backdrop and lighting unchanged."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "_comment": "Round 10, FINAL. Variations of the r04_02 design, made from the WEAPON-FREE reference. The reference itself went through three steps: (1) the four surface greebles were flattened with tools/clean-reference-artifacts.py, (2) the long blade was replaced by a blunt armoured fist, (3) the three-talon claw was replaced by a blunt armoured fist. Every unit below is therefore a design with no weapons, as the user asked - weapons are generated separately when wanted.",
+
+  "_artifactNote": "The reference is CLEAN, so there is nothing to remove and nothing to name. Naming an artifact in an instruction ADDS that artifact - an earlier revision asked every unit to 'remove the emblem, the screen and the grid panel' and the outputs grew screens and emblems in places the instruction never mentioned. Artifact words live in the NEGATIVE prompt only.",
+
+  "_axes": "One change per unit, on three different axes, so the sheet shows what the mechanism can hold: 01 PAINT (rust orange -> bone white and crimson), 02 SILHOUETTE HARDWARE (the two dorsal fins swept back), 03 SHOULDER ARMOUR (flat angular pauldron -> three overlapping curved plates). Unit 03 is the proof that a chassis change can be made WITHOUT redrawing the machine.",
+
+  "_rule0": "r04_02 is ALREADY a bipedal humanoid mech - two digitigrade legs, a blade arm, a claw arm, a forward-thrusting wedge head. An earlier revision asked the model to 'change only the legs so that it stands upright on two legs instead of four', which asked for a change that was not a change, and the model redrew the machine from scratch. Never ask for what the reference already is.",
+
+  "reference": "moss_mech_r04_02_reference_weaponfree_01_empty_handed_00001_.png [output]",
+
+  "width": 960,
+  "height": 1280,
+  "steps": 30,
+  "cfg": 4.0,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "edit_format": "Moss-Image-Edit",
+  "image_strength": 1.0,
+
+  "negative": "nsfw, worst quality, bad anatomy, watermark, jpeg artifact, emblem, insignia, decal, symbol, lettering, numbers, screen, readout",
+
+  "prefix": "moss_mech_r10",
+
+  "concepts": [
+    {
+      "name": "01_bone_crimson",
+      "seed": 29552778028108,
+      "instruction": "Change only the machine's paint scheme from rust orange and charcoal to bone white over charcoal, with deep crimson chevron stripes on the shin plates and a crimson band across the forward chest plate. Keep its chunky brutalist armour slabs, its rivets and weld seams, its heavy battle damage and soot streaks, its pose, and the plain silver-grey studio backdrop and lighting unchanged."
+    },
+    {
+      "name": "02_swept_fins",
+      "seed": 113147870550493,
+      "instruction": "Change only the two large flat fins on the machine's back so that they lie swept backward along the spine and close against the body, instead of standing up and out from the shoulders. Keep its chunky brutalist rust orange and charcoal armour slabs, its rivets and weld seams, its heavy battle damage and soot streaks, its pose, and the plain silver-grey studio backdrop and lighting unchanged."
+    },
+    {
+      "name": "03_layered_pauldrons",
+      "seed": 40411852960137,
+      "instruction": "Change only the shoulder armour so that each shoulder carries three overlapping curved armour plates stepping down over the upper arm, instead of one flat angular pauldron. Keep its chunky brutalist rust orange and charcoal armour slabs, its rivets and weld seams, its heavy battle damage and soot streaks, its pose, and the plain silver-grey studio backdrop and lighting unchanged."
+    }
+  ]
+}

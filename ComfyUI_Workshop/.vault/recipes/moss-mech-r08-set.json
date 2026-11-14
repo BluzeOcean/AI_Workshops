@@ -1,0 +1,200 @@
+{
+  "_comment": "Round 08 - FIVE humanoid war mechs, the HUMANOID form of r04_02. Round 07 failed on one thing: it used round 06's style suffix instead of round 04's, so the set inherited the bone-white/olive hardsuit language and the rounded pauldrons instead of r04_02's brutalist rust-orange slabs. The user said 'they do not look like the sample that I asked for'. So round 08 uses ROUND 04's styleSuffix essentially VERBATIM - massive armoured slabs, thick structural ribs, visible rivets and weld seams, exposed hydraulic actuators and cable looms, scorched and battle-damaged with soot streaks, chipped paint showing bare steel, scorch marks and paint burns, grit caked into the lower legs, chevron hazard stripes. Added on top: r04_02's low wide head module with a single wide visor band and cheek tusk spurs; the FIXED defined pauldron assembly from round 07 (no random spikes); the NAMED weapons described by their parts from round 07; and the relaxed standing pose rule from round 06. Subject form is HUMANOID - two legs, two arms - which is what round 07 was not.",
+  "_variationAxis": "Five distinct BUILDS of one design house, not five colourways. Round 07 varied the hue and kept the body identical, which read as a colour sheet; round 08 varies the build (height, proportion, torso, legs, weapon, back rack) while the art style and the palette family stay locked to r04_02. The palette shifts only within r04_02's own rust-and-charcoal family, never out of it.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r08",
+  "promptPrefix": "A full-body concept-art portrait of a heavy armoured battle mech, a bipedal war machine with a low wide armoured head, a single wide visor band across the face, articulated arms and legs and heavy mounted weapon systems, ",
+  "styleSuffix": ". Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its feet. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground, no rubble. Nothing else in the frame except the machine and its shadow. Brutalist heavy war machine design: massive armoured slabs and thick structural ribs, visible rivets and weld seams, exposed hydraulic actuators and cable looms, armour scorched and battle-damaged with soot streaks, chipped paint showing bare steel, scorch marks and paint burns, dust and grit caked into the lower legs, painted chevron hazard stripes on the outer legs that read as plain geometric shapes and never as characters, and nothing readable on any surface - no letters, no numbers, no words, no signage, no logos. Every machine in this set is built to one identical design standard, so the set reads as one production line: the same square bevelled shoulder pauldrons on every unit, each built from two stacked plates with a recessed circular housing on the outer face and a raised ridge running along the top edge, and a hard shoulder cap over the joint; the same low wide head module with a single wide visor band and a pair of short tusk-like armour spurs at the cheeks; the same heavy digitigrade legs ending in broad clawed feet; the same exposed cable looms running down the flanks; and a livery built on the same structure on every unit, one dominant rust and scorched-iron armour colour over a dark charcoal structural colour with a single worn accent colour. Shot identically on every machine: a relaxed upright standing pose with the weight even on both legs and the feet planted slightly apart, the body square and tall, a low three-quarter front view from the left, camera at chest height, a 50mm lens, the whole machine in frame with clear air around it. Heavy military concept art in the same painterly semi-realistic real-robot mecha illustration style as the earlier rounds, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Huge readable silhouette, crisp negative space between the limbs, fine mechanical detail, deep contact shadows. No text, no lettering, no watermark, no scenery, no extra limbs, no duplicated parts.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_bulwark",
+      "seed": 87805808400093,
+      "prompt": "a heavy bipedal siege walker in a livery of dominant rust orange over a near-black structural frame with worn brass accent trim, its left arm carrying a towering slab shield that reaches above the head, its right hand holding a heavy short rifle at the low ready, a broad heavy torso with a deep armoured chest and a barrel-shaped upper body, wide-set thick legs planted wide and low, massive squared pauldrons over each shoulder, short tusk spurs at the cheeks of the low head",
+      "subject": "a heavy humanoid bipedal siege mech with a towering shield on its left arm and a rifle in its right hand",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.18,
+            "y": 0.05,
+            "w": 0.64,
+            "h": 0.84,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "02_stalker",
+      "seed": 131728732499524,
+      "prompt": "a lean bipedal stalker war machine in a livery of dominant burnt sienna over a charcoal structural frame with weathered amber accent trim, its right arm ending in a heavy machine gun with a thick barrel, a round drum magazine, a boxy receiver and a squared shoulder mount, its left arm a heavy gripping claw with three blunt talons, a narrow forward-leaning torso carried on long digitigrade legs, a ridge of armour plates stepping down the spine, short tusk spurs at the cheeks of the low head",
+      "subject": "a lean humanoid stalker mech with long digitigrade legs and a heavy machine gun on its right arm",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.23,
+            "y": 0.04,
+            "w": 0.54,
+            "h": 0.87,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "03_marksman",
+      "seed": 69998610228624,
+      "prompt": "a very tall and lean bipedal marksman war machine in a livery of dominant scorched iron grey over a matte black structural frame with ochre accent trim, its right arm holding a long recoilless gun gripped in the claw and held pointing down and forward away from the body, with a boxy breech, a ribbed heat jacket along the barrel and a slotted muzzle brake at the tip, a narrow flat chest on very long thin digitigrade legs, a slim chest plate and narrow pauldrons, short tusk spurs at the cheeks of the low head",
+      "subject": "a very tall lean humanoid marksman mech on long thin legs holding a long recoilless gun down at its side",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.25,
+            "y": 0.03,
+            "w": 0.5,
+            "h": 0.88,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "04_juggernaut",
+      "seed": 148191086857483,
+      "prompt": "a squat and blocky bipedal siege juggernaut in a livery of dominant dark ember brown over a matte black structural frame with rust-orange accent trim, its right arm ending in a heavy rotary cannon, a cluster of six short barrels arranged around a central spindle with a boxy breech block and a slotted muzzle shroud, its left arm a heavy gripping claw with three blunt talons, a very deep wide torso carried low between enormous squared pauldrons, short thick legs planted wide and splayed, short tusk spurs at the cheeks of the low head",
+      "subject": "a squat blocky humanoid siege mech with a rotary cannon on its right arm and enormous shoulders",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.08,
+            "w": 0.68,
+            "h": 0.8,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "05_carrier",
+      "seed": 70997266477268,
+      "prompt": "a broad-shouldered bipedal missile carrier war machine in a livery of dominant gunmetal over a near-black structural frame with rust-orange accent trim, its right arm ending in a twin-barrel heavy gun, two thick parallel barrels side by side with a visible blocky breech behind them and a squared muzzle plate, its left arm a heavy gripping claw with three blunt talons, a row of weapon pods and missile racks mounted across the upper back behind the shoulders, wide heavy legs planted apart, short tusk spurs at the cheeks of the low head",
+      "subject": "a broad-shouldered humanoid carrier mech with a row of missile racks on its back and a twin-barrel gun",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.17,
+            "y": 0.05,
+            "w": 0.66,
+            "h": 0.84,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    }
+  ]
+}

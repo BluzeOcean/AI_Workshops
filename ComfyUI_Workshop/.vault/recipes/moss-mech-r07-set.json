@@ -1,0 +1,200 @@
+{
+  "_comment": "Round 07 - FIVE quadrupedal war hounds, one design line, five colourways. Built on r04_02 (the only keeper of round 04): the user called its silhouette good and wants it as the basis of a new round. Three fixes requested: (1) the right-arm weapon was ambiguous - now every unit carries a NAMED weapon whose parts are spelled out, so it reads as a weapon and not a slab; (2) the shoulders were random spikes - now a defined pauldron assembly with two stacked plates, a recessed circular housing, a top ridge and a hard shoulder cap; (3) the set had no colour variety - the LIVERY STRUCTURE is shared in styleSuffix (one dominant colour over a dark structural colour with one worn accent) and only the HUES vary per unit. The art style itself stays locked exactly as in round 06, because that is the part that was wrong before.",
+  "_styleNote": "Colourway varies per unit ON PURPOSE - the user asked for it. The lock is on the art style, the construction language, the camera and the lighting, not on the palette.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r07",
+  "promptPrefix": "A single full-body hero concept-art portrait of a quadrupedal armoured war hound, ",
+  "styleSuffix": ". A heavy four-legged war machine built to run down infantry: a long armoured spine carried low and held horizontal on four powerful digitigrade legs, a heavy sloped head with a single wide visor band and a pair of short tusk-like armour spurs at the cheeks, and a row of weapon pods and missile racks mounted along the spine. Every machine in this set is built to one identical design standard, so the set reads as one production line: the same square bevelled shoulder pauldrons on every unit, each built from two stacked plates with a recessed circular housing on the outer face and a raised ridge running along the top edge, and a hard shoulder cap over the joint; the same wide low head module with a single visor band; the same thick digitigrade legs ending in broad clawed feet; chunky exposed hydraulic actuators and cable looms along the flanks; matte ceramic composite plating over a dark structural frame; and a livery built on the same three-colour structure on every unit, one dominant armour colour over a dark structural colour with a single worn accent colour, plus a small set of painted chevron hazard stripes on the outer legs that read as plain geometric shapes and never as characters. Heavy visible panel seams, thick structural ribs and recessed bolt heads, chipped paint showing bare steel, scorch marks and paint burns, dust and grit caked into the lower legs. Every machine shows the same light even field wear: a uniform chalky grey dust film on the upward-facing surfaces, faint scuffs on the leading edges, dried mud caked into the leg joints. Shot identically on every machine: a low three-quarter front view from the left, camera at the height of the machine's hull, a 50mm lens, the whole machine in frame with clear air around it. Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its feet. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground, no rubble. Nothing else in the frame except the machine and its shadow. Military concept art in a painterly semi-realistic real-robot mecha illustration style, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Huge readable silhouette, crisp negative space between the limbs, fine mechanical detail, deep contact shadows. No text, no lettering, no watermark, no scenery, no extra limbs, no duplicated parts.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_ember_stalker",
+      "seed": 125580903071841,
+      "prompt": "a heavy four-legged war hound in a livery of dominant rust orange over a near-black structural frame with worn brass accent trim, its right arm ending in a heavy rotary cannon, a cluster of six short barrels arranged around a central spindle with a boxy breech block and a slotted muzzle shroud, its left arm a heavy gripping claw with three blunt talons, standing with the weight even on all four legs and the body held level, the head raised and facing forward",
+      "subject": "a quadrupedal armoured war hound with rust orange plating and a rotary cannon on its right arm",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.08,
+            "y": 0.26,
+            "w": 0.84,
+            "h": 0.6,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "02_dune_stalker",
+      "seed": 202968268179908,
+      "prompt": "a heavy four-legged war hound in a livery of dominant pale desert sand over a dark olive drab structural frame with weathered amber accent trim, its right arm ending in a long recoilless gun gripped in the claw and held pointing down and forward, with a boxy breech, a ribbed heat jacket along the barrel and a slotted muzzle brake at the tip, its left arm a heavy gripping claw with three blunt talons, standing with the weight even on all four legs and the body held level, the head raised and facing forward",
+      "subject": "a quadrupedal armoured war hound with pale sand plating and a long recoilless gun on its right arm",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.07,
+            "y": 0.26,
+            "w": 0.86,
+            "h": 0.6,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "03_slate_stalker",
+      "seed": 249696271772951,
+      "prompt": "a heavy four-legged war hound in a livery of dominant gunmetal blue-grey over a matte black structural frame with hazard orange accent trim, its right arm ending in a twin-barrel heavy gun, two thick parallel barrels side by side with a visible blocky breech behind them and a squared muzzle plate, its left arm a heavy gripping claw with three blunt talons, standing with the weight even on all four legs and the body held level, the head raised and facing forward",
+      "subject": "a quadrupedal armoured war hound with gunmetal blue-grey plating and a twin-barrel gun on its right arm",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.08,
+            "y": 0.26,
+            "w": 0.84,
+            "h": 0.6,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "04_bone_stalker",
+      "seed": 120112622051732,
+      "prompt": "a heavy four-legged war hound in a livery of dominant bone white over a charcoal black structural frame with deep crimson accent trim, its right arm ending in a boxy shoulder-mounted missile pod, a rectangular launch face filled with a grid of square launch cells and a raised sight rail along the top, its left arm a heavy gripping claw with three blunt talons, standing with the weight even on all four legs and the body held level, the head raised and facing forward",
+      "subject": "a quadrupedal armoured war hound with bone white plating and a boxy missile pod on its right arm",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.08,
+            "y": 0.26,
+            "w": 0.84,
+            "h": 0.6,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "05_moss_stalker",
+      "seed": 226441422958938,
+      "prompt": "a heavy four-legged war hound in a livery of dominant moss green over a dark grey structural frame with pale sand accent trim, its right arm ending in a heavy machine gun with a thick barrel, a round drum magazine, a boxy receiver and a squared shoulder mount, its left arm a heavy gripping claw with three blunt talons, standing with the weight even on all four legs and the body held level, the head raised and facing forward",
+      "subject": "a quadrupedal armoured war hound with moss green plating and a heavy machine gun on its right arm",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.08,
+            "y": 0.26,
+            "w": 0.84,
+            "h": 0.6,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    }
+  ]
+}

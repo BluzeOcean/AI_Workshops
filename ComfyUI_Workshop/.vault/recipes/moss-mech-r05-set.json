@@ -1,0 +1,202 @@
+{
+  "_status": "FAILED",
+  "_failedBecause": "The user rejected the whole round: 'negative, i need humanoid mech, this current round is useless to me, dispose it.' The style lock WORKED - all five machines shared one palette, one camera and one light - but every subject was non-humanoid (quadruped, hexapod, tripod). The technique is worth keeping; the subject form was wrong. Recipe retained as a failure record.",
+  "_comment": "Round 05 - FIVE war mechs, five different archetypes, ONE locked art style. The lesson from round 04: the set was rejected for style drift ('one can look like a mech from a fiction movie and the other is mech from another movie'). The cause was that each concept carried its OWN palette and wear sentence, so the model faithfully drew five machines from five different films. The fix here: the livery, materials, construction vocabulary, camera and lighting live ONLY in the shared styleSuffix. Every concept describes ONLY archetype, pose and weapon - never colour, never material, never finish. Five classes (quadruped hunter, hexapod artillery, tripod sentinel, heavy ram, long crawler) from one production line. Studio backdrop unchanged. All SUBJECT boxes are wider than they are tall, because round 04's four tall boxes produced four upright humanoid rejects and its only wide box produced the only keeper.",
+  "_styleLock": "If a future round drifts back into five different films, check first: does any concept sentence mention a colour, a material or a finish? It must not. Colour and finish live in styleSuffix and nowhere else.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r05",
+  "promptPrefix": "A full-body concept-art portrait of an armoured war machine, a legged combat robot with a wide horizontal chassis, a low angular sensor head and heavy weapons integrated into the frame, ",
+  "styleSuffix": ". Every machine in this series is built to one identical design standard: matte gunmetal armour plates in stacked segments, a matte charcoal underframe with charcoal legs and weapon housings, one narrow signal-amber accent strip running along the upper flank, and pale bone-white ceramic panels on the sensor housing and the raised upper plates of the hull. The same family of low angular sensor heads, the same chunky hydraulic leg joints and the same broad clawed feet on every machine, so the set reads as one production line built by one manufacturer. Clean unmarked plate surfaces, hard-edged faceted forms, no rivets and no bare steel. Every machine shows the same light even field wear: a uniform chalky grey dust film on the upward-facing surfaces and faint scuffs on the leading edges. Shot identically on every machine: a three-quarter front view from the left, camera at the height of the machine's hull, a 50mm lens, the whole machine in frame with clear air around it. Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its body. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground, no rubble. Nothing else in the frame except the machine and its shadow. Military concept art in a painterly semi-realistic real-robot mecha illustration style, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Huge readable silhouette, crisp negative space between the limbs, fine mechanical detail, deep contact shadows. No text, no lettering, no watermark, no scenery, no extra limbs, no duplicated parts.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_ridge_hunter",
+      "seed": 116467011754715,
+      "prompt": "a four-legged hunter war machine built to chase down infantry across open ground. Mid-stride, the near foreleg lifted and the body driving forward. A long low chassis carried on four digitigrade legs, a narrow wedge head pushed forward between the shoulders, angular armour blades stepping back along the spine, a recessed rotary cannon pod set into each flank, a pair of short cutting claws at the front",
+      "subject": "a four-legged hunter war machine with a long low chassis, a forward wedge head and a rotary cannon pod on each flank",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.09,
+            "y": 0.3,
+            "w": 0.82,
+            "h": 0.54,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "02_mortar_frame",
+      "seed": 16298161626860,
+      "prompt": "a six-legged artillery war machine built to shell a position from a distance and hold it. Braced wide and stationary, a burst of smoke venting from the tubes. A broad flat hull carried on six braced legs, a wide flat dorsal plate over the hull, a cluster of seven short mortar tubes grouped in a row along the back, two forward-mounted grapple arms under the dorsal plate",
+      "subject": "a six-legged artillery war machine with a broad flat hull, a dorsal armour plate and a row of mortar tubes along its back",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.12,
+            "y": 0.26,
+            "w": 0.76,
+            "h": 0.58,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "03_sentinel_tripod",
+      "seed": 35535740640047,
+      "prompt": "a three-legged scout war machine built to stand on high ground and watch, never advancing. Stationary with its legs braced in a wide triangle and its sensor mast raised. A small narrow hull with a tall thin sensor mast rising from the centre, a single autocannon mounted on a short arm under the mast, and three long angular legs meeting the hull at evenly spaced points",
+      "subject": "a three-legged scout war machine with a small hull, a tall sensor mast and an autocannon",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.26,
+            "w": 0.68,
+            "h": 0.56,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "04_breach_ram",
+      "seed": 82893580031279,
+      "prompt": "a heavy ram war machine built to smash through barricades and walls, charging head-on. Driving forward with the forelegs planted wide and the body low. A short deep chassis on four thick splayed legs, a broad blunt charging prow of stacked plates at the front, one massive breaching cannon recessed into the chest beneath the prow, a heavy protective collar around the hull",
+      "subject": "a heavy ram war machine with a broad blunt charging prow and a breaching cannon recessed in its chest",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.1,
+            "y": 0.26,
+            "w": 0.8,
+            "h": 0.6,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "05_rail_crawler",
+      "seed": 231259710097532,
+      "prompt": "a long segmented crawler war machine built to strike along a fixed line from extreme range. Arched low over the ground with the front segments raised and the rear coiled down. A very long body made of stacked armour segments stepping down toward the tail, six short stubby legs set along both flanks, a narrow pointed head at the front, a long harpoon rail running the length of the spine",
+      "subject": "a very long low segmented war machine with short legs along both flanks and a harpoon rail along its spine",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.06,
+            "y": 0.36,
+            "w": 0.88,
+            "h": 0.46,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    }
+  ]
+}

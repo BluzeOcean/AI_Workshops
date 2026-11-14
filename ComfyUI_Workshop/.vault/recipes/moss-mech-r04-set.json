@@ -1,0 +1,194 @@
+{
+  "_comment": "Round 04 - FIVE war mechs. Round 03 failed twice over: it changed the CATEGORY (industrial vehicles instead of mechs) AND it changed the BACKDROP (a hangar/ruined city instead of the clean studio). The user's rule: character concept art wants NO background - the round 01/02 seamless silver-grey studio backdrop is the house style. So round 04 keeps the category AND the backdrop, and changes only the LOOK: brutalist siege walkers, riveted slab armour, visible hydraulics, battle-damaged and scorched, with varied low camera angles.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r04",
+  "promptPrefix": "A full-body concept-art portrait of a towering armoured battle mech, a bipedal war machine with a recessed cockpit, articulated arms and legs and heavy mounted weapon systems, ",
+  "styleSuffix": ". Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its feet. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground, no rubble. Nothing else in the frame except the machine and its shadow. Brutalist heavy war machine design: massive armoured slabs and thick structural ribs, visible rivets and weld seams, exposed hydraulic actuators and cable looms, armour scorched and battle-damaged with soot streaks, chipped paint showing bare steel, scorch marks and paint burns, dust and grit caked into the lower legs, painted chevron hazard stripes and abstract stencil shapes with nothing readable on any surface - no letters, no numbers, no words, no signage, no logos. Heavy military concept art in the same painterly semi-realistic real-robot mecha illustration style as the earlier rounds, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Huge readable silhouette, crisp negative space between the limbs, fine mechanical detail, deep contact shadows. No text, no lettering, no watermark, no scenery, no extra limbs, no duplicated parts.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_bastion_titan",
+      "seed": 168361823897167,
+      "prompt": "a colossal siege walker, the heaviest war machine in the set, built to walk into a city and knock down what is left of it. Low three-quarter front view from below, looking up at it. An enormous rectangular slab-armoured torso with thick structural ribs down the chest, a tiny armoured cockpit head sunk deep between the shoulders behind a narrow visor slit, short massive legs with wide splayed feet, a huge cannon mounted across the top of one shoulder and a second launcher on the other, riveted plates and exposed actuators at the hips. Gunmetal and scorched bone-white armour with oxidised red-brown rust, orange hazard chevrons on the shin guards, heavy battle scarring and scorch marks across the chest, dust and rubble ground into every joint",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.14,
+            "y": 0.03,
+            "w": 0.72,
+            "h": 0.89,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "02_hound_tracker",
+      "seed": 417731753208543,
+      "prompt": "a quadrupedal war machine built to run down infantry, a heavy armoured war hound. Low three-quarter front view. A long armoured spine carried low on four powerful digitigrade legs, a heavy sloped head with a single wide visor band and a pair of short tusk-like armour spurs, angular armour blades sweeping back over the shoulders, a row of weapon pods and missile racks mounted along the spine, one long blade arm and one heavy claw. Charcoal and rust-brown armour with dull orange panels, scorched and pitted by battle, dried mud caked into the leg joints, exposed cabling running along the flanks",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.1,
+            "y": 0.24,
+            "w": 0.8,
+            "h": 0.64,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "03_shroud_reaver",
+      "seed": 10392791762705,
+      "prompt": "a cloaked raider war machine, a hunched killer built to strike from cover. Three-quarter front view from a low angle. A folded-forward hunched posture with long reversed-jointed legs, a narrow armoured torso wrapped in layered ragged shroud plates that hang like a torn cloak, a small featureless head with a single thin visor, asymmetric plating with a heavy shield on one arm and a long curved blade on the other, exposed hydraulic lines disappearing into the shroud. Soot-black and deep oxblood armour with dull bronze trim, scorch-mottled and pitted, soot streaks bleeding down the shroud, chipped bare metal at every edge",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.22,
+            "y": 0.06,
+            "w": 0.56,
+            "h": 0.86,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "04_vanguard_colossus",
+      "seed": 437066953913735,
+      "prompt": "a shielded assault war machine, a walking bunker built to advance under fire. Straight-on front view from a low camera angle. A broad heavy torso with a deep armoured chest and a small recessed cockpit band, wide-set thick legs planted in a braced stance, massive layered shoulder armour, one arm carrying a towering slab shield that reaches above the head, the other arm a heavy twin-barrel gun, a secondary launcher slung under the chest. Matte olive and gunmetal armour with faded red panels, heavy rivets and weld seams, a tower shield scorched and dented from repeated impacts, dust and chipped paint across the shield face",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.04,
+            "w": 0.68,
+            "h": 0.88,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "05_wraith_lancer",
+      "seed": 187313772924710,
+      "prompt": "a tall spindly war machine carrying a lance, a fast strike walker built to pierce armour. Pure side profile view. A narrow vertical torso mounted high on long thin digitigrade legs, a very long spear-like lance arm projecting forward at chest height with a counterweight at the rear, a small narrow sensor head with a single optic, asymmetric plating with heavy armour on the leading shoulder and almost none on the trailing side, exposed hydraulic pistons running the full length of each leg. Steel blue-grey and bone armour with dull gold trim, rust bleeding from every joint, chipped and scratched along the lance shaft, dust film over the upper surfaces",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.22,
+            "y": 0.04,
+            "w": 0.56,
+            "h": 0.88,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    }
+  ]
+}

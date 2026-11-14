@@ -1,0 +1,385 @@
+{
+  "_comment": "Round 02 concept set for EpicJam2026. The concept prompts are VERBATIM from moss-mech-r01-set.json so that the only difference between the rounds is the rune layer - a clean A/B on one design variable. What changed: each concept gains a `runes` clause saying where the runes go on THAT machine, and the recipe gains a shared `runeStyle` saying what the runes look like everywhere. Coordinates in layout boxes are FRACTIONS 0..1; background box first, subject box second; characterBoxes marks the subject as a character.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r02",
+  "promptPrefix": "A single full-body hero concept-art portrait of ",
+  "runeStyle": "Etched across its armour is a layer of runic decoration: angular geometric glyphs cut into the metal as narrow recessed channels with a faint luminous glow sitting inside them, arranged as bands, columns, chevrons and circular knotwork motifs that follow the forms of the machine. The glyphs are abstract and non-linguistic - they read as ancient symbols, never as letters, words or numbers, and nothing in the image is readable text.",
+  "styleSuffix": ". Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its feet. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground. Nothing else in the frame except the machine and its shadow. Painterly semi-realistic 'real robot' mecha illustration, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Crisp readable silhouette with clear negative space between the limbs. No text, no lettering, no watermark, no extra limbs, no duplicated parts, no duplicated weapon, no scenery.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_scout_skirmisher",
+      "seed": 82001,
+      "prompt": "a fast, agile humanoid scout mech built for long-range reconnaissance and hit-and-run strikes, three-quarter front view, whole machine visible from crest to feet. Lean forward-leaning silhouette with a narrow chest, narrow shoulders and long thin legs held in a ready stance, a small head with a single horizontal visor slit, one long sleek blade arm and one short clawed support arm, a slim torso tapering to a point at the front. Cool bone-white armour with a faint satin sheen and thin dark seam lines, a single crimson red accent stripe running along the shin, near-black joints and inner frame, a low swept crest fin rising from the back of the head, narrow blade-like shin armour",
+      "runes": "Thin bright runic bands climb the shin plates and run the full length of the blade arm, with a small knotwork ring at the wrist and a single glyph on the head crest.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.26,
+            "y": 0.05,
+            "w": 0.48,
+            "h": 0.87,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "02_lance_artillery",
+      "seed": 82002,
+      "prompt": "a long-range artillery mech, a tall and lean siege platform with an elongated skeletal frame, three-quarter front view, whole machine visible from crest to feet. The body is stretched vertically with a small armored torso perched on long segmented legs, one arm replaced by a very long slender barrel cannon that extends past the knee, the other arm a short stabiliser claw braced against the ground. Pale ivory and sand-coloured armour with warm gold accent panels, near-black mechanical joints, a narrow optical sensor head with a single amber lens, coil rings along the cannon barrel, thin blade-like hip vanes",
+      "runes": "A double band of tight angular runic script spirals around the cannon barrel, and a triangular arrangement of larger glyphs is engraved across the chest and the hip vanes.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.22,
+            "y": 0.04,
+            "w": 0.56,
+            "h": 0.88,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "03_phantom_infiltrator",
+      "seed": 82003,
+      "prompt": "a stealth infiltration mech built for silent night approaches, three-quarter front view, whole machine visible from crest to feet. A crouched, compressed silhouette with the knees deeply bent and the torso folded forward low over the hips, narrow shoulders, a featureless head with one thin slit visor, long thin reversed-jointed legs, one short blade arm held close to the body, thin angular fin blades sweeping back from the shoulders and spine like folded wings. Matte charcoal and gunmetal armour with almost no sheen, a single muted teal accent line, near-black joints, faint dusty wear on the edges",
+      "runes": "The runes are almost hidden - shallow unlit carvings in the darkest armour, only catching the rim light along the shoulder fins and the thigh, with a faint dull teal glimmer deep in the channels.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.24,
+            "y": 0.12,
+            "w": 0.52,
+            "h": 0.8,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "04_bulwark_vanguard",
+      "seed": 82004,
+      "prompt": "a frontline vanguard mech that carries a large ablative shield, three-quarter front view, whole machine visible from crest to feet. A solid, planted silhouette with wide-set heavy legs and a wide stance, broad angular shoulder pauldrons flaring outward, a barrel chest with a recessed core, a small heavy head with a horizontal visor band, one arm holding a tall slab-like shield panel that reaches from the knee to above the shoulder, the other arm a compact piston fist. Warm cream-white armour with a satin sheen and thin dark seam lines, large saturated crimson red and gold accent panels on the chest and shoulders, near-black joints and inner frame, curved blade-like shin armour, a crest fin rising from the head",
+      "runes": "Bold, heavy runic capitals are cut across the face of the tall shield panel in two rows, with a circular knotwork mandala in the middle of the chest and matching glyph bands on the pauldrons.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.2,
+            "y": 0.05,
+            "w": 0.6,
+            "h": 0.87,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "05_harrier_striker",
+      "seed": 82005,
+      "prompt": "a fast aerial strike mech with thruster wings, three-quarter front view seen slightly from below, whole machine visible from crest to feet. A streamlined aerodynamic silhouette with a forward-canted torso, swept shoulder wings that angle back and outward, twin thruster nacelles mounted high on the back, narrow hips and long legs held in a landing hover, a small pointed head with a wide wraparound visor, one compact arm cannon and one short blade arm. Glossy white and pale grey armour with a satin sheen, vivid gold and orange accent panels along the wing roots, near-black joints, a short crest fin on the forehead",
+      "runes": "The wing roots carry a tight chevron lattice of runic strokes that stream backward along each wing toward the thruster nacelles, with a small ring of glyphs around the collar.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.18,
+            "y": 0.06,
+            "w": 0.64,
+            "h": 0.86,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "06_warden_marksman",
+      "seed": 82006,
+      "prompt": "a long-range marksman mech with extreme precision, pure side profile view, whole machine visible from crest to feet. A very tall and extremely slender silhouette, long thin legs like a bird, a narrow flat chest, a small featureless head with one circular optic, one arm extended forward holding an extremely long thin rifle barrel that reaches far past the body, the other arm a delicate folded brace. Brushed silver and pale platinum armour with cool blue-grey accent panels, near-black joints, a delicate antenna array on the back of the head, minimal ornamentation",
+      "runes": "A single precise column of very fine runic script runs the length of the rifle barrel, with three isolated glyphs marked down the chest and one at the ankle.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.04,
+            "w": 0.68,
+            "h": 0.88,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "07_demon_duelist",
+      "seed": 82007,
+      "prompt": "a close-quarters duelist mech with two blade arms, three-quarter front view, whole machine visible from crest to feet. An aggressive forward-leaning silhouette with the torso pitched into the charge, wide flared hip plates, a horned head crest, both arms ending in long curved energy blades held apart in a ready stance, long digitigrade legs with reverse-jointed knees. Glossy near-black and deep crimson armour with a hard sheen, bright hot orange accent panels glowing along the blade edges and the chest core, exposed black mechanical joints, thin blade-like shin armour, a single abstract emblem on the chest with no lettering",
+      "runes": "Runes burn hot along the inner edge of both blades and flare up the horned crest, with a dense knotwork band wrapping the forearms and the hip plates.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.17,
+            "y": 0.06,
+            "w": 0.66,
+            "h": 0.86,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "08_oracle_support",
+      "seed": 82008,
+      "prompt": "a non-combat support mech built as a mobile field hospital and sensor platform, three-quarter front view, whole machine visible from crest to feet. A calm upright silhouette with balanced medium proportions, gently rounded armour with soft petal-like shoulder flares, a smooth domed head with a wide friendly band of pale blue optics, two slender articulated arms ending in delicate multi-finger manipulators, a slim waist and stable reverse-jointed legs, a circular dish antenna and a compact medical pod mounted on the back. Soft pearl-white and pale warm ivory armour with a satin sheen, gentle pale gold accent trim, near-black joints, a few small teal indicator lights",
+      "runes": "Fine delicate runic script circles the rim of the dish antenna in a single neat ring, and a small glowing knotwork rosette sits on the chest above the core.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.24,
+            "y": 0.06,
+            "w": 0.52,
+            "h": 0.86,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "09_titan_bulwark",
+      "seed": 82009,
+      "prompt": "a heavy siege mech with a commanding presence, three-quarter front view from a slightly low angle, whole machine visible from crest to feet. A tall powerful silhouette with a deep chest, thick but well-proportioned legs planted wide, massive layered shoulder armour that flares upward like layered petals, a compact armoured head with a narrow visor and a heavy brow, one enormous arm ending in a blunt siege piston hammer, the other in a heavy braced claw, a broad slab-like chest plate. Deep midnight navy and gunmetal armour with a satin sheen, large saturated safety-orange accent panels, near-black joints and inner frame, thick curved shin armour with piston detail",
+      "runes": "Massive angular rune blocks are cut into the layered shoulder plates and the broad chest slab, with a heavy double column of runic script running down the piston hammer.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.19,
+            "y": 0.05,
+            "w": 0.62,
+            "h": 0.87,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "10_lancet_hover",
+      "seed": 82010,
+      "prompt": "a hovering skirmisher mech with lift thrusters, three-quarter front view seen slightly from below, whole machine visible from crest to feet. A compact hovering silhouette with the legs folded up and tucked beneath the body, a narrow tapered torso, small angled shoulder fins, four lift thruster nozzles glowing pale blue under the hips, a small angular head with a bright cyan visor band, one arm ending in a long slim lance spear, the other a short articulated claw. Pale blue-grey and white armour with a satin sheen, vivid cyan accent panels, near-black joints, a small abstract emblem on the chest with no lettering",
+      "runes": "Small circular clusters of runes ring each thruster nozzle, and a narrow ribbon of script runs the full length of the lance spear.",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.25,
+            "y": 0.08,
+            "w": 0.5,
+            "h": 0.84,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    }
+  ]
+}

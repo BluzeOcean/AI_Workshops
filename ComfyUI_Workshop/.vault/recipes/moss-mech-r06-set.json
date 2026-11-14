@@ -1,0 +1,200 @@
+{
+  "_comment": "Round 06 - FIVE humanoid war mechs. Two lessons are being applied at once. (1) ARCHETYPE: the roster is taken from R02 (the set the user prefers over R01) plus r04_04, with the weapons corrected per the user's note that r02_01's slim body should carry a sniper rifle rather than a blade. Every machine is humanoid: two legs, two arms, a head. No drones, no quadrupeds, no spiders. (2) STYLE LOCK: round 04 was rejected because the machines looked like five different films. The livery, materials, construction vocabulary, wear, camera, light and rune layer live ONLY in the shared styleSuffix, so the set reads as one production line. Per-concept text names archetype, weapon, pose and ONE accent colour - nothing else.",
+  "_styleDecision": "R02's machines, as field-worn military hardsuits: R02's tapered bone-white hero plating and rune layer, plus r04_02's matte honest wear, with chunky exposed hardsuit joints. One locked livery across all five; per-machine accent colour is the only permitted variation.",
+  "width": 960,
+  "height": 1280,
+  "steps": 8,
+  "cfg": 2.5,
+  "prefix": "moss_mech_r06",
+  "promptPrefix": "A single full-body hero concept-art portrait of a humanoid war machine, two legs and two arms, a head above the shoulders and a torso between them, ",
+  "styleSuffix": ". Every machine in this set is built the same way: matte hardened bone-white composite plating with thin dark seam lines over a near-black mechanical frame, sand-olive drab panels on the lower legs and the shoulders, chunky exposed hydraulic actuators at the hips, knees and elbows, tapered hard-edged panel forms, a family of low angular sensor-head housings, broad clawed feet. The plating is honest and used rather than showroom gloss: a uniform chalky grey dust film settled on the upward-facing surfaces, worn and chipped edges showing the darker material underneath, grime and oil caught in the recesses, faint scuffing around every joint. Etched across the armour of every machine is the same layer of runic decoration: angular geometric glyphs cut into the plating as narrow recessed channels with a faint luminous glow sitting inside them, arranged as bands, columns and chevrons that follow the forms of the machine, abstract and non-linguistic, never as letters, words or numbers. Shot identically on every machine: a three-quarter front view from the left, camera at chest height, a 50mm lens, the whole machine in frame from crest to feet with clear air around it. Standing on a seamless neutral silver-grey studio backdrop with a soft contact shadow under its feet. The backdrop is plain and empty: no landscape, no sky, no horizon, no ground scenery, no buildings, no props, no weapons on the ground. Nothing else in the frame except the machine and its shadow. Painterly semi-realistic 'real robot' mecha illustration, smooth airbrushed gradients, soft volumetric haze, gentle film grain, studio key light high above and slightly to the left, falling on the machine only, cool soft fill on the camera-facing side, a bright thin edge highlight running down the left side of the machine, flat even overhead ambient lighting on the floor, the floor a matte plane of one uniform neutral grey with no horizontal gradient across it, all the way to every edge of the frame, with no directional falloff, no pool of light, no bright corner, no dark corner and no reflection. Crisp readable silhouette with clear negative space between the limbs, fine mechanical detail, deep contact shadows. No text, no lettering, no watermark, no extra limbs, no duplicated parts, no duplicated weapon, no scenery.",
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, pool of light on the floor, bright corner, dark corner, warm glow on the floor, lens flare, sunbeam, spotlight on the floor, directional falloff on the floor, horizontal gradient, floor gradient, lighting gradient, uneven lighting, mirror reflection on the floor, vignette, corner glow, glow in the corner, hotspot on the floor, floor hotspot, bright lower corner, hot spot in the corner, uneven corner lighting, shadow gradient across the floor",
+  "backdropDesc": "seamless neutral silver-grey studio backdrop, plain and empty, smooth vertical gradient from light grey at the top to mid grey at the floor, soft contact shadow pooled under the subject, one uniform matte neutral grey with no horizontal gradient across the floor, evenly lit across the whole frame with no pool of light and no bright corner, no landscape, no sky, no horizon, no scenery, no buildings, no props",
+  "concepts": [
+    {
+      "name": "01_recon_sniper",
+      "seed": 113868691105654,
+      "prompt": "a fast, agile scout mech built to find targets at extreme range and kill them from far off. Lean forward-leaning silhouette with a narrow chest, narrow shoulders and long thin legs held in a ready stance, a small head with a single horizontal visor slit, one arm shouldering a long sniper rifle held high and pointing forward past the body, a compact scope mounted on a short top rail above the barrel, the other arm a short clawed support arm held at the hip, a slim torso tapering to a point at the front, a low swept crest fin rising from the back of the head, narrow blade-like shin armour, a single amber accent stripe running along the rifle stock and down the shin",
+      "subject": "a slim humanoid scout mech with long thin legs shouldering a long sniper rifle",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.25,
+            "y": 0.05,
+            "w": 0.5,
+            "h": 0.87,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "02_bunker_bulwark",
+      "seed": 124919031846948,
+      "prompt": "a shielded assault mech, a walking bunker built to advance under fire and hold ground. A broad heavy torso with a deep armoured chest and a small recessed cockpit band, wide-set thick legs planted in a braced stance, massive layered shoulder armour, its left arm carrying a towering slab shield that reaches above the head, its right hand holding a heavy short rifle at the low ready, a compact ammunition drum slung under the chest, a single crimson accent band across the face of the shield",
+      "subject": "a heavy humanoid assault mech with a broad torso carrying a towering slab shield and a rifle",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.05,
+            "w": 0.68,
+            "h": 0.84,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "03_plasma_duelist",
+      "seed": 42627144287711,
+      "prompt": "a close-quarters duelist mech built to break into a formation and cut it apart. A relaxed upright standing pose with the weight even on both legs, feet planted slightly apart, the body held square and tall, both arms lowered at the sides, wide flared hip plates, a horned head crest, one hand holding a long curved plasma saber hanging straight down at its side, the blade running parallel to the leg and clear of the body, a faint teal glow along its emitter, the other arm a heavy armoured gauntlet hanging loose, long digitigrade legs with reverse-jointed knees, a single crimson accent on the shoulder plates",
+      "subject": "a humanoid duelist mech standing upright and relaxed with a curved plasma saber hanging at its side",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.2,
+            "y": 0.05,
+            "w": 0.6,
+            "h": 0.85,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "04_missile_artillery",
+      "seed": 12269784593990,
+      "prompt": "a long-range artillery mech, a tall and lean siege platform with an elongated skeletal frame. The body is stretched vertically with a small armoured torso perched on long segmented legs, a bank of box missile launchers mounted over the right shoulder angled up at a steep firing elevation, the other arm a short stabiliser claw braced against the ground, a narrow optical sensor head with a single lens, coil rings around the launcher frame, a single amber accent panel across the chest",
+      "subject": "a very tall lean humanoid artillery mech with a bank of missile launchers over its shoulder",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.21,
+            "y": 0.03,
+            "w": 0.58,
+            "h": 0.89,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    },
+    {
+      "name": "05_wing_striker",
+      "seed": 278469611900304,
+      "prompt": "a fast aerial strike mech built to break through a defensive line from above and hit the rear. A streamlined aerodynamic silhouette with a forward-canted torso, swept shoulder wings that angle back and outward, twin thruster nacelles mounted high on the back, narrow hips and long legs held in a landing hover, a small pointed head with a wide wraparound visor, a rack of missile tubes slung under the right wing root, one arm holding a compact rifle and the other a short stabiliser claw, a single crimson accent panel along the wing roots",
+      "subject": "a humanoid strike mech with swept thruster wings, a missile rack under one wing and a rifle",
+      "layout": {
+        "boxes": [
+          {
+            "x": 0.0,
+            "y": 0.0,
+            "w": 1.0,
+            "h": 1.0,
+            "type": "obj",
+            "desc": "BACKDROP"
+          },
+          {
+            "x": 0.0,
+            "y": 0.87,
+            "w": 1.0,
+            "h": 0.13,
+            "type": "obj",
+            "desc": "the studio floor, a flat matte plane of one single neutral grey tone, identical from the left edge of the frame to the right edge, evenly lit, no gradient across it, no pool of light, no bright corner, no reflection"
+          },
+          {
+            "x": 0.16,
+            "y": 0.06,
+            "w": 0.68,
+            "h": 0.84,
+            "type": "obj",
+            "desc": "SUBJECT"
+          }
+        ],
+        "characterBoxes": [
+          "3"
+        ]
+      }
+    }
+  ]
+}

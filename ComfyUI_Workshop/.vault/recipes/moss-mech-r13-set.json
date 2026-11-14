@@ -1,0 +1,62 @@
+{
+  "_comment": "Round 13, FINAL. Class variations of the user's FINAL S01 design, which the user supplied as four views (front/back/right/left .webp) in the destination folder. The reference IMAGE carries the art direction and the body shape; the prompt carries only the class. This is the MOSS-Image edit path, not the text-to-image path: the text path drifts into grimdark power armour and invents its own design, and the user asked for the image to be used as the style and body-shape reference.",
+  "_mechanism": "EDIT path: TextEncodeMOSSImageEdit + MOSS-Image-Edit LoRA (edit_format Moss-Image-Edit), 30 steps, cfg 4.0, euler/normal, skip layer 22 0->1, image_strength 1.0. NO 8-step acceleration LoRA on this path.",
+  "_reference": "S01-front.webp [output] - a .webp reference works: ComfyUI's LoadImage resolves '[output]' against the output directory and the extension is irrelevant to the existence check, and PyAV opens a .webp as a video stream with codec 'webp', so it decodes through the normal image path.",
+  "_roundNumber": "r13. r11 was the house-style verification set, r12 was the abandoned correction round (its probes are disposed). Round 13 is this class-variation round.",
+  "_designRules": [
+    "1. NEVER describe the whole frame's proportions. 'Taller and leaner', 'lean and upright but narrow' both produced spindly anime mechs that lost the S01 bulk. Describe ONE part; keep the frame.",
+    "2. The keep-list must RESTATE the mass and the signature hardware by name, or the model fills the gap with the house average: 'its broad heavy frame with a deep chest carried low and thick digitigrade legs', 'the three overlapping curved armour plates stacked on each shoulder', 'the small head set low between the shoulders with two amber optic lenses in its dark visor recess', 'the row of dark tube clusters above the shoulders'.",
+    "3. The class is carried by SENSOR HARDWARE, not by silhouette. A rangefinder pod, a sighting pod, a row of glass lenses, a dorsal sensor mast. Adding hardware reads; subtracting mass does not.",
+    "4. Never contradict the head in the same instruction that keeps the body. The class hardware goes on the chest, shoulder, forearm or back; the head keeps its own amber lenses untouched.",
+    "5. Weapons live in the NEGATIVE, never in the instruction. The reference carries a rifle between the legs and a three-talon claw; the negative suppresses those and the output is empty-handed, as concept art should be.",
+    "6. Stealth changes the livery on purpose - matte graphite and charcoal with only a narrow muted orange band across the chest. A bright orange stealth unit is not stealth. The material, panel language, finish and lighting are still locked."
+  ],
+  "_probeRecord": "Probe 1 (4 renders) found the thinness drift: sniperA 'taller and leaner' and stealthB 'lean and upright but narrow' came back spindly. Probe 2 (6 renders) fixed it with the rules above - sniperC, sniperE, stealthC and stealthD all hold the S01 bulk. The floor measured evenly lit on all 10 probes.",
+
+  "reference": "S01-front.webp [output]",
+  "width": 960,
+  "height": 1280,
+  "steps": 30,
+  "cfg": 4.0,
+  "sampler": "euler",
+  "scheduler": "normal",
+  "edit_format": "Moss-Image-Edit",
+  "image_strength": 1.0,
+
+  "negative": "nsfw, worst quality, low quality, bad anatomy, deformed, extra limbs, duplicated parts, watermark, text, lettering, signature, emblem, insignia, decal, symbol, numbers, screen, readout, jpeg artifact, grime, caked dirt, mud, muddy streaks, corroded steel, flaking rust, brown stain, heavy weathering, plastic toy finish, plastic sheen, injection moulded plastic, pool of light on the floor, bright corner, dark corner, warm glow on the floor, vignette, rifle, gun, cannon, sword, blade, spear, weapon, gun in hand, rifle held between the legs, thin spindly limbs, spindly, lanky, skinny legs, stick limbs, anime, chibi, cute, toy, cartoon, glossy candy paint",
+
+  "prefix": "moss_mech_r13",
+
+  "concepts": [
+    {
+      "name": "01_sniper_rangefinder",
+      "seed": 180136815643300,
+      "instruction": "Change only the machine's chest and one shoulder so that it reads as a long-range sniper: a long horizontal row of small glass sensor lenses is set into a recessed strip across its upper chest plate, and a bulky rectangular rangefinder pod with a big glass lens at its front is bolted flat onto one shoulder. Keep its broad heavy frame with a deep chest carried low and thick digitigrade legs, its rust orange painted armour plates over dark charcoal structural parts, the three overlapping curved armour plates stacked on each shoulder, the small head set low between the shoulders with two amber optic lenses in its dark visor recess, the row of dark tube clusters above the shoulders, its crisp bevelled panel lines and rows of rivets, its satin painted-metal finish with light edge wear, its relaxed upright standing pose with feet apart and arms lowered, and the plain evenly lit silver-grey studio backdrop with a soft contact shadow unchanged."
+    },
+    {
+      "name": "02_sniper_mast",
+      "seed": 164907734664425,
+      "instruction": "Change only the machine's chest and back so that it reads as a long-range sniper: a long horizontal row of small glass sensor lenses is set into a recessed strip across its upper chest plate, and a slim folded sensor mast rises from the upper back behind the shoulders. Keep its broad heavy frame with a deep chest carried low and thick digitigrade legs, its rust orange painted armour plates over dark charcoal structural parts, the three overlapping curved armour plates stacked on each shoulder, the small head set low between the shoulders with two amber optic lenses in its dark visor recess, the row of dark tube clusters above the shoulders, its crisp bevelled panel lines and rows of rivets, its satin painted-metal finish with light edge wear, its relaxed upright standing pose with feet apart and arms lowered, and the plain evenly lit silver-grey studio backdrop with a soft contact shadow unchanged."
+    },
+    {
+      "name": "03_sniper_sighting_pod",
+      "seed": 89927704266184,
+      "instruction": "Change only the machine's chest and one forearm so that it reads as a long-range sniper: a long horizontal row of small glass sensor lenses is set into a recessed strip across its upper chest plate, and a long cylindrical sighting pod with a glass lens at its front end is mounted along the outside of one forearm on a short bracket. Keep its broad heavy frame with a deep chest carried low and thick digitigrade legs, its rust orange painted armour plates over dark charcoal structural parts, the three overlapping curved armour plates stacked on each shoulder, the small head set low between the shoulders with two amber optic lenses in its dark visor recess, the row of dark tube clusters above the shoulders, its crisp bevelled panel lines and rows of rivets, its satin painted-metal finish with light edge wear, its relaxed upright standing pose with feet apart and arms lowered, and the plain evenly lit silver-grey studio backdrop with a soft contact shadow unchanged."
+    },
+    {
+      "name": "04_stealth_crouched",
+      "seed": 49332029821098,
+      "instruction": "Change only the machine's armour, finish and stance so that it reads as a low close-quarters stealth infiltrator: the frame crouches forward with hunched shoulders and the head tucked low, the armour plates are flat and angular with chamfered edges, the finish is matte graphite and charcoal with only a narrow muted orange band across the chest, the arms are long with broad flat forearm shrouds, the legs are short and crouched with wide flat feet and hooked toe claws, and a low slim dorsal fin runs down the spine. Keep its broad heavy frame with a deep chest carried low, the three overlapping curved armour plates stacked on each shoulder, the small head set low between the shoulders with two amber optic lenses in its dark visor recess, its crisp bevelled panel lines and rows of rivets, its satin painted-metal finish with light edge wear, its relaxed standing pose, and the plain evenly lit silver-grey studio backdrop with a soft contact shadow unchanged."
+    },
+    {
+      "name": "05_stealth_upright",
+      "seed": 154740848096780,
+      "instruction": "Change only the machine's arms, finish and stance so that it reads as a close-quarters stealth infiltrator: the frame leans forward with the head low and forward, the arms are long and heavy with broad flat forearm shrouds, the legs are long and heavy with narrow hooked feet, a slim dorsal fin runs down the spine, and the finish is matte graphite and charcoal with only a narrow muted orange band across the chest. Keep its broad heavy frame with a deep chest carried low, the three overlapping curved armour plates stacked on each shoulder, the small head set low between the shoulders with two amber optic lenses in its dark visor recess, its crisp bevelled panel lines and rows of rivets, its satin painted-metal finish with light edge wear, its relaxed standing pose, and the plain evenly lit silver-grey studio backdrop with a soft contact shadow unchanged."
+    },
+    {
+      "name": "06_stealth_low_crouch",
+      "seed": 277379082532273,
+      "instruction": "Change only the machine's armour, finish and stance so that it reads as a low close-quarters stealth infiltrator: the frame crouches low with hunched shoulders and the head tucked down between them, the armour plates are flat and angular with chamfered edges, the arms are long and heavy with broad flat forearm shrouds, the legs are short and powerful with wide hooked feet, a wide low dorsal fin runs down the spine, and the finish is matte graphite and charcoal with only a narrow muted orange band across the chest. Keep its broad heavy frame with a deep chest carried low, the three overlapping curved armour plates stacked on each shoulder, the small head set low between the shoulders with two amber optic lenses in its dark visor recess, its crisp bevelled panel lines and rows of rivets, its satin painted-metal finish with light edge wear, its relaxed standing pose, and the plain evenly lit silver-grey studio backdrop with a soft contact shadow unchanged."
+    }
+  ]
+}
