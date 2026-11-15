@@ -5,8 +5,8 @@
 **Decision:** The workshop tree holds **no MCP configuration at all** — no `.mcp.json`, no
 `.mcp.json.example`, and no agent-tool settings directory. The **client definition** the
 agent needs to register lives with the procedure that uses it, in
-`.skills/ue-mcp-bridge/references/client-config.json`, and the procedure itself is
-`.skills/ue-mcp-bridge/SKILL.md`.
+`.skills/ue-op-mcp-diagnose/references/client-config.json`, and the procedure itself is
+`.skills/ue-op-mcp-diagnose/SKILL.md`.
 
 The live bridge is registered with the agent at **user scope** — check it with
 `claude mcp list`; the entry is named `unreal-mcp` and points at the editor's own MCP

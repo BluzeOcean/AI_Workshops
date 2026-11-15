@@ -15,7 +15,7 @@ things are below.
 
 | Path | What it is |
 |---|---|
-| `.skills/` | **Procedures.** One folder per skill, each with a `SKILL.md`. A skill is a repeatable task — "import a skeletal mesh and bind a skeleton", "render a level sequence to PNG", "cook a web build", "reach the editor over MCP". Read `.skills/README.md` before writing one. |
+| `.skills/` | **Procedures.** One folder per skill, each with a `SKILL.md`, always named `ue-op-<verb-noun>`. 31 skills covering blueprint authoring, input, PIE, asset search and migration, capture, the web build pipeline, skeletal import and more. `.skills/skill_catalog.md` is the index — read it to find the one you need; `.skills/README.md` has the format and the naming rule. |
 | `.vault/` | **The memory bank.** Unreal-specific facts worth carrying forward — lessons, decisions, model notes, recipes, workflows. It is **written after a task, not read before one** (see §6). Every entry must make a future agent **faster or safer**; generic house rules live in this file, not in the vault. The entries that will save you the most time are listed in §8. |
 | `tools/` | The scripts. Currently a **specification, not an implementation** — see `tools/README.md`. Whoever builds them owns this layer. |
 
@@ -221,7 +221,7 @@ act, and re-read after anything slow.
 
 ### 4b. MCP — Epic's built-in ModelContextProtocol plugin
 
-> **The procedure for this is the skill `.skills/ue-mcp-bridge/SKILL.md`** — it covers
+> **The procedure for this is the skill `.skills/ue-op-mcp-diagnose/SKILL.md`** — it covers
 > resolving the engine, finding the editor, proving which server answered, and registering
 > a client. This section is the reference behind it.
 
@@ -413,8 +413,8 @@ claude mcp list          # shows the server, its URL and whether it is connected
 ```
 
 The endpoint it points at is the editor's own MCP route, `http://127.0.0.1:8000/mcp`. The
-definition to register is in `.skills/ue-mcp-bridge/references/client-config.json`, and
-`.skills/ue-mcp-bridge/SKILL.md` is the procedure for registering it.
+definition to register is in `.skills/ue-op-mcp-diagnose/references/client-config.json`, and
+`.skills/ue-op-mcp-diagnose/SKILL.md` is the procedure for registering it.
 
 **Verify the port before you trust a tool.** One command:
 
@@ -475,42 +475,37 @@ UnrealEditor-Cmd.exe "D:\UE\<Project>\<Project>.uproject" `
   **Use absolute paths inside scripts.**
 - Nothing persists between runs except what you save.
 
-### 4e. The `ue-op-*` skillset — external, and already good
+### 4e. The `ue-op-*` skills — vendored into this workshop
 
-A large, working skillset for Unreal operations lives **outside this workshop**:
+`.skills/` holds **31 skills**: the 30 that were forged on this machine at
+`D:\UE\.ue-op-skillset\` (29 `ue-op-*` plus `ue-op-mcp-connect`), now vendored in, plus
+`ue-op-mcp-diagnose` (§4b).
 
 ```
-D:\UE\.ue-op-skillset\<skill-name>\SKILL.md
+Unreal_Workshop\.skills\<skill-name>\SKILL.md
 ```
 
-It has 30 skill folders (29 `ue-op-*` plus `ue-mcp-connect`):
-`ue-op-inspect-blueprint`, `ue-op-create-blueprint`, `ue-op-add-component`,
-`ue-op-wire-graph`, `ue-op-fix-compile-error`, `ue-op-fix-large-ue-sample-project`,
-`ue-op-setup-game-mode`, `ue-op-setup-input`, `ue-op-setup-playable-character`,
-`ue-op-test-pie`, `ue-op-find-assets`, `ue-op-find-dependencies`,
-`ue-op-clone-assets`, `ue-op-relocate-assets`, `ue-op-capture-editor`,
-`ue-op-offscreen-verify`, `ue-op-editor-script`, `ue-op-python-gotchas`,
-`ue-op-build-web`, `ue-op-verify-web`, `ue-op-ship-web`, `ue-op-bake-mesh-partition`,
-`ue-op-browser-look-budget`, `ue-op-blender-rig-for-ue`, `ue-op-animate-foreign-rig`,
-`ue-op-skeletal-import-and-skeleton`, `ue-op-tripo-pipeline`,
-`ue-op-tripo-triage-asset`, `ue-op-extract-to-skill`.
+They cover blueprint authoring and repair, components, input, game modes, PIE, asset
+search and dependency walks, asset migration, capture, offscreen verification, the editor's
+Python, the web build pipeline, skeletal import, the Tripo/AI-character pipeline, and
+skill extraction. **`.skills/skill_catalog.md` is the index — read the `When to use it`
+column and open the one that matches.** Do not read them all.
 
-**Read the matching `SKILL.md` directly from disk** — that is the intended access path. It is
-deliberately kept outside any agent's skills directory and registered per project, so
-agents working in non-UE projects never load it.
+**Helper scripts live next to the skill that owns them**, and the paths inside the skills
+point at this copy — `ue-op-mcp-connect/mcp_call.py`, `ue-op-bake-mesh-partition/scripts/`,
+`ue-op-build-web/scripts/`, and so on.
 
-To make them callable inside a UE project, junction them into that project's skills
-directory (the convention most agents use is `.claude/skills`; others differ):
+**Two copies exist.** The original at `D:\UE\.ue-op-skillset\` is still the one wired
+into the UE projects — `D:\UE\EpicJam2026\.claude\skills\` junctions point there. When
+you change a skill **here**, change it there too, or move the junction:
 
 ```powershell
 New-Item -ItemType Junction -Path "D:\UE\<Project>\.claude\skills\<name>" `
-  -Target "D:\UE\.ue-op-skillset\<name>"
+  -Target "V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>"
 ```
 
-**These are not this workshop's skills.** They are a sibling asset. When one of them proves
-itself in a real task, the *generalized* version — the part that is not specific to one
-project — belongs in `.skills/` here, written with the optimized steps. Copying a skill
-across verbatim teaches this workshop nothing.
+**New skills are forged here**, into `.skills/<name>/SKILL.md`. `ue-op-extract-to-skill`
+does exactly that, and its duplicate scan covers both this folder and the original set.
 
 ### 4f. The tools in `tools/`
 
@@ -676,13 +671,20 @@ The distinction that matters:
 - A **workflow** is a known-good command sequence — the order of the commands.
 - A **tool** is a script — something that can be run rather than read.
 
-All five grow by use. The index of what exists is `.skills/README.md` (§ "Skills available
-now"); **keep it current**, because an agent decides what to open by reading it. A skill
-that exists but is not in the table is a skill nobody will find.
+All five grow by use. The index of what exists is `.skills/skill_catalog.md`; **keep it
+current**, because an agent decides what to open by reading it. A skill that exists but is
+not in the catalog is a skill nobody will find.
 
-**Do not import skills from a sibling workshop or from the `ue-op` skillset verbatim.** A
-skill is forged from a task that actually happened *in this app, for this workspace*.
-`D:\UE\.ue-op-skillset\` is a sibling asset (§4e) — generalize from it, don't clone it.
+**Every skill folder is named `ue-op-<verb-noun>`, and the frontmatter `name:` matches the
+folder exactly.** The prefix says which application the skill belongs to and keeps Unreal
+skills from colliding with skills from other workshops. A skill without it is a
+convention break.
+
+**A new skill is forged from a task that actually happened in this app, for this
+workspace.** The `ue-op-*` set (§4e) was vendored in as a body of proven work — that is a
+deliberate exception, not a licence to import anything. A skill you add yourself is
+written from your own run, with the optimized steps. Do not import from a sibling
+workshop, and do not clone a skill you have not verified.
 
 If a task needs a tool that does not exist yet, that is a finding too: add it to the
 specification in `tools/README.md` rather than working around it silently.
@@ -845,11 +847,12 @@ git push origin master          # then push it
 | Editor Python plugin | `<engine>\Engine\Plugins\Experimental\PythonScriptPlugin\` |
 | Unreal Canvas / merlin build | `C:\Users\Bluze\AppData\Local\UnrealCanvas\Builds\v0.21.0\` |
 | Unreal Canvas version | `…\v0.21.0\merlin-version.txt` |
-| `ue-op-*` skillset (external) | `D:\UE\.ue-op-skillset\<name>\SKILL.md` |
+| `ue-op-*` skills (31 in `.skills/`) | `Unreal_Workshop\.skills\<name>\SKILL.md` — index in `.skills/skill_catalog.md` |
+| Original skillset (still wired into UE projects) | `D:\UE\.ue-op-skillset\<name>\SKILL.md` |
 | Unreal projects | `D:\UE\<Project>\<Project>.uproject` |
 | Engine templates | `<engine>\Templates\` (`TP_ThirdPerson\`, `TP_FirstPerson\`, `TP_Blank\`, …) |
 | Claude Code MCP entry | user scope — check with `claude mcp list` |
-| Dependency-free MCP client | `D:\UE\.ue-op-skillset\ue-mcp-connect\mcp_call.py` |
+| Dependency-free MCP client | `.skills/ue-op-mcp-connect/mcp_call.py` |
 | Sister workshops | `../Blender_Workshop/`, `../Unity_Workshop/`, `../ComfyUI_Workshop/` |
 | The tool spec | `tools/README.md` |
 | Memory bank | `.vault/README.md` |

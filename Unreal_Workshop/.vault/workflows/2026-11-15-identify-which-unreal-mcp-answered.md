@@ -76,11 +76,11 @@ curl -s -X POST "http://127.0.0.1:8000/mcp" \
 Every later call needs the `Mcp-Session-Id` header. `notifications/initialized` must
 precede `tools/list`.
 
-**Or skip all of this** — `D:\UE\.ue-op-skillset\ue-mcp-connect\mcp_call.py` does the
+**Or skip all of this** — `V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py` does the
 handshake, tracks the session id and sends the right headers:
 
 ```bash
-cd D:/UE/.ue-op-skillset/ue-mcp-connect
+cd V:/04_Projects/Workshops/Unreal_Workshop/.skills/ue-op-mcp-connect
 python mcp_call.py list_toolsets
 python mcp_call.py call EditorToolset.EditorAppToolset GetOpenAssets
 ```

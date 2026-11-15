@@ -83,9 +83,9 @@ able to see what was true then, and why it stopped being true.
 7. **A success is not just a log entry — it is material for a skill.** After a task that
    went well, decompose the operation and write the modular piece worth repeating into
    `.skills/`, with the optimized steps.
-8. **Keep the indexes current.** `.skills/README.md` lists the skills; an agent decides
-   what to open by reading it. A skill that exists but is not listed is a skill nobody
-   finds.
+8. **Keep the indexes current.** `.skills/skill_catalog.md` lists the skills; an agent
+   decides what to open by reading it. A skill that exists but is not listed is a skill
+   nobody finds.
 
 ## What is in here right now
 

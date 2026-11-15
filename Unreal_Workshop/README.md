@@ -30,14 +30,17 @@ that pointer lives in the **agent's own configuration**, not here.
    the version, the six ways to talk to Unreal, and the mistakes that cost the most time.
 2. Confirm the **destination** for the task — which project, and which folder inside it. If
    the user has not said, ask. Unreal projects live under `D:\UE\<Project>\`.
-3. Check what already exists: `.skills/README.md` lists the skills; `tools/README.md`
+3. Check what already exists: `.skills/skill_catalog.md` is the **index of 31 skills** —
+   read the `When to use it` column and open the one that matches; `tools/README.md`
    describes the tool layer; `.vault/` holds what past tasks learned.
 4. Talk to Unreal — see §4 of `AGENTS.md`:
    - the live editor process (find it with WMI, and read its command line for the project),
    - Epic's built-in MCP plugin on `127.0.0.1:8000/mcp` (UE 5.8+ only),
    - the Unreal Canvas bridge — a *different* MCP server that looks the same,
    - headless: `UnrealEditor-Cmd.exe -run=<Commandlet>` or `-ExecutePythonScript=`,
-   - the external `ue-op-*` skillset in `D:\UE\.ue-op-skillset\`,
+   - the **31 skills in `.skills/`** — blueprint authoring and repair, input, PIE,
+     asset search and migration, capture, the web build pipeline, skeletal import, and
+     more. Read `.skills/skill_catalog.md` for the index;
    - or the tools in `tools/`, once they do.
 5. Build the script in the **project's `Saved/` folder** (or next to the skill it serves, in
    `.skills/<name>/scripts/`). Save the result into the destination.
@@ -60,8 +63,11 @@ That is what the `.vault/` is for. It is the self-learning mechanism:
 - **Known-good instances** become **recipes** — the exact settings that worked, so the
   result can be reproduced.
 
-The index of what the workshop can currently do is `.skills/README.md`. It is kept current
-as skills are forged, because an agent decides what to open by reading it.
+The index of what the workshop can currently do is `.skills/skill_catalog.md`. It is kept
+current as skills are forged, because an agent decides what to open by reading it.
+
+Every skill folder is named `ue-op-<verb-noun>`, and the frontmatter `name:` matches the
+folder exactly — the convention is in `.skills/README.md`.
 
 ## The three ideas
 
@@ -92,8 +98,8 @@ every session in every directory connects automatically when an editor is up.
 client definition and the procedure for registering it live together in the skill that
 needs them:
 
-- `.skills/ue-mcp-bridge/SKILL.md` — the procedure
-- `.skills/ue-mcp-bridge/references/client-config.json` — the server definition to register
+- `.skills/ue-op-mcp-diagnose/SKILL.md` — the procedure
+- `.skills/ue-op-mcp-diagnose/references/client-config.json` — the server definition to register
 
 Two things to know before you use it: **do not register the server at project scope** in a
 project that already has the user-scope entry — a duplicate shows as "⏸ Pending approval"

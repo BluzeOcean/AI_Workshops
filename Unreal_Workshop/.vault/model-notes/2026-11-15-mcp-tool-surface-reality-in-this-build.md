@@ -12,7 +12,7 @@ the editor's own Blueprint/Asset/Actor toolsets.
 
 **What does work:** the editor's own Python, driven through the MCP bridge's
 console-command bridge. That covers most editor work that is not Blueprint graph
-authoring. See `D:\UE\.ue-op-skillset\ue-op-editor-script\SKILL.md`.
+authoring. See `V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-editor-script\SKILL.md`.
 
 **Blueprint graph authoring specifically still needs `editor_toolset`** — if it is
 unavailable, say so rather than silently skipping the graph.
@@ -38,7 +38,7 @@ The `ProgrammaticToolset` sandbox allows `copy`, `datetime`, `time`, `json`, `ma
 ## A dependency-free MCP client already exists
 
 ```
-D:\UE\.ue-op-skillset\ue-mcp-connect\mcp_call.py
+V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py
 ```
 
 It handles the `initialize` → `notifications/initialized` handshake, tracks the
@@ -47,7 +47,7 @@ with no MCP client in the loop, and with none of the sandbox's restrictions. Use
 rather than writing another one.
 
 ```bash
-cd D:/UE/.ue-op-skillset/ue-mcp-connect
+cd V:/04_Projects/Workshops/Unreal_Workshop/.skills/ue-op-mcp-connect
 python mcp_call.py list_toolsets
 python mcp_call.py describe_toolset EditorToolset.EditorAppToolset
 python mcp_call.py call EditorToolset.EditorAppToolset GetOpenAssets

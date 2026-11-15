@@ -1,16 +1,16 @@
 ---
-name: ue-mcp-bridge
+name: ue-op-mcp-diagnose
 description: Use when an agent needs to reach a running Unreal editor over MCP — to check the bridge is alive, to tell Epic's built-in plugin from the Unreal Canvas bridge, to register an MCP client against the right port, or to start a second editor without colliding on port 8000. Skip when no editor is running (use commandlets instead) or when the engine is older than 5.8 (no MCP plugin exists).
 ---
 
-# ue-mcp-bridge — reach the Unreal editor over MCP, and know which server answered
+# ue-op-mcp-diagnose — reach the Unreal editor over MCP, and know which server answered
 
 Unreal exposes **two** MCP servers, they look alike, and confusing them is the most
 expensive mistake on this machine. This skill is the procedure for getting a connection
 *and* for proving which server it is.
 
 For the broader connect-and-use workflow (toolsets, `call_tool` dispatch, image payloads)
-see the external `D:\UE\.ue-op-skillset\ue-mcp-connect\SKILL.md`. This skill covers the
+see the sibling `V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\SKILL.md`. This skill covers the
 part that is specific to **this** machine: two engines, three installs, one registry that
 lies, and two servers.
 
@@ -21,7 +21,7 @@ lies, and two servers.
 | You need | Then use |
 |---|---|
 | the editor alive, project identified | this skill, steps 1–4 |
-| to call a tool | this skill, step 4, then the external `ue-mcp-connect` skill |
+| to call a tool | this skill, step 4, then the sibling `ue-op-mcp-connect` skill |
 | the editor **not** running | a commandlet — `AGENTS.md` §4d. There is no bridge without an editor. |
 | an engine older than 5.8 | a commandlet. The MCP plugin does not exist before 5.8. |
 
@@ -176,4 +176,4 @@ Then register that port as a second client entry.
 - `.vault/lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md`
 - `.vault/lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md`
 - `.vault/workflows/2026-11-15-identify-which-unreal-mcp-answered.md` — the same sequence as a workflow
-- `D:\UE\.ue-op-skillset\ue-mcp-connect\SKILL.md` — the external, fuller connect workflow
+- `V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\SKILL.md` — the fuller connect workflow

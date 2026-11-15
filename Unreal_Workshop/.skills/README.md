@@ -4,16 +4,49 @@ A skill is a **repeatable task** you want any agent to be able to execute well, 
 rediscovering it. "What went wrong last time" is not; that is a **lesson**, and it belongs
 in `.vault/lessons/`.
 
+**The catalog of what exists is [`skill_catalog.md`](skill_catalog.md).** Read it to find the
+skill you need; this file is about the format and the naming rule.
+
 ## Layout
 
 ```
 .skills/
-  README.md
+  README.md          <- this file: the format and the naming convention
+  skill_catalog.md   <- the index: every skill, what it does, when to use it
   <skill-name>/
-    SKILL.md          <- required: frontmatter + the instructions
-    scripts/          <- optional: executable helpers for this skill
-    references/       <- optional: long docs, loaded only when needed
+    SKILL.md         <- required: frontmatter + the instructions
+    scripts/         <- optional: executable helpers for this skill
+    references/      <- optional: long docs, loaded only when needed
 ```
+
+---
+
+## Naming convention
+
+**Every skill folder is named `ue-op-<verb-noun>`. The `ue-op-` prefix is mandatory.**
+
+```
+ue-op-wire-graph          <- verb-noun
+ue-op-find-assets         <- verb-noun
+ue-op-setup-input-legacy  <- verb-noun + a situation suffix
+```
+
+The rules:
+
+1. **The folder name starts with `ue-op-`.** No exceptions. The prefix says which
+   application the skill belongs to, and it keeps Unreal skills from colliding with skills
+   from other workshops in a shared skills directory.
+2. **`<verb-noun>` describes the operation**, in lowercase with hyphens:
+   `wire-graph`, `find-assets`, `setup-input`, `build-web`. Not `graph-wiring` or
+   `assets`.
+3. **The frontmatter `name:` must match the folder name exactly.** A mismatch is the usual
+   cause of a skill not registering.
+4. **A skill is one operation.** If the description needs the word "and", it is two skills.
+5. **Variants carry a situation suffix**, and the existing sibling is renamed to match, so
+   the family reads as siblings: `ue-op-setup-input` → `ue-op-setup-input-legacy` and
+   `ue-op-setup-input-enhanced`.
+
+---
 
 ## Writing a `SKILL.md`
 
@@ -21,7 +54,7 @@ YAML frontmatter, then the body:
 
 ```markdown
 ---
-name: skill-name
+name: ue-op-<verb-noun>
 description: One sentence saying what it does AND when to use it.
 ---
 
@@ -53,50 +86,44 @@ Body rules:
 7. **Never hardcode a version or an install path.** Resolve it at run time, so the skill
    still works after the app updates.
 
+---
+
 ## Forging new skills
 
-The point of `.skills/` is that it **grows as the workspace is used**. Nothing here ships
-with the workshop; the skills are forged out of tasks that actually happened.
+The point of `.skills/` is that it **grows as the workspace is used**. Skills are forged out
+of tasks that actually happened.
 
 When a task succeeds, do not just log it — **decompose it**. Break the operation into its
-modular pieces and ask which one is worth keeping as a procedure: the part that was
-fiddly, the part that will come up again, the part that took three attempts to get right.
-That piece becomes a skill — written with the **optimized steps**, not the steps you
-happened to take. The skill records the fastest correct path, so the next agent starts
-there instead of rediscovering the slow one.
+modular pieces and ask which one is worth writing down as a procedure with optimized steps:
+the part that was fiddly, the part that will come up again, the part that took three
+attempts to get right. That piece becomes `SKILL.md` — with the *optimized steps*, not the
+steps you happened to perform. A skill written from a success records the fastest correct
+path, so the next agent starts there instead of rediscovering the slow one.
 
 To forge one:
 
 1. Do it once, for real.
 2. Write the `SKILL.md` that would have let you do it correctly the first time.
-3. Save any helper script next to the skill, in `scripts/`.
-4. If the task produced a lesson, write the lesson too — in `.vault/lessons/`.
-5. **Add it to the table below.** An agent decides what to open by reading that table; a
+3. Name the folder `ue-op-<verb-noun>` — **the prefix is not optional** — and make the
+   frontmatter `name:` match it exactly.
+4. Save any helper script next to the skill, in `scripts/`.
+5. If the task produced a lesson, write the lesson too — in `.vault/lessons/`.
+6. **Add it to `skill_catalog.md`.** An agent decides what to open by reading that file; a
    skill that is not listed is a skill nobody will find.
 
-Do **not** write a skill for something you have only done once, speculatively. A skill that
-is wrong is worse than no skill, because agents trust it.
+`ue-op-extract-to-skill` does all of this for you, and its duplicate scan covers both this
+folder and the original set at `D:\UE\.ue-op-skillset\`.
 
-## Skills available now
+---
 
-A workshop accumulates its skills from real use — this table is the index of what the
-workspace can currently do, and it is kept current as skills are forged.
+## Where these came from
 
-| Skill | What it covers |
-|---|---|
-| [`ue-mcp-bridge`](ue-mcp-bridge/SKILL.md) | Reaching the running Unreal editor over MCP: resolving the engine, finding the editor and its project, proving which of the two MCP servers answered, registering a client, and starting a second editor without colliding on port 8000. |
+The 29 `ue-op-*` skills and `ue-op-mcp-connect` were **vendored in** from the working
+skillset at `D:\UE\.ue-op-skillset\` — a set forged over real Unreal work on this machine.
+They are now part of the workshop, so they travel with it in git.
 
-## The external `ue-op-*` skillset
-
-A large, working set of Unreal skills already exists at
-`D:\UE\.ue-op-skillset\<name>\SKILL.md` — blueprint inspection and wiring, component
-setup, input, PIE, asset search, web builds, capture, and more. **Read the matching
-`SKILL.md` from disk** rather than writing an equivalent here.
-
-They are deliberately **not** in this table, and they are **not** this workshop's skills.
-They live outside `~/.claude/skills` and are registered project-scoped, so agents working
-in non-UE projects never load them.
-
-When one of them proves itself in a real task, the **generalized** version — the part that
-is not specific to one project, one engine build or one machine — belongs here, written
-with the optimized steps. Copying a skill across verbatim teaches this workshop nothing.
+**Two folders were renamed on the way in**, to satisfy the naming convention:
+`ue-mcp-connect` → `ue-op-mcp-connect`, and the bridge-diagnostics skill →
+`ue-op-mcp-diagnose`. The original names still apply to the copy at
+`D:\UE\.ue-op-skillset\`. The full mapping, the helper paths and the two-copy caveat are in
+[`skill_catalog.md`](skill_catalog.md).
