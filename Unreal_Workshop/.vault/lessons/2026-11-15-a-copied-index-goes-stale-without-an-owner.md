@@ -3,7 +3,8 @@
 **Status:** active
 
 **Date:** 2026-11-15
-**Symptom:** `AGENTS.md` §8 carried a hand-maintained table of the vault's twelve entries,
+**Symptom:** `AGENTS.md`'s reference section carried a hand-maintained table of the vault's
+twelve entries,
 duplicating what `.vault/` already knew. The table had **no status column**, so it could
 not express the one fact that matters about a memory — whether it is still true. The
 decisions it listed each carried `Status: active | superseded` in their own file, and the

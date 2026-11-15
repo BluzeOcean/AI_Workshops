@@ -1,13 +1,19 @@
 # The workshop is loaded lazily, and the vault is pruned
 
 **Date:** 2026-11-15
-**Status:** active
+**Status:** superseded
+**Superseded by:** `../decisions/2026-11-15-agents-md-is-a-router-not-a-manual.md`
+
+> **Superseded.** The rule this file recorded is now carried by
+> `../decisions/2026-11-15-agents-md-is-a-router-not-a-manual.md`, which merges it
+> with the rule about what `AGENTS.md` may contain. Read that one instead.
+
 **Decision:** The workshop is built so that **reading its entry points costs a page, not a
 library**. Three rules, and they hold together:
 
 1. **Two indexes, and only two.** `.skills/skill_catalog.md` maps the procedures;
    `.vault/vault_index.md` maps the memory. An agent reads the index, picks the one entry it
-   needs, and opens that. It never reads a folder end to end, and never reads all 31 skills
+   needs, and opens that. It never reads a folder end to end, and never reads every skill
    to decide which one applies.
 2. **The always-loaded file never duplicates a fetched layer.** `AGENTS.md` carries the
    *rules* — the destination rule, the version rule, the traps. It does **not** carry the
@@ -20,7 +26,7 @@ library**. Three rules, and they hold together:
 is to be *loaded* by an agent that knows nothing. A workshop that carries its own library
 into every session is a liability, not an asset — the always-loaded file is the part that
 can never be lazily fetched, so every byte in it is paid for by every task forever. The
-slimming of `AGENTS.md` §4b/§4c from 137 lines to 47 was not tidiness: it was the removal
+slimming of `AGENTS.md`'s MCP sections from 137 lines to 47 was not tidiness: it was the removal
 of content that a skill already carried and a vault note already carried, so the fetch
 returned to being an actual fetch instead of a formality.
 
@@ -31,7 +37,6 @@ signal drowns. The index makes the vault's size visible at a glance, so rot is v
 before it is expensive.
 
 **Supersedes:** —
-**Superseded by:** —
 
 **Reuse when:** deciding whether something belongs in `AGENTS.md` (always-loaded, a rule)
 or in the vault (fetched, a fact); deciding whether to add a third index; deciding what to

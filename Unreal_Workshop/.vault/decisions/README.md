@@ -27,4 +27,4 @@ way, from the replacement to what it replaced. Both directions, always.
 
 A decision is not revoked until the revocation is recorded in **four** places — the new
 file, the old file's status, its `Superseded by:` back-link, and the `vault_index.md` row.
-The procedure is in `../../AGENTS.md` §6, *Revoking a decision*.
+The procedure is in `../../AGENTS.md` §5, *Revoking a decision*.

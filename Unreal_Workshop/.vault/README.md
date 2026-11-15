@@ -83,7 +83,7 @@ so an agent who opens the old file is handed the new one instead of a dead end. 
 points forward from the replacement to what it replaced. Both directions, always.
 
 The full revocation procedure — the four places a supersession must be recorded, and in what
-order — is in `../AGENTS.md` §6, *Revoking a decision*.
+order — is in `../AGENTS.md` §5, *Revoking a decision*.
 
 ## Rules for agents
 
@@ -92,7 +92,7 @@ order — is in `../AGENTS.md` §6, *Revoking a decision*.
 2. **Write the lesson, not the diary.** One file, one lesson. No session logs.
 3. **Never overwrite a lesson.** Add a new one and link it. A **decision** is revoked with
    `Status: superseded` plus a `Superseded by:` back-link — the four-step procedure is in
-   `../AGENTS.md` §6, *Revoking a decision*.
+   `../AGENTS.md` §5, *Revoking a decision*.
 4. **A lesson that contradicts `AGENTS.md` does not silently win.** Fix `AGENTS.md`
    too, or say clearly in the lesson that it is an open question.
 5. **If a lesson is no longer true, say so in the file.** Mark it `Status: stale` with the
@@ -118,7 +118,7 @@ attention in a grep, and it slowly contradicts the entries that matter. Six week
 the vault is either a memory bank or a landfill, and the difference is decided by whether
 somebody prunes it.
 
-**The procedure lives here and the trigger lives in `../AGENTS.md` §6** — the trigger is
+**The procedure lives here and the trigger lives in `../AGENTS.md` §5** — the trigger is
 always loaded, this is fetched only when a prune actually runs.
 
 ### When a prune runs

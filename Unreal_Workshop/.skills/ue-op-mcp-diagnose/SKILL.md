@@ -22,7 +22,7 @@ lies, and two servers.
 |---|---|
 | the editor alive, project identified | this skill, steps 1–4 |
 | to call a tool | this skill, step 4, then the sibling `ue-op-mcp-connect` skill |
-| the editor **not** running | a commandlet — `AGENTS.md` §4d. There is no bridge without an editor. |
+| the editor **not** running | a commandlet — the `ue-op-run-headless` skill. There is no bridge without an editor. |
 | an engine older than 5.8 | a commandlet. The MCP plugin does not exist before 5.8. |
 
 ---
@@ -59,7 +59,7 @@ Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'" |
 The `.uproject` in the command line is the **authority** on which project is open — not
 the MCP reply, not a remembered path.
 
-No output means no editor: use a commandlet (`AGENTS.md` §4d).
+No output means no editor: use a commandlet (`ue-op-run-headless`).
 
 ---
 
@@ -171,7 +171,8 @@ Then register that port as a second client entry.
 
 ## Related
 
-- `AGENTS.md` §4b and §4c — the two surfaces, summarised (this skill is the procedure they point at)
+- `.vault/decisions/2026-11-15-the-two-unreal-mcp-surfaces-are-not-interchangeable.md` — the rule
+- `.vault/model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md` — the raw facts
 - `.vault/lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md`
 - `.vault/lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md`
 - `.vault/lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md`

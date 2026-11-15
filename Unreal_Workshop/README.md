@@ -2,17 +2,17 @@
 
 A workspace that gives any agent the ability to drive Unreal Engine.
 
-**Tell the agent to read this file. That is the entire entry point.** From here the agent
-reads `AGENTS.md`, picks up the tools and skills that exist, and does the work — with no
-tutorial, no prior context, and no hand-holding.
+**Tell the agent to read this file, then `AGENTS.md`.** That is the entire entry point.
+`AGENTS.md` is the **gateway and the rules** — where everything is, how to look it up, and
+how to maintain the workshop. Everything else is fetched on demand.
 
-It contains **no media**. It holds only the **instructions**, the **skills**, the **vault
+It contains **no media**. It holds only the **rules**, the **skills**, the **vault
 (memory)** and the **tools** — text an agent can read. No Unreal assets, no pictures, no
 renders, no large or binary files of any kind, and deliberately **no `.gitignore`**:
 nothing that belongs here needs excluding, because media does not come here at all.
 
 ```
-AGENTS.md        <- start here. the whole onboarding.
+AGENTS.md        <- start here. the gateway and the rules.
 .skills/         <- procedures: one folder per skill, each with a SKILL.md
 .vault/          <- the memory bank: lessons, decisions, notes, recipes, workflows
 tools/           <- the scripts (spec only for now — see tools/README.md)
@@ -31,28 +31,23 @@ that pointer lives in the **agent's own configuration**, not here.
 
 ## Quick start for an agent
 
-1. Read `AGENTS.md`. It covers the destination rule, the Unreal installs and how to resolve
-   the version, the six ways to talk to Unreal, and the mistakes that cost the most time.
+1. Read `AGENTS.md`. It is the gateway: the map, the lookup discipline, and the rules for
+   working inside the workshop.
 2. Confirm the **destination** for the task — which project, and which folder inside it. If
-   the user has not said, ask. Unreal projects live under `D:\UE\<Project>\`.
-3. Check what already exists: `.skills/skill_catalog.md` is the **index of 31 skills** —
+   the user has not said, ask. The rule is in
+   `.vault/decisions/2026-11-15-working-in-a-live-unreal-project.md`.
+3. Check what already exists: `.skills/skill_catalog.md` is the **index of the skills** —
    read the `When to use it` column and open the one that matches; `tools/README.md`
    describes the tool layer; `.vault/vault_index.md` is the **map of what past tasks
    learned** — read the index, never the vault end to end.
-4. Talk to Unreal — see §4 of `AGENTS.md`:
-   - the live editor process (find it with WMI, and read its command line for the project),
-   - Epic's built-in MCP plugin on `127.0.0.1:8000/mcp` (UE 5.8+ only),
-   - the Unreal Canvas bridge — a *different* MCP server that looks the same,
-   - headless: `UnrealEditor-Cmd.exe -run=<Commandlet>` or `-ExecutePythonScript=`,
-   - the **31 skills in `.skills/`** — blueprint authoring and repair, input, PIE,
-     asset search and migration, capture, the web build pipeline, skeletal import, and
-     more. Read `.skills/skill_catalog.md` for the index;
-   - or the tools in `tools/`, once they do.
+4. Reach Unreal through the skill that fits — the live editor over MCP
+   (`ue-op-mcp-diagnose`), headless (`ue-op-run-headless`), the live editor's Python
+   (`ue-op-editor-script`), or a task-specific skill. The catalog says which.
 5. Build the script in the **project's `Saved/` folder** (or next to the skill it serves, in
    `.skills/<name>/scripts/`). Save the result into the destination.
 6. **Log the memory** in `.vault/` when the task is done — add its row to
    `.vault/vault_index.md`, turn what worked into a skill, and prune what you touched.
-   See `.vault/README.md` and §6 of `AGENTS.md`.
+   See `.vault/README.md` and §5 of `AGENTS.md`.
 
 ## The workshop is not finished when it is created
 
@@ -87,17 +82,14 @@ folder exactly — the convention is in `.skills/README.md`.
 ## The ideas
 
 **Nothing is loaded until it is needed.** The catalog is the map of the skills; the index is
-the map of the memory. Reading either costs a page, not a library. Reading `AGENTS.md` and
-this file tells an agent *where* everything is and *when* to open it — it does not carry the
-31 skill bodies or the vault entries with it. Fetch the one you need, when you need it.
+the map of the memory. Reading either costs a page, not a library. `AGENTS.md` and this
+file tell an agent *where* everything is and *when* to open it — they do not carry the
+skill bodies or the vault entries with them. Fetch the one you need, when you need it.
 
-**The destination is confirmed, never assumed.** Unreal will create assets in any project
-you point it at, so a guessed project means the work is in the wrong place and nothing tells
-you. Ask — and never save over an asset the user has open.
-
-**The Unreal version is resolved, not pinned.** 5.9.0, 5.8.4 and 5.5.4 are installed side
-by side. The newest wins, and the launcher registry cannot be trusted — UE 5.9 is installed
-and running but is *not* in the registry. Scan `Engine/Build/Build.version` instead.
+**`AGENTS.md` is a router, not a manual.** It holds the rules for working in the workshop
+and points at the catalogs for everything else. The Unreal rules — where work goes, which
+engine to use, how to reach the editor — live in the vault and the skills, where they are
+read when a task needs them and kept current in one place.
 
 **The vault is a memory bank.** Written after each task, searched when something breaks. It
 is what stops the workspace from making the same mistake twice.
@@ -106,7 +98,7 @@ is what stops the workspace from making the same mistake twice.
 file's status, its `Superseded by:` back-link, and the index row — plus `AGENTS.md` if it
 quoted the old decision, because `AGENTS.md` is loaded at every session start. A decision
 revoked in the vault but still quoted in `AGENTS.md` has not actually been revoked. The
-procedure is `AGENTS.md` §6.
+procedure is `AGENTS.md` §5.
 
 ## State of the tool layer
 
@@ -130,8 +122,8 @@ needs them:
 Two things to know before you use it: **do not register the server at project scope** in a
 project that already has the user-scope entry — a duplicate shows as "⏸ Pending approval"
 and shadows the working one. And there are **two** Unreal MCP surfaces on this box which
-are not interchangeable; read §4b and §4c of `AGENTS.md`, or the skill, before assuming
-which one answered.
+are not interchangeable; read the `ue-op-mcp-diagnose` skill, or the vault decision *the
+two Unreal MCP surfaces are not interchangeable*, before assuming which one answered.
 
 ## Sister workshops
 

@@ -1,7 +1,7 @@
 # Skill catalog — every skill in this workshop
 
-**31 skills.** Read the `When to use it` column and open the one that matches. Do not read
-them all.
+**One row per skill.** Read the `When to use it` column and open the one that matches. Do
+not read them all.
 
 Naming: every folder is `ue-op-<verb-noun>` — see the convention in
 [`README.md`](README.md).
@@ -15,6 +15,7 @@ Naming: every folder is `ue-op-<verb-noun>` — see the convention in
 | [`ue-op-mcp-connect`](ue-op-mcp-connect/SKILL.md) | Brings the MCP bridge up: enables Epic's plugin in the `.uproject`, turns on auto-start, registers the client, walks the handshake | The editor has no MCP surface, or the bridge needs recovering |
 | [`ue-op-mcp-diagnose`](ue-op-mcp-diagnose/SKILL.md) | Works out **which editor and which MCP server** you are talking to — resolves the engine, finds the project, finds the port owner, tells Epic's plugin from the Canvas bridge | A tool call succeeds but does the wrong thing, or you are not sure which project answered |
 | [`ue-op-editor-script`](ue-op-editor-script/SKILL.md) | Drives the live editor with Python when the MCP tools cannot express the job | Batch asset edits, reading a scene, a calculation you need as data |
+| [`ue-op-run-headless`](ue-op-run-headless/SKILL.md) | Runs Unreal with no GUI on screen — commandlets, editor Python, automation tests | No editor is running, the user's editor is busy, or you want a cook or a bulk resave out of the way |
 | [`ue-op-capture-editor`](ue-op-capture-editor/SKILL.md) | Screenshots the editor or the viewport through MCP | You need to *show* what the editor looks like |
 | [`ue-op-offscreen-verify`](ue-op-offscreen-verify/SKILL.md) | Proves a mesh renders and animates without a desktop screenshot | You need visual proof but the user is at the machine |
 
