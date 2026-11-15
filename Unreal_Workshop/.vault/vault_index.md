@@ -37,6 +37,7 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`model-notes/2026-11-15-the-mission-camera-shows-no-horizon.md`](model-notes/2026-11-15-the-mission-camera-shows-no-horizon.md) | The -38 deg / 32 deg mission rig never sees the horizon: why far scenery must be a ground plate, and how far out it must reach |
 | active | [`lessons/2026-11-16-a-modal-dialog-blocks-every-editor-tool.md`](lessons/2026-11-16-a-modal-dialog-blocks-every-editor-tool.md) | Delete-then-create over a referenced asset raises Slate's "Overwrite Existing Object?" — and every editor tool then answers "not run" while the dialog is up |
 | active | [`lessons/2026-11-16-in-a-top-down-arena-the-floor-is-the-mood.md`](lessons/2026-11-16-in-a-top-down-arena-the-floor-is-the-mood.md) | Why the sun barely touches a top-down deck: the SkyLight and the floor's albedo tint ARE the mood, and where the post-process/sky-atmosphere dials live in Python |
+| active | [`lessons/2026-11-16-a-default-on-cpp-overlay-ships-to-the-player.md`](lessons/2026-11-16-a-default-on-cpp-overlay-ships-to-the-player.md) | A `bDevMode = true` C++ default put DEV STATS in the browser build; gate on WITH_EDITOR / -JamDevMode, then rebuild wasm + recook |
 
 **28 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.

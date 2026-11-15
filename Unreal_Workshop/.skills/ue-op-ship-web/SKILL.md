@@ -58,7 +58,41 @@ into `<project>/Saved`. The launcher finds a Python 3.8+ (tries `py -3`,
 stage on port 8936 with the COOP/COEP headers the page needs, opens the
 browser, and stops the server ~10 s after the game tab closes.
 
-### 3. Hosting requirements
+### 3. Deliver into the folder the user names
+
+When the user names a destination folder ("put the build on the Desktop"), that folder is
+**theirs**, and its path is **an argument, never a constant**. Do not bake a project path
+into a script, a launcher or a skill: the same procedure has to work for the next project.
+
+- **Read what is already there first.** A previous build is the user's work, not clutter:
+  move it into `version 1` (or ask which name they want) rather than deleting it, then
+  put the new stage in `version 2`. One folder per version, the newest named last.
+- **Copy the stage, do not move it.** The stage under `Saved/<Stage>` stays the source of
+  truth for the next rebuild; the delivered folder is a copy that the user can move, zip
+  or hand to a host.
+- **Make the folder self-contained.** Copy `serve.py` into it next to `index.html` and
+  write the launcher against `%~dp0serve.py`, so the folder still runs after it is moved
+  off this machine or the project is deleted. Take the port as an optional argument.
+- **Write a `VERSION.txt`** into it: build time, engine and tier, stage name, the map token
+  that the page opens on, what changed since the previous version, how to run it, and the
+  payload sizes. It is the only record the delivered folder carries.
+- **Serve the delivered folder — not the stage — when you verify.** The copy is what the
+  user will open; a path that broke in the copy (a space in `version 2`) has to fail in
+  front of you.
+
+```powershell
+# the destination is a parameter; there is no default that points at this machine
+$dest = '<user-named folder>\version N'
+New-Item -ItemType Directory -Force -Path $dest | Out-Null
+Copy-Item "$stage\*" $dest -Recurse -Force
+Copy-Item "<workshop>\..\..\<project>\Tools\serve_web_lab.py" "$dest\serve.py" -Force
+```
+
+Space in a path is a live hazard here: `Start-Process -ArgumentList` splits on spaces, so
+`"C:\...\version 2"` arrives as `C:\...\version` and the server answers *stage not found*.
+Quote the whole argument inside the argument list.
+
+### 4. Hosting requirements
 
 | Requirement | Why | Where |
 |---|---|---|
