@@ -30,9 +30,11 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`lessons/2026-11-15-a-tool-name-is-not-a-capability.md`](lessons/2026-11-15-a-tool-name-is-not-a-capability.md) | Twelve skills died on one renamed dispatch mechanism, and a `not found` got recorded as a missing capability |
 | active | [`lessons/2026-11-15-a-client-registration-is-per-agent-not-per-machine.md`](lessons/2026-11-15-a-client-registration-is-per-agent-not-per-machine.md) | A "user scope" registration reaches one agent only — and the no-registration route that works for everyone else |
 | active | [`lessons/2026-11-15-a-material-graph-link-that-does-not-raise.md`](lessons/2026-11-15-a-material-graph-link-that-does-not-raise.md) | connect_material_expressions no-ops on a wrong pin name — the read-back that proves a link, the enum connect_material_property needs, and why a rebuilt material orphans the level |
+| active | [`decisions/2026-11-15-the-prefab-is-a-blueprint-actor-not-a-level-instance.md`](decisions/2026-11-15-the-prefab-is-a-blueprint-actor-not-a-level-instance.md) | Unreal's prefab: Blueprint actor vs Level Instance vs Packed Level Actor, and what must stay in the level |
+| active | [`lessons/2026-11-15-the-subobject-api-will-not-tell-you-it-succeeded.md`](lessons/2026-11-15-the-subobject-api-will-not-tell-you-it-succeeded.md) | Scripting Blueprint components: the Text failure reason that is always truthy, the handle → data → object chain, and components not being on the CDO |
 | active | [`model-notes/2026-11-15-the-mission-camera-shows-no-horizon.md`](model-notes/2026-11-15-the-mission-camera-shows-no-horizon.md) | The -38 deg / 32 deg mission rig never sees the horizon: why far scenery must be a ground plate, and how far out it must reach |
 
-**22 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**24 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are
