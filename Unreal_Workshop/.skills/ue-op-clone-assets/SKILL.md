@@ -23,7 +23,7 @@ at the source project.
 
 ## The three facts that decide everything
 
-### 1. `duplicate` is a plain file copy — it does NOT remap references
+### 1. `Duplicate` is a plain file copy — it does NOT remap references
 
 Verified: after duplicating `M_Murdock_Body`, the copy's dependencies still
 listed `/Game/ParagonMurdock/.../MF_MatLayerBlend_Decal` and
@@ -33,16 +33,17 @@ assets.
 Consequence: a cloned tree is a *manifest*, not a standalone package. This is
 not fixable through the exposed tools, because a material's texture references
 live inside its **expression graph** (`UMaterial::Expressions`), not in a
-UPROPERTY that `set_properties` can rewrite. The same is true of material-layer
+UPROPERTY that `SetProperties` can rewrite. The same is true of material-layer
 overrides and material-function references.
 
-### 2. `move` rewrites references — but it consumes the original
+### 2. `Move` rewrites references — but it consumes the original
 
 Verified: moving an asset re-pointed *both* the original referencer and an
 unrelated duplicate copy at the new path, and moving it back restored both.
-`rename_directory`/`rename_asset` do a project-wide referencer sweep.
+There is no separate rename tool in this build — `Move(path, newPath)` is the
+project-wide referencer sweep.
 
-So `move` is the only way to make a tree self-contained — but it is a
+So `Move` is the only way to make a tree self-contained — but it is a
 **relocation, not a clone**. Do not do it to the user's source assets unless
 they have explicitly asked for it: it is not reversible from the user's point
 of view and the harness's permission layer will (correctly) block it.
@@ -117,16 +118,24 @@ dropping it.
 
 ### 4. Create every destination folder first
 
-`duplicate` on a **folder** fails if the destination already exists, so create
+`Duplicate` on a **folder** fails if the destination already exists, so create
 all leaf folders up front, then duplicate **per asset** (which is the only
 form that lets you control the destination path).
+
+The blocks from here on are the `content` of one `execute_python` call, so they
+run inside the editor and `await call_tool(...)` reaches the registered tool by
+its full name:
+
+```powershell
+python ...\mcp_call.py call editor_toolset.toolsets.python_scripting.PythonScriptingTools execute_python `
+  '{"script":{"content":"<the Python block below>","language":"Python"}}'
+```
 
 ```python
 for _, d in plan:
     parts = d.split("/")
     for i in range(3, len(parts)):
-        T(AT + ".create_folder", path="/".join(parts[:i]))
-T(AT + ".save_assets", asset_paths=[])
+        await call_tool("EditorToolset.AssetToolset.CreateFolder", path="/".join(parts[:i]))
 ```
 
 ### 5. Duplicate, then save
@@ -134,24 +143,25 @@ T(AT + ".save_assets", asset_paths=[])
 ```python
 ok, fail = [], []
 for src, dst in plan:
-    try:
-        r = T(AT + ".duplicate", path=src, new_path=dst)
-    except Exception:
-        r = False
-    (ok if r else fail).append((src, dst))
+    if await call_tool("EditorToolset.AssetToolset.Duplicate", path=src, newPath=dst):
+        ok.append((src, dst))
+    else:
+        fail.append((src, dst))
 
-T(AT + ".save_assets", asset_paths=[])
+# SaveAsset takes one path; there is no batch save.
+for _, dst in ok:
+    await call_tool("EditorToolset.AssetToolset.SaveAsset", assetPath=dst)
 ```
 
-**Duplicates live in memory until `save_assets` runs** — until then nothing is
-on disk and `get_dependencies` on a copy returns `None`.
+**Duplicates live in memory until `SaveAsset` runs on each of them** — until
+then nothing is on disk and `GetDependencies` on a copy returns nothing.
 
 ### 6. Verify
 
 - file count and size on disk under `Content/Assets`
-- `get_dependencies` on a few copies — confirm they point at the sources
+- `GetDependencies` on a few copies — confirm they point at the sources
   (that is correct for a clone)
-- `compile_blueprint` on a copied blueprint — must not raise
+- `CompileBlueprint` on a copied blueprint — must not raise
 - the source tree must be **byte-identical** in count and size
 
 ## Migration recipes
@@ -169,7 +179,7 @@ Pick one deliberately — they are not equivalent.
 |---|---|---|
 | **A. Migrate one clone** | the clone + the full closure at the source's paths | ~1× closure, but the clone set is dead weight |
 | **B. Migrate the closure's originals** | the closure at the source's paths, no clones | 1× closure, cleanest |
-| **C. Migrate clones, then reorganise in the destination** | closure at source paths, then `move` it into the curated structure | 1× closure + one pass of folder moves |
+| **C. Migrate clones, then reorganise in the destination** | closure at source paths, then `Move` it into the curated structure | 1× closure + one pass of folder moves |
 | **D. Relocate first, then migrate** | only the curated folder, self-contained | 1× closure, nothing else — **best** |
 
 Recipe D is `ue-op-relocate-assets` followed by a plain Migrate of the
@@ -177,7 +187,7 @@ curated folder: the destination receives one standalone folder and the other
 project references it directly, with no restructuring on their side.
 
 Recipe C is the fallback when the source project must not be touched at all:
-migrate, then `move` the migrated assets into the curated structure *in the
+migrate, then `Move` the migrated assets into the curated structure *in the
 destination*, where a broken reference is cheap to fix.
 
 
@@ -185,13 +195,13 @@ destination*, where a broken reference is cheap to fix.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `duplicate` of a folder returns false | the destination folder already exists | create it as a folder first, or duplicate assets individually |
-| `duplicate` of an asset returns false | the asset is not registered yet, or its class cannot be loaded | retry after `save_assets`; check the log for the class name |
-| Duplicates vanish | they were never saved | `save_assets` after the loop |
+| `Duplicate` of a folder returns false | the destination folder already exists | create it as a folder first, or duplicate assets individually |
+| `Duplicate` of an asset returns false | the asset is not registered yet, or its class cannot be loaded | check the log for the class name; the call returns a plain boolean, with no reason |
+| Duplicates vanish | they were never saved | `SaveAsset` each copy after the loop |
 | A copied asset has no dependencies | it was never saved/loaded | save first, then query |
-| `set_properties` cannot re-point a texture | texture refs live in the expression graph | accept it — use the move-based recipe |
+| `SetProperties` cannot re-point a texture | texture refs live in the expression graph | accept it — use the move-based recipe |
 | An asset cannot be duplicated at all | its plugin is disabled (e.g. `Rig` / Control Rig) | exclude it; confirm with the log: `its class (Rig) does not exist` |
-| `asset_paths=[...]` rejected | outer `call_tool` mangles arrays into `{"item": [...]}` | go through `execute_tool_script` with `json.dumps` |
+| A batch save | there is no `save_assets(list)`, and `execute_tool_script` does not exist in this build | `SaveAsset` per copy — one path per call; arrays themselves pass through fine (`ValidateAssets(assetPaths=[...])` received both entries) |
 | The clone is 600 MB but the closure is 700 MB | some assets failed to duplicate | diff the file lists and report the gaps |
 
 **Always report what did not copy.** A silently missing asset is a broken

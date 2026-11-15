@@ -14,158 +14,201 @@ allowed-tools:
 
 # ue-op-wire-graph — create and connect blueprint nodes
 
+Every call below is one hop: `python mcp_call.py call <Toolset> <Tool>
+'<json arguments>'`. The parameters are UE camelCase, and the toolset is
+`BlueprintToolsets.BlueprintToolset` — not the old
+`editor_toolset.toolsets.blueprint.BlueprintTools`, which is not registered in
+this build.
+
 ## The core mechanic
 
 `PinID` identifies one pin on one node:
 
-```python
-{"node": "<node refPath>", "index_id": <int>, "direction": "EGPD_Input"|"EGPD_Output"}
+```json
+{"node": "<node refPath>", "indexId": <int>, "direction": "EGPD_Input"}
 ```
 
-- `direction: "EGPD_Output"` + `index_id` → a source pin
-- `direction: "EGPD_Input"` + `index_id` → a destination pin
+- `indexId` is camelCase. The old `index_id` is rejected by the schema.
+- `direction: "EGPD_Output"` + `indexId` → a source pin
+- `direction: "EGPD_Input"` + `indexId` → a destination pin
 
-Connect with `connect_pins(output_pin=..., input_pin=...)`; set a default value
-with `set_pin_value(pin=..., value="900.0")`.
+Connect with `ConnectPins(outputPin=..., inputPin=...)`; set a default value
+with `SetPinValue(pin=..., value="900.0")`.
 
-**Pin indices are per-node and stable**, and you learn them from
-`get_node_infos`.
+**Pin indices are per-node**, so you do not guess them: you read them back from
+`GetNodeInfos`, where the index lives at `pin["pinId"]["indexId"]` and the
+direction at `pin["pinId"]["direction"]`.
 
 ---
 
 ## Procedure
 
-### 0. Resolve the graph you are editing
+Every block below assumes one shell variable for the client:
 
-Every step below works on `eg`, the blueprint's EventGraph:
-
-```python
-def rp(o):
-    if isinstance(o, dict):
-        try:
-            return o["refPath"]
-        except Exception:
-            return str(o)
-    return str(o)
-
-BP = "/Game/<Folder>/<AssetName>"
-bp = T("editor_toolset.toolsets.asset.AssetTools.load_asset", asset_path=BP)
-graphs = T("editor_toolset.toolsets.blueprint.BlueprintTools.list_graphs", blueprint=bp)
-eg = [g for g in graphs if rp(g).endswith(":EventGraph")][0]
+```powershell
+$mcp = "V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py"
 ```
 
-`list_graphs` returns the blueprint's **own** graphs. A child blueprint's
-EventGraph starts empty — the parent's graph is separate and still runs.
+### 0. Resolve the graph you are editing
+
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset ListGraphs '{"blueprint":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn"}'
+```
+
+```json
+{"returnValue":[{"refPath":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:UserConstructionScript"},
+                {"refPath":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph"}]}
+```
+
+Every later step wants `eg`, the graph whose refPath ends in `:EventGraph`.
+The graph is addressed by that refPath string, not by the blueprint.
+
+`ListGraphs` returns the blueprint's **own** graphs only — a child's
+EventGraph is its own graph, the parent's nodes are not in it, and the parent's
+graph still runs. An `(event ...)` line with no body in the DSL means the
+override exists but does nothing yet.
 
 ### 1. Find the node types you need
 
-```python
-import json
-
-def T(tool, **kw):
-    """Call a toolset tool from inside execute_tool_script and unwrap its
-    {'returnValue': ...} envelope.  Tool names are fully qualified, e.g.
-    'editor_toolset.toolsets.asset.AssetTools.load_asset'."""
-    r = execute_tool(tool, json.dumps(kw))
-    if isinstance(r, dict) and "returnValue" in r:
-        return r["returnValue"]
-    return r
-
-T("editor_toolset.toolsets.blueprint.BlueprintTools.find_node_types", graph=eg, type_id_filter="SetMaxWalkSpeed",
-  context_pins=[])
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset FindNodeTypes '{"graph":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph","typeIdFilter":"SetMaxWalkSpeed"}'
 ```
 
-`context_pins=[]` is **required** even though the signature shows a default.
+```json
+{"returnValue":["Class|CharacterMovementComponent|SetMaxWalkSpeed",
+                "Class|CharacterMovementComponent|SetMaxWalkSpeedCrouched"]}
+```
 
-The catalog is seeded from the graph's own nodes, so a node type only exists
-if something in the graph already uses it — or if the input mapping that
-creates it exists (legacy `Input|ActionEvents|<Name>` appears once an action
-mapping named `<Name>` is registered; see `ue-op-setup-input`).
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset FindNodeCategories '{"graph":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph","categoryFilter":"Development"}'
+```
+
+```json
+{"returnValue":["Development","Development|Editor"]}
+```
+
+`contextPins` is **optional** (default null) — leave it out unless you are
+filtering by compatible types. The catalogue is the editor's whole palette, not
+the graph's contents: 2484 categories come back on an EventGraph that holds
+three event nodes, and `Class|CharacterMovementComponent|SetMaxWalkSpeed` is
+offered in a Pawn graph.
+
+A trailing pipe lists a whole category — `"typeIdFilter":"Utilities|FlowControl|"`
+→ 1421 ids.
 
 ### 2. Create the nodes
 
-```python
-n = T("editor_toolset.toolsets.blueprint.BlueprintTools.create_node", graph=eg, type_id=tid, pos={"x": -300, "y": 300})
+*(write step — signature-verified, not executed)*
+
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset CreateNode '{"graph":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph","typeId":"Development|PrintString","pos":{"x":-300,"y":300}}'
 ```
+
+`pos` is an `IntPoint`: `{"x": -300, "y": 300}`. The call returns the new
+node, and its `refPath` is what you feed to the next step and to `ConnectPins`
+— it is resolved as a plain string, so nothing has to stay in memory between
+calls. `CreateNode(graph, typeId, pos, declaringClass=null)`; set
+`declaringClass` only to disambiguate a `typeId` two classes both offer.
 
 ### 3. Read their pins
 
-```python
-ni = T("editor_toolset.toolsets.blueprint.BlueprintTools.get_node_infos", nodes=[n])[0]
-# ni["input_pins"] / ni["output_pins"] -> [{"name","type_id","pin_id","connected_pins","value"}]
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset GetNodeInfos '{"nodes":["/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_Event_0"]}'
 ```
 
-Pin index lives at `p["pin_id"]["index_id"]`.
+```json
+{"returnValue":[{"typeId":"AddEvent|EventBeginPlay",
+  "node":{"refPath":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_Event_0"},
+  "position":{"x":0,"y":0},
+  "inputPins":[],
+  "outputPins":[
+    {"name":"OutputDelegate","typeId":"Delegate",
+     "pinId":{"node":{"refPath":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_Event_0"},
+              "indexId":0,"direction":"EGPD_Output"},
+     "connectedPins":[],"value":""},
+    {"name":"then","typeId":"Exec",
+     "pinId":{"node":{"refPath":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_Event_0"},
+              "indexId":1,"direction":"EGPD_Output"},
+     "connectedPins":[],"value":""}]}]}
+```
+
+Read the pin list and match on `name` / `typeId` **before** using an index:
+here index 0 is a `Delegate` and index 1 is the exec `then` pin. When you
+write a PinID by hand you may pass the node as a plain refPath string; the
+`{"refPath": …}` object that comes back reads the same way.
 
 ### 4. Wire
 
-```python
-def PID(node_ref, index_id, direction):
-    return {"node": node_ref, "index_id": index_id, "direction": direction}
+*(write step — signature-verified, not executed)*
 
-T("editor_toolset.toolsets.blueprint.BlueprintTools.connect_pins",
-  output_pin=PID(sprint_ref, 0, "EGPD_Output"),   # Pressed
-  input_pin=PID(setfast_ref, 0, "EGPD_Input"))    # execute
-
-T("editor_toolset.toolsets.blueprint.BlueprintTools.set_pin_value",
-  pin=PID(setfast_ref, 1, "EGPD_Input"), value="900.0")
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset ConnectPins '{"outputPin":{"node":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_Event_0","indexId":1,"direction":"EGPD_Output"},"inputPin":{"node":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_CallFunction_0","indexId":0,"direction":"EGPD_Input"}}'
 ```
+
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset SetPinValue '{"pin":{"node":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn:EventGraph.K2Node_CallFunction_0","indexId":1,"direction":"EGPD_Input"},"value":"900.0"}'
+```
+
+`value` is always a **string**, formatted for the pin's type (`"900.0"`,
+`"true"`, `"Hello"`, `"/Game/Path/Asset.Asset"`). `SetPinValue` only works on
+an input pin that supports default values.
 
 ### 5. Compile and save
 
-```python
-T("editor_toolset.toolsets.blueprint.BlueprintTools.compile_blueprint", blueprint=bp)
-T("editor_toolset.toolsets.asset.AssetTools.save_assets", asset_paths=[bp])   # stop PIE first
+*(write step — signature-verified, not executed)*
+
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset CompileBlueprint '{"blueprint":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn"}'
+python $mcp call EditorToolset.AssetToolset SaveAsset '{"assetPath":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn"}'
 ```
+
+`SaveAsset` takes **one** path. There is no `save_assets(list)` in this build —
+`search_symbols` returns zero matches for that name — so a batch save is one
+call per asset.
 
 ---
 
-## Legacy input events: the multi-exec case
+## Events with several exec outputs
 
-A legacy `InputAction` node (`UK2Node_InputAction`) has exec outputs
-**`Pressed` (0)** and **`Released` (1)**, plus a `Key` struct output (2) —
-that is how hold-to-sprint works. The DSL's `(event …)` form only wires a pin
-named `then`, which legacy events do not have, so wire these by hand with the
-pin API above.
+The old recipe here wired a legacy `InputAction` node (`Pressed` = 0,
+`Released` = 1, `Key` = 2) for a hold-to-sprint toggle. **That pin table does
+not hold in this build.** `FindNodeTypes` with `typeIdFilter="ActionEvents"`
+returns 15 ids and every one of them is `Input|EnhancedActionEvents|<IA_Name>`;
+`typeIdFilter="AxisEvents"` returns nothing at all. No `Input|ActionEvents|…`
+node exists in this project's palette because it registers Enhanced Input only,
+so the legacy indices could not be re-verified and are not repeated.
 
-Its sibling, the axis event (`UK2Node_InputAxisEvent` — there is no
-`UK2Node_InputAxis` class in 5.8), has three **output** pins and no exec
-input:
+What is verified is the shape you must handle either way — several output pins
+on one node, only one of them exec. `AddEvent|EventBeginPlay` reports
+`OutputDelegate` (Delegate, indexId 0) and `then` (Exec, indexId 1). The
+method is the same for an Enhanced Input action event:
+`GetNodeInfos` first, match the pin `name`, then wire its `indexId`. The
+Enhanced Input action events the palette offers here are
+`Input|EnhancedActionEvents|<IA_Name>` — 15 of them, `IA_Pan`, `IA_Select`,
+`IA_Face`, `IA_ZoomIn`, `IA_Card1` and so on, one per input action asset.
 
-| index | pin | type |
-|---|---|---|
-| 0 | `OutputDelegate` | Delegate |
-| 1 | `then` | Exec |
-| 2 | `AxisValue` | float |
-
-So an axis event can be read as a data source as well as driven as a flow.
-
-A worked sprint chain:
-
-```
-Input|ActionEvents|Sprint        Pressed  -> SetMaxWalkSpeed.execute   value 900
-                                 Released -> SetMaxWalkSpeed.execute   value 600
-GetCharacterMovement             CharacterMovement -> both .self pins
-```
-
-`600` is ACharacter's default walk speed — sprint must differ from it or the
-toggle is invisible.
-
-## Node type id conventions (verified)
+## Node type id conventions (re-derived 2026-11-15)
 
 | What | type_id |
 |---|---|
-| legacy action event | `Input\|ActionEvents\|<ActionName>` |
-| legacy axis event | `Input\|AxisEvents\|<AxisName>` |
-| component variable setter | `\|SetMaxWalkSpeed` (empty class prefix) |
-| component variable getter | `Variables\|Character\|GetCharacterMovement` |
-| class function | `Class\|CharacterMovementComponent\|SetMaxWalkSpeed` |
-| custom event | `AddEvent\|Custom\|<Name>` |
-| built-in event | `AddEvent\|EventBeginPlay`, `AddEvent\|EventTick` |
+| built-in event | `AddEvent\|EventBeginPlay`, `AddEvent\|EventTick` (27 `AddEvent\|*` ids) |
+| custom event | `AddEvent\|Custom\|<Name>` (the palette lists the generic `AddEvent\|AddCustomEvent...`) |
+| Enhanced Input action event | `Input\|EnhancedActionEvents\|<IA_Name>` |
+| class function | `Class\|CharacterMovementComponent\|SetMaxWalkSpeed`, `Class\|Character\|GetCharacterMovement` |
+| ordinary function | `Development\|PrintString`, `Utilities\|FlowControl\|<Name>` |
+| variable access | `Variables\|Replication\|GetReplicates` (63 `Variables\|*` ids) |
 
-The catalog id and the id reported by `get_node_infos` differ
-(`Class|CharacterMovementComponent|SetMaxWalkSpeed` → `|SetMaxWalkSpeed`).
-**Match on the reported id** when looking nodes up.
+The catalogue id **is** the id the graph reports back: `GetNodeInfos` on an
+existing node answers `"typeId":"AddEvent|EventBeginPlay"`, the same string
+`FindNodeTypes` offers. There is no second, shorter "reported id" to match on —
+copy the id from `FindNodeTypes` and use it verbatim.
+
+The empty-class-prefix form `|SetMaxWalkSpeed` and
+`Variables|Character|GetCharacterMovement` are **not** palette ids here.
+Filtering `SetMaxWalkSpeed` returns exactly two ids, both
+`Class|CharacterMovementComponent|…`; filtering `GetCharacterMovement` returns
+exactly one, `Class|Character|GetCharacterMovement`. Those complete result lists
+are the evidence — no id equal to `|SetMaxWalkSpeed` is among them.
 
 ---
 
@@ -173,27 +216,30 @@ The catalog id and the id reported by `get_node_infos` differ
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `create_node` → "does not exist" | the id is not in that graph's catalog | find the real id with `find_node_types` |
-| `find_node_types` fails | `context_pins` is required | pass `context_pins=[]` |
-| `connect_pins` fails on types | incompatible pins | check `type_id` on both pins |
-| Wires land on the wrong pin | indices are per-node | re-read `get_node_infos` after every change |
-| Duplicate nodes accumulate | a failed script still created nodes | list nodes by type, delete extras before rebuilding |
-| The DSL cannot wire legacy events | `(event …)` only handles a `then` pin | use the pin API |
-| `save_assets` → "Asset does not exist" | PIE is running | stop PIE first |
+| `CreateNode` fails on the id | the id is not a palette id in that graph | `FindNodeTypes` first, copy the id verbatim |
+| `FindNodeTypes` → `was called with unrecognized parameter(s) [type_id_filter]. Valid parameters: [contextPins, graph, typeIdFilter]` | parameters are camelCase | the error prints the valid names — use them |
+| `ConnectPins` fails on types | incompatible pins | check `typeId` on both pins |
+| Wires land on the wrong pin | indices are per-node, and index 0 is not always exec | re-read `GetNodeInfos`; match the pin `name` before using `indexId` |
+| `ConnectPins` → `unrecognized parameter(s) [input_pin, output_pin]. Valid parameters: [inputPin, outputPin]` | the old snake_case names | `ConnectPins(outputPin, inputPin)`, `SetPinValue(pin, value)` |
+| `save_assets` → Unknown tool | no such tool in this build | `AssetToolset.SaveAsset` one path at a time |
+| Duplicate nodes accumulate | a failed script still created nodes | list nodes by type, `DeleteNode` the strays before rebuilding |
+| `read_graph_dsl` → "is a plain Blueprint" | the old DSL toolset only handles Widget / Anim / level-script Blueprints | `BlueprintDslToolset.Read(assetPath, scope)` |
 
 **Clean up before you rebuild.** A script that fails partway still leaves the
-nodes it already created. List nodes by type, `delete_node` the strays, then
-create the final set — otherwise you get two `InputActionSprint` nodes and
-only one of them is wired.
+nodes it already created. List nodes by type, `DeleteNode` the strays
+(`BlueprintToolsets.BlueprintToolset.DeleteNode(node: EdGraphNode)` — verified
+signature), then create the final set — otherwise you get two nodes of
+the same type and only one of them is wired.
 
-**`read_graph_dsl` is the best way to *understand* a graph**; use the pin API
-to *change* one. `write_graph_dsl` exists but cannot express multi-exec
-legacy events.
+**`BlueprintDslToolset.Read` is the best way to *understand* a graph**; use the
+pin API to *change* one. For a plain Blueprint the DSL write path is
+`BlueprintDslToolset.Write` / `Edit` (write steps), and `Edit` needs the
+`revision` token from the matching `Read`.
 
 ## Output contract
 
 - the new nodes exist in the graph with the intended connections
-- `get_node_infos` shows non-zero `connected_pins` on the pins you wired
+- `GetNodeInfos` shows non-empty `connectedPins` on the pins you wired
 - the blueprint compiles and is saved
 
 ## Related

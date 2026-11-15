@@ -23,12 +23,13 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md`](lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md) | Why an old engine has no MCP at all |
 | active | [`lessons/2026-11-15-a-copied-index-goes-stale-without-an-owner.md`](lessons/2026-11-15-a-copied-index-goes-stale-without-an-owner.md) | A hand-copied table of contents has no owner, so a revoked decision stays listed as live forever |
 | active | [`lessons/2026-11-15-a-skill-that-pins-the-engine-version-fails-on-the-next-install.md`](lessons/2026-11-15-a-skill-that-pins-the-engine-version-fails-on-the-next-install.md) | Two skills hardcoded `UE_5.8` paths and kept working — against the wrong engine |
-| active | [`model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md`](model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md) | `editor_toolset` absent; base64-wrapped images; the sandbox limits; `mcp_call.py` |
+| active | [`model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md`](model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md) | The tool surface as it really is: the live toolset names (`BlueprintToolsets.*`, `EditorToolset.*Toolset`), `execute_python` as the runner, and the two claims that were wrong for a day — the tools were never absent, and `base64` works |
 | active | [`model-notes/2026-11-15-ue-installs-and-mcp-capability.md`](model-notes/2026-11-15-ue-installs-and-mcp-capability.md) | Which engine can do what; verified commandlets; reusable engine assets |
 | active | [`model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md`](model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md) | Ports, protocol versions, config keys, console commands |
 | active | [`workflows/2026-11-15-identify-which-unreal-mcp-answered.md`](workflows/2026-11-15-identify-which-unreal-mcp-answered.md) | The copy-pasteable "which server answered" sequence |
+| active | [`lessons/2026-11-15-a-tool-name-is-not-a-capability.md`](lessons/2026-11-15-a-tool-name-is-not-a-capability.md) | Twelve skills died on one renamed dispatch mechanism, and a `not found` got recorded as a missing capability |
 
-**18 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**19 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are

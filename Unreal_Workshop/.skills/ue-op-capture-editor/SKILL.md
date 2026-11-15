@@ -14,16 +14,23 @@ allowed-tools:
 
 # ue-op-capture-editor — screenshot the editor through MCP
 
-## Two tools, two very different results
+## Four tools, four very different results
 
 | Tool | Captures | Notes |
 |---|---|---|
-| `CaptureEditorImage` | the whole editor OS window | works only when PIE is **not** running |
-| `CaptureViewport` | a free-floating viewport camera | renders the **editor** world, not the PIE world |
+| `EditorToolset.EditorAppToolset.CaptureEditorImage()` | the whole editor OS window | no arguments; read-only |
+| `SceneCaptureToolset.CaptureEditorViewport(captureTransform, annotations, bShowUI, viewportId)` | one editor viewport — a level viewport or an asset editor | renders the **editor** world; every argument is optional |
+| `SceneCaptureToolset.CaptureGameViewport(world, maxResolution)` | the Game/PIE viewport, UMG and overlays included | needs a `World` — the PIE world |
+| `EditorToolset.EditorAppToolset.CaptureAssetImage(assetPath)` | an asset thumbnail | meshes, materials, textures, animations |
 
-**`CaptureViewport` cannot see PIE actors.** It renders the editor's level, so
-a pawn that exists only in the PIE world is invisible in the capture. Verify
-PIE state numerically instead (`ue-op-test-pie`).
+There is no `CaptureViewport` in this build — *"Unknown tool CaptureViewport
+in toolset EditorToolset.EditorAppToolset. Closest tools: CaptureAssetImage,
+CaptureEditorImage, ExitEditor"*. `CaptureEditorViewport` is its replacement.
+
+**`CaptureEditorViewport` cannot see PIE actors.** It renders the editor's
+level, so a pawn that exists only in the PIE world is invisible in the
+capture; `CaptureGameViewport` is the one that renders the PIE viewport.
+Verify PIE state numerically as well (`ue-op-test-pie`).
 
 ---
 
@@ -31,94 +38,103 @@ PIE state numerically instead (`ue-op-test-pie`).
 
 ### 1. Capture
 
-```python
-r = execute_tool("EditorToolset.EditorAppToolset.CaptureEditorImage", "{}")
+```powershell
+# the whole editor window; no arguments
+python ...\mcp_call.py call EditorToolset.EditorAppToolset CaptureEditorImage
+# {"returnValue":"urn:toolresult:EditorToolset.EditorAppToolset.CaptureEditorImage:ea6e9dfc-…:/returnValue"}
 ```
 
 or, for a specific viewpoint:
 
-```python
-r = execute_tool("EditorToolset.EditorAppToolset.CaptureViewport", json.dumps({
-    "captureTransform": {
-        "location": {"x": -150.0, "y": 0.0, "z": 120.0},
-        "rotation": {"pitch": -8.0, "yaw": 0.0, "roll": 0.0},
-        "scale":    {"x": 1, "y": 1, "z": 1},
-    },
-    "annotations": {"gridSpacing": 0.0, "gridExtent": 0.0,
-                    "gridHeight": 0.0, "maxLabelDistance": 0.0},
-}))
+```powershell
+python ...\mcp_call.py call SceneCaptureToolset.SceneCaptureToolset CaptureEditorViewport `
+  '{"annotations":{"gridSpacing":0,"gridExtent":0,"gridHeight":0,"maxLabelDistance":0},"bShowUI":false}'
 ```
+
+**Neither call puts the PNG in its own output.** Each prints a `urn:toolresult:`
+handle and stops — the pixels are a separate block. See step 2.
 
 ### 2. Unwrap the payload
 
-The image comes back as **base64 inside a JSON-wrapped text block**, not as an
-image content block:
+The image does **not** come back inside the JSON text block. It is a **second
+MCP content block** of `type: "image"`; the `text` block carries only a handle:
 
 ```json
-{"result": {"content": [{"type": "text",
-  "text": "{\"returnValue\":{\"image\":{\"mimeType\":\"image/png\",\"data\":\"iVBOR...\"}}}"}]}}
+{"result": {"content": [
+  {"type": "text",  "text": "{\"returnValue\":\"urn:toolresult:EditorToolset.EditorAppToolset.CaptureEditorImage:…\"}"},
+  {"type": "image", "mimeType": "image/png", "data": "iVBOR…"}
+]}}
 ```
 
-So: parse the outer JSON → take `result.content[0].text` → parse *that* as
-JSON → reach `result.image.data` → base64-decode → write the file.
+So `result.structuredContent.returnValue` is a `urn:toolresult:` string, and
+`mcp_call.py`'s `as_text()` keeps **only** the `type: "text"` blocks — which is
+why `python mcp_call.py call … CaptureEditorImage` prints a URN and no image.
+Decode `content[...]` where `type == "image"` instead:
 
-The in-editor sandbox (`ProgrammaticToolset`) **forbids `base64`**
-(allowed: `copy`, `datetime`, `time`, `json`, `math`, `re`). Decoding has to
-happen outside the editor — use `mcp_call.py` from Bash, which has no such
-restriction:
-
-```bash
-cd "V:/04_Projects/Workshops/Unreal_Workshop/.skills/ue-op-mcp-connect"   # where mcp_call.py lives
-python - <<'PY'
-import base64, json, sys
-sys.path.insert(0, '.')
+```powershell
+$py = @'
+import base64, sys
+sys.path.insert(0, r"V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect")
 from mcp_call import MCPClient
-
-def find_data(o):
-    if isinstance(o, dict):
-        if isinstance(o.get("data"), str) and len(o["data"]) > 100: return o
-        for v in o.values():
-            r = find_data(v)
-            if r: return r
-    elif isinstance(o, list):
-        for v in o:
-            r = find_data(v)
-            if r: return r
-    return None
 
 c = MCPClient(); c.initialize()
 r = c.call_tool("EditorToolset.EditorAppToolset", "CaptureEditorImage", {})
-txt = r["result"]["content"][0]["text"]
-hit = find_data(json.loads(txt))
-if hit:
-    open("D:/UE/shot.png", "wb").write(base64.b64decode(hit["data"]))
-    print("saved")
-PY
+img = next(b for b in r["result"]["content"] if b.get("type") == "image")
+out = r"D:\UE\EpicJam2026\Saved\shot.png"
+open(out, "wb").write(base64.b64decode(img["data"]))
+print(img["mimeType"], len(img["data"]), out)
+'@
+$py | Set-Content -Encoding utf8 "$env:TEMP\mcp_shot.py"
+python "$env:TEMP\mcp_shot.py"
+# image/png 426816 D:\UE\EpicJam2026\Saved\shot.png
 ```
+
+The same block decodes a `CaptureEditorViewport` result — the toolset and tool
+names are the only change, and `structuredContent.returnValue` then also holds
+`width`, `height`, `metadata` (camera, world, frame) and `warnings`.
 
 Then read the PNG with the Read tool to look at it.
 
+`base64` is **not** restricted, in or out of the editor. The in-editor runner
+(`PythonScriptingTools.execute_python`) says so itself in `read_me`: *"full
+interpreter access and no sandbox"* — `import base64` there returns
+`YWJj` for `b"abc"`. What it does reject is imports anywhere but the top of
+the script, star imports, blocking network / `subprocess` / `time.sleep`
+calls, and `unreal.ToolsetRegistry.execute_tool`.
+
 ---
 
-## Required parameters
+## Optional arguments
 
-`CaptureViewport` rejects calls that omit parameters even when the schema
-shows defaults — it will ask for them one at a time:
+Every `CaptureEditorViewport` argument has a default, so a call with none of
+them works:
 
-1. `captureTransform` — a full transform (location, rotation, scale)
-2. `annotations` — the overlay config; all-zero values disable the grid and
-   actor labels
+1. `captureTransform` — `{translation, rotation, scale3D}`; **not**
+   `location`/`scale`, which is the older shape. Axis-aligned orthographic
+   views keep their orientation.
+2. `annotations` — `gridSpacing`, `gridExtent`, `gridHeight`,
+   `maxLabelDistance`, `classFilter`, `maxLabels`; zeros disable the grid and
+   the actor labels.
+3. `bShowUI` — `false` suppresses transform widgets and selection overlays.
+4. `viewportId` — from `SceneCaptureToolset.ListEditorViewports`; unset
+   captures the active level viewport.
+
+The reason to pass `viewportId` is that a viewport in a background tab is
+not capturable: *"CaptureEditorViewport: the viewport Level Viewport
+(Perspective) is in a background tab or a hidden or minimized window."* Pick
+the entry whose `bIsVisible` is true.
 
 ## Verified facts & gotchas
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `input param "captureTransform" needs a default value` | optional params must still be passed | supply a full transform |
-| `input param "annotations" needs a default value` | same | pass the annotations object |
-| `CaptureEditorImage` → "Failed to capture any editor windows" | unsupported while PIE is running | capture before PIE, or use `CaptureViewport` |
-| The image is a giant base64 string in the transcript | not unwrapped | decode it to a PNG file |
-| `Import of 'base64' is not permitted` | the in-editor sandbox restricts imports | decode outside the editor (Bash) |
-| The capture shows an empty level | `CaptureViewport` renders the editor world | PIE actors are not there |
+| `mcp_call.py call … CaptureEditorImage` prints `urn:toolresult:…` and nothing else | `as_text()` keeps only text blocks | read `result["content"][i]` where `type == "image"` (step 2) |
+| `CaptureViewport` → "Unknown tool … Closest tools: CaptureAssetImage, CaptureEditorImage, ExitEditor" | that tool does not exist in this build | `SceneCaptureToolset.CaptureEditorViewport` |
+| `CaptureEditorViewport` → "… is in a background tab or a hidden or minimized window" | the target viewport is not the visible tab | bring it forward, or pass a `viewportId` whose `bIsVisible` is true |
+| `ValueError: line N: imports must be at the top level of the script` | `execute_python` checks the script before running it | move every `import` to the top |
+| `Unable to import JSON string into CodeBlock` | `script` was sent as a bare string | `{"script": {"content": "<source>", "language": "Python"}}` |
+| `CaptureEditorImage` → "Failed to capture any editor windows" | unsupported while PIE is running | capture before PIE, or use `CaptureGameViewport` |
+| The capture shows an empty level | `CaptureEditorViewport` renders the editor world | PIE actors are not there — `CaptureGameViewport(world, maxResolution)` |
 | The picture is enormous | full resolution | crop/downscale with PIL before reading it |
 
 **Crop before reading.** A 1280×732 PNG is fine, but a 4K capture floods the
@@ -126,8 +142,8 @@ context. Use PIL to crop to the region of interest and upscale a small region
 to read text.
 
 **`CaptureEditorImage` grabs the editor window including panels** — useful for
-reading a tab strip or a Details panel. `CaptureViewport` is a clean 3D view
-without UI chrome.
+reading a tab strip or a Details panel. `CaptureEditorViewport` is a clean 3D
+view without UI chrome.
 
 ## Output contract
 

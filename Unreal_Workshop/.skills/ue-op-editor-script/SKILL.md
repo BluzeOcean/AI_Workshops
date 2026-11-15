@@ -1,6 +1,6 @@
 ---
 name: ue-op-editor-script
-description: Use when the task is to make the live Unreal editor do something its MCP tools cannot express — run a Python script inside the editor, read a scene, batch-edit assets, or capture a render — especially when the editor_toolset (BlueprintTools/AssetTools/ActorTools) is not registered in this build. Skip for plain Blueprint graph authoring (use ue-op-wire-graph) or when no editor is running.
+description: Use when the task is to make the live Unreal editor do something its toolsets cannot express — run a Python script inside the editor, read a scene as data, batch-edit assets, or capture a render. Skip for plain Blueprint graph authoring (use ue-op-wire-graph) or when no editor is running.
 user-invocable: true
 allowed-tools:
   - Bash
@@ -13,28 +13,32 @@ allowed-tools:
 
 # ue-op-editor-script — drive the live editor with Python
 
-The editor-side skills in this vault (`ue-op-wire-graph`, `ue-op-create-blueprint`,
-`ue-op-add-component`, …) call `editor_toolset.*` tools. **That toolset is not
-registered in every build** — on this project's UE 5.9 install the calls fail
-with `Toolset 'editor_toolset.BlueprintTools' not found`, and no amount of
-retrying fixes it.
+The toolset registry covers most editor work: `BlueprintToolsets.BlueprintToolset`
+(graphs, nodes, pins, variables), `BlueprintToolsets.BlueprintDslToolset` (graph DSL),
+`EditorToolset.{Asset,Actor,Object,Level}Toolset`. **Use those first** — a tool call is
+cheaper and more predictable than a script.
 
-What *is* available is the editor's own Python, driven through the MCP
-bridge's console-command bridge. That covers most editor work that is not
-Blueprint graph authoring.
+This skill is for the rest: work no tool expresses, a batch over hundreds of assets,
+a computation you want returned as data, or an `unreal.*` API the toolsets do not wrap.
+Two routes run your Python — pick by size:
+
+| Route | Use when |
+|---|---|
+| `PythonScriptingTools.execute_python` | a short script, result wanted inline (it returns the last expression). No file juggling |
+| `RunConsoleCommand` with `py <file>` | a long script, or one you want to keep and re-run from `<project>\Saved\` |
 
 ---
 
 ## When to apply
 
-- the MCP surface lacks the tool you need (no `editor_toolset` in this build)
+- no toolset tool expresses the operation you need
 - the task is a batch operation over many assets/actors
 - you need the result of a computation (bounds, counts, transforms) as data
 - a skill you would otherwise use needs a fallback
 
 ## When NOT to apply
 
-- Blueprint graph authoring → `ue-op-wire-graph` (needs `editor_toolset`)
+- Blueprint graph authoring → `ue-op-wire-graph` (`BlueprintToolsets.BlueprintToolset`)
 - the editor is not running → start it first, and never during the user's
   working hours if it would steal focus
 
@@ -81,9 +85,10 @@ python V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_ca
 - `meta` calls a **top-level** tool (`RunConsoleCommand`, `TriggerMRGRender`,
   `GetViewportCamera`); `call` only reaches **toolset** tools.
 - The command string is `py <path>` — UE's Python commandlet-style invocation.
-- The reply carries `handled: true|false`. `false` means the console command
-  was not recognised — that is how you test whether a console command exists
-  at all (compare against a deliberately bogus command as a control).
+- The reply is `{command, handled, output}`. `handled: false` means the console command
+  was not recognised — that is how you test whether a console command exists at all
+  (compare against a deliberately bogus command as a control). Short `print`/`unreal.log`
+  output **does** come back in `output`; it is capped, so a long result still goes to a file.
 
 ### 4. Read the result file
 
@@ -122,7 +127,8 @@ afterwards if you moved it.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `Toolset 'editor_toolset.BlueprintTools' not found` | that toolset is not registered in this build | use this skill instead |
+| `Toolset 'editor_toolset.toolsets.blueprint.BlueprintTools' is not registered` | the pre-5.9 toolset name | the live name is `BlueprintToolsets.BlueprintToolset` — see `ue-op-mcp-connect/references/calling-tools-in-this-build.md` |
+| console output truncated or missing | the reply's `output` field is capped | write JSON to `<project>\Saved\` and read the file |
 | `mcp_call.py call …` fails for a top-level tool | `call` only reaches toolset tools | use `meta <tool_name>` |
 | script ran but produced no output | it only wrote to the console | write a JSON file and read it back |
 | `handled: false` for a console command | the command name does not exist | test it against a bogus command as a control |

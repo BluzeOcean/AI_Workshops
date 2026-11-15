@@ -143,12 +143,17 @@ If the file does not exist, create it (UE reads it at startup regardless of
 who wrote it). If it exists but lacks the section, append the block — do
 not rewrite the whole file, it holds unrelated editor preferences.
 
-`bEnableToolSearch=True` (the default) registers **3 meta-tools** instead of
-every toolset tool natively:
+`bEnableToolSearch=True` (the default) registers a handful of **meta-tools** instead
+of every toolset tool natively. Verified on this build (2026-11-15): four of them, and the
+names are **plural** —
 
 - `list_toolsets` — list available toolsets
-- `describe_toolset` — full tool list + input schemas for one toolset
-- `call_tool` — invoke a tool by name
+- `describe_toolsets` — full tool list for the toolsets you name (`{"toolset_names": [...]}`)
+- `describe_tools` — the same at individual-tool granularity
+- `call_tool` — invoke a toolset tool by name
+
+`describe_toolset` (singular) is **not registered**: it comes back `Unknown tool:
+describe_toolset`. Some older notes in this workshop still spell it that way.
 
 This keeps the tool list small. Set it to `False` only if a client cannot
 handle the indirection.
@@ -239,7 +244,9 @@ curl -s -X POST "http://127.0.0.1:8000/mcp" \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/list"}'
 ```
 
-Expect three tools: `list_toolsets`, `describe_toolset`, `call_tool`.
+Expect the meta-tools — `list_toolsets`, `describe_toolsets`, `describe_tools`,
+`call_tool` — alongside whatever the enabled editor plugins register (70 top-level tools on
+EpicJam2026, 2026-11-15).
 
 Three details this protocol will bite on:
 
@@ -260,9 +267,10 @@ curl -s -X POST "http://127.0.0.1:8000/mcp" \
   -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"list_toolsets","arguments":{}}}'
 ```
 
-A healthy FabAssets-style project returns ~19 toolsets. A project with only
-the MCP plugin enabled returns far fewer — add `EditorToolset` and
-`Terminal` to enrich it.
+The count is a property of the project's enabled plugins, not of the bridge, and it
+moves as editor modules register: EpicJam2026 answered **115 toolsets** on 2026-11-15
+(`AllToolsets` is enabled there). Re-count instead of trusting any number in a note — the
+workshop's own `ue-op-mcp-diagnose` does exactly that.
 
 ### 8. Get the tools into the live session
 
@@ -351,7 +359,7 @@ is why the user-scope entry registered in Step 4 is the better default here.
 ### Calling tools: the `call_tool` indirection
 
 With `bEnableToolSearch=True` (the default) the server registers only
-`list_toolsets`, `describe_toolset` and `call_tool`. The individual toolset
+`list_toolsets`, `describe_toolsets`, `describe_tools` and `call_tool`. The individual toolset
 tools are **not** directly callable — `tools/call` with a name like
 `EditorToolset.EditorAppToolset.GetOpenAssets` returns HTTP 400.
 
@@ -372,7 +380,30 @@ Go through the meta-tool instead:
 ```
 
 `tool_name` is the bare name **without** the toolset prefix. Use
-`describe_toolset` to get the exact names and input schemas first.
+`describe_toolsets` (plural) to get the exact names and input schemas first.
+
+### How a skill runs a tool call in this build
+
+**The reference is [`references/calling-tools-in-this-build.md`](references/calling-tools-in-this-build.md)** —
+verified signatures, the name map from the old toolset names, the JSON shapes for assets,
+graphs, nodes and pins, and the gotchas. Read it before writing any tool call.
+
+Two forms, and only two:
+
+```powershell
+# one tool, one JSON object — the default for a single step
+python mcp_call.py call BlueprintToolsets.BlueprintToolset ListGraphs `
+  '{"blueprint":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn"}'
+
+# in-editor Python — when a later call needs a handle the earlier one returned
+python mcp_call.py call editor_toolset.toolsets.python_scripting.PythonScriptingTools execute_python `
+  '{"script":{"content":"g = await call_tool(\"BlueprintToolsets.BlueprintToolset.ListGraphs\", blueprint=BP); g","language":"Python"}}'
+```
+
+**What the older skills assumed, and does not exist:** a top-level `execute_tool_script` tool,
+and `execute_tool("<toolset>.<tool>", json.dumps(kw))` inside it. The runner is the
+`PythonScriptingTools` toolset, the call is `await call_tool(...)`, and `script` is a
+CodeBlock struct (`content` + `language`), not a string.
 
 ---
 
@@ -386,10 +417,9 @@ current session's toolkit yet, or for scripted checks.
 cd V:/04_Projects/Workshops/Unreal_Workshop/.skills/ue-op-mcp-connect
 
 python mcp_call.py list_toolsets
-python mcp_call.py describe_toolset EditorToolset.EditorAppToolset
+python mcp_call.py meta describe_toolsets '{"toolset_names":["EditorToolset.EditorAppToolset"]}'
 python mcp_call.py call EditorToolset.EditorAppToolset GetOpenAssets
 python mcp_call.py call EditorToolset.EditorAppToolset SelectActors '{"names":["Foo"]}'
-python mcp_call.py meta list_toolsets
 ```
 
 It handles the `initialize` → `notifications/initialized` handshake, tracks

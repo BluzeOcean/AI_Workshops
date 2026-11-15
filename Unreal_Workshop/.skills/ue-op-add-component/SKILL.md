@@ -21,7 +21,8 @@ allowed-tools:
 
 ## When NOT to apply
 
-- The component already exists → configure it with `ObjectTools.set_properties`
+- The component already exists → configure it with
+  `EditorToolset.ObjectToolset.SetProperties`
 - The task is about the *behaviour* of existing components → `ue-op-wire-graph`
 - You are adding a component to a **placed actor in a level** rather than to a
   blueprint — same tool, but `owner` is the actor refPath
@@ -30,37 +31,60 @@ allowed-tools:
 
 ## Procedure
 
+```powershell
+$mcp = "V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py"
+```
+
 ### 1. Check what is already there first
 
-```python
-import json
+A blueprint's components live on its class default object, so get the CDO and
+ask it:
 
-def T(tool, **kw):
-    """Call a toolset tool from inside execute_tool_script and unwrap its
-    {'returnValue': ...} envelope.  Tool names are fully qualified, e.g.
-    'editor_toolset.toolsets.asset.AssetTools.load_asset'."""
-    r = execute_tool(tool, json.dumps(kw))
-    if isinstance(r, dict) and "returnValue" in r:
-        return r["returnValue"]
-    return r
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset GetDefaultObject '{"blueprint":"/Game/Jam/Core/BP_MechPawn.BP_MechPawn"}'
+```
 
-comps = T("editor_toolset.toolsets.actor.ActorTools.get_components", actor=cdo)
+```json
+{"returnValue":{"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C"}}
+```
+
+```powershell
+python $mcp call EditorToolset.ActorToolset GetComponents '{"actor":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C"}'
+```
+
+```json
+{"returnValue":[{"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C:SceneRoot"},
+                {"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C:BattleCamera"},
+                {"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C:PathPreview"},
+                {"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C:PathPreviewMarker"},
+                {"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C:FacingArrow"}]}
+```
+
+`GetComponents(actor, componentType = null)` takes a class filter as its second
+argument — the cheap way to ask the only question that matters here:
+
+```powershell
+python $mcp call EditorToolset.ActorToolset GetComponents '{"actor":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C","componentType":"/Script/Engine.CameraComponent"}'
+```
+
+```json
+{"returnValue":[{"refPath":"/Game/Jam/Core/BP_MechPawn.Default__BP_MechPawn_C:BattleCamera"}]}
 ```
 
 **Adding a second camera rig when one already exists is the classic mistake** —
-two springs arms fight over the view target and the result is a camera that
+two spring arms fight over the view target and the result is a camera that
 jitters or snaps. Read `ue-op-inspect-blueprint` and look first.
 
 ### 2. Add the component
 
-`add_component` accepts **a blueprint** as well as a scene actor:
+*(write step — signature-verified, not executed)*
 
-```python
-T("editor_toolset.toolsets.actor.ActorTools.add_component",
-  owner="/Game/Lab/Characters/BP_LabTPSCharacter",
-  component_type="/Script/Engine.SpringArmComponent",
-  name="LabSpringArm")
+```powershell
+python $mcp call EditorToolset.ActorToolset AddComponent '{"owner":"/Game/Lab/Characters/BP_LabTPSCharacter.BP_LabTPSCharacter","componentType":"/Script/Engine.SpringArmComponent","name":"LabSpringArm"}'
 ```
+
+`AddComponent(owner, componentType, name) -> ActorComponent`. The call returns
+the new component; read its name back before you configure it.
 
 - `owner` may be a **blueprint** → the component is added to the SCS and the
   blueprint is recompiled automatically.
@@ -68,33 +92,56 @@ T("editor_toolset.toolsets.actor.ActorTools.add_component",
   *that* component instead of the root.
 - `owner` may be a **scene actor** → an instance component.
 
-`component_type` is a script path: `/Script/Engine.CameraComponent`,
-`/Script/Engine.SkeletalMeshComponent`, …
+`componentType` is a class path — `/Script/Engine.SpringArmComponent`,
+`/Script/Engine.CameraComponent`, `/Script/Engine.SkeletalMeshComponent`. A bare
+name such as `"SpringArmComponent"` is rejected during parameter conversion
+(*"… is not a valid object path for property 'ComponentType'"*), so the tool
+never runs.
 
 ### 3. Configure the properties
 
-```python
-T("editor_toolset.toolsets.object.ObjectTools.set_properties",
-  instance=<component refPath>,
-  values=json.dumps({
-      "TargetArmLength": 350.0,
-      "bUsePawnControlRotation": True,
-      "bDoCollisionTest": False,
-      "RelativeLocation": {"x": 0.0, "y": 0.0, "z": 90.0},
-      "RelativeRotation": {"pitch": -8.0, "yaw": 0.0, "roll": 0.0},
-  }))
+*(write step — signature-verified, not executed)*
+
+`SetProperties(instance, values)` — `values` is a **JSON string**, not a JSON
+object. Build it once with `ConvertTo-Json` and you avoid hand-escaping:
+
+```powershell
+$values = @{
+  TargetArmLength         = 350.0
+  bUsePawnControlRotation = $true
+  bDoCollisionTest        = $false
+  RelativeLocation        = @{ x = 0.0; y = 0.0; z = 90.0 }
+  RelativeRotation        = @{ pitch = -8.0; yaw = 0.0; roll = 0.0 }
+} | ConvertTo-Json -Depth 4 -Compress
+$body = @{ instance = "/Game/Lab/Characters/BP_LabTPSCharacter.BP_LabTPSCharacter:LabSpringArm"; values = $values } | ConvertTo-Json -Compress
+python $mcp call EditorToolset.ObjectToolset SetProperties $body
 ```
 
-Read back with
-`get_properties(instance=<refPath>, properties=[...])` to confirm each value
-landed — a silently-unset property is common.
+Read back with `GetProperties(instance, properties=[...])` to confirm each value
+landed — a silently-unset property is common, and this tool will not tell you:
+
+```powershell
+python $mcp call EditorToolset.ObjectToolset GetProperties '{"instance":"/Script/Engine.Default__SpringArmComponent","properties":["TargetArmLength","ProbeSize","bDoCollisionTest"]}'
+```
+
+```json
+{"returnValue":"{\"TargetArmLength\":300,\"ProbeSize\":12,\"bDoCollisionTest\":true}"}
+```
+
+Note the shape: `returnValue` is a **JSON string**, so it needs a second parse.
+That is the native CDO answering with its defaults — read your own component the
+same way.
 
 ### 4. Compile and save
 
-```python
-T("editor_toolset.toolsets.blueprint.BlueprintTools.compile_blueprint", blueprint=bp)
-T("editor_toolset.toolsets.asset.AssetTools.save_assets", asset_paths=[bp])   # stop PIE first
+*(write step — signature-verified, not executed)*
+
+```powershell
+python $mcp call BlueprintToolsets.BlueprintToolset CompileBlueprint '{"blueprint":"/Game/Lab/Characters/BP_LabTPSCharacter.BP_LabTPSCharacter"}'
+python $mcp call EditorToolset.AssetToolset SaveAsset '{"assetPath":"/Game/Lab/Characters/BP_LabTPSCharacter.BP_LabTPSCharacter"}'
 ```
+
+`SaveAsset` takes one path; there is no `save_assets(list)` in this build.
 
 ---
 
@@ -102,23 +149,28 @@ T("editor_toolset.toolsets.asset.AssetTools.save_assets", asset_paths=[bp])   # 
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `SocketName` / `TargetSocket` "could not be read" | **UE 5.8 spring arms have no socket property** | attach to the mesh and use `RelativeLocation` |
-| `Class\|CharacterMovementComponent\|GetCharacterMovement` does not exist | that function is on `ACharacter` | use `Variables\|Character\|GetCharacterMovement` |
-| The requested component name is ignored | `add_component` may keep the auto-generated variable name | read the name back; do not assume |
-| Two cameras fight over the view | a rig already existed | remove the duplicate (`remove_component`) |
-| Component "not found" later | CDO uses the mangled SCS name, the instance uses the variable name | match on the last `.`-segment |
-| `remove_component` on a CDO component | it removes the SCS node, not just the instance | re-run `get_components` to confirm |
+| `SocketName` / `TargetSocket` "could not be read" | neither is a property of `USpringArmComponent` in this build | aim the boom with `SocketOffset` / `TargetOffset` |
+| `Class\|CharacterMovementComponent\|GetCharacterMovement` does not exist | that function is on `ACharacter` | `Class\|Character\|GetCharacterMovement` |
+| `Variables\|Character\|GetCharacterMovement` does not exist | there is no such variable-access id | `Class\|Character\|GetCharacterMovement` |
+| `SetProperties` returns true but nothing changed | `values` was passed as an object, not a JSON string | encode it, then read back with `GetProperties` |
+| `GetProperties` result is not a dict | `returnValue` is a JSON string | parse it a second time |
+| Two cameras fight over the view | a rig already existed | `RemoveComponent(component)` the duplicate |
+| Component "not found" later | you matched the wrong segment | the component name is the refPath part after the last `:` |
+| `add_component` → "unrecognized parameter" | the old snake_case names | `owner`, `componentType`, `name` |
 
-**UE 5.8 `USpringArmComponent` properties** (verified): `TargetArmLength`,
-`SocketOffset`, `TargetOffset`, `ProbeSize`, `ProbeChannel`,
-`bDoCollisionTest`, `bUsePawnControlRotation`, `bInheritPitch/Yaw/Roll`,
-`bEnableCameraLag`, `CameraLagSpeed`. `RelativeLocation` / `RelativeRotation`
-are inherited from `USceneComponent`, not declared on the spring arm.
+**`USpringArmComponent` properties** (read off
+`/Script/Engine.Default__SpringArmComponent` on 2026-11-15): `TargetArmLength`
+(300), `SocketOffset`, `TargetOffset`, `ProbeSize` (12), `ProbeChannel`
+(`ECC_Camera`), `bDoCollisionTest` (true), `bUsePawnControlRotation` (false),
+`bInheritPitch` / `bInheritYaw` / `bInheritRoll` (true), `bEnableCameraLag`
+(false), `CameraLagSpeed` (10), `CameraRotationLagSpeed` (10).
+`RelativeLocation` / `RelativeRotation` are inherited from
+`USceneComponent`, not declared on the spring arm.
 
-**A spring arm does have a `SocketName`, but it is a static `FName`
-constant, not a property** — it names the arm's *own* end socket and
-cannot be set. There is no `TargetSocket` UPROPERTY anywhere in the
-engine in 5.8.
+**A spring arm has no `SocketName` and no `TargetSocket` property.** Asking for
+either answers *"the following properties could not be read: SocketName"*, and
+there is nothing to set — the arm's transform plus `SocketOffset` /
+`TargetOffset` is how it is aimed.
 
 **Existing rigs often aim the boom with `SocketOffset`** rather than a bone
 socket — the FabAssets Paragon rig uses `SocketOffset Z = 282.8` plus a camera

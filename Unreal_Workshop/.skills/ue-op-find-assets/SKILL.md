@@ -85,7 +85,8 @@ ss = [s.decode('ascii') for s in re.findall(rb'[ -~]{3,}', b)]
 seen = []
 for s in ss:
     if s not in seen: seen.append(s)
-print([t for t in seen if any(k in t for k in ('Spine','Socket','EInputActionValueType'))])
+keys = ('spine', 'socket', 'einputactionvaluetype')   # lowercase - the dump is case-sensitive
+print([t for t in seen if any(k in t.lower() for k in keys)])
 PY
 ```
 
@@ -95,24 +96,28 @@ trip on the editor.
 
 ### 4. Search the project through the editor
 
-```python
-import json
+One hop, one tool, one JSON object. `mcp_call.py` (in `ue-op-mcp-connect`) performs the
+MCP handshake itself, so the shell is enough:
 
-def T(tool, **kw):
-    """Call a toolset tool from inside execute_tool_script and unwrap its
-    {'returnValue': ...} envelope.  Tool names are fully qualified, e.g.
-    'editor_toolset.toolsets.asset.AssetTools.load_asset'."""
-    r = execute_tool(tool, json.dumps(kw))
-    if isinstance(r, dict) and "returnValue" in r:
-        return r["returnValue"]
-    return r
+```powershell
+$MCP = "V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py"
 
-T("editor_toolset.toolsets.asset.AssetTools.find_assets", folder_path="/Game", name="", recursive=True)
-T("editor_toolset.toolsets.asset.AssetTools.list_folders", root_path="/Game", recursive=False)
+# -> ["/Game/Jam/Input/IMC_Jam.IMC_Jam"]
+python $MCP call EditorToolset.AssetToolset FindAssets '{"filter":{"folderPath":"/Game/Jam/Input","name":"IMC"}}'
+
+# -> ["/Game/Jam/Audio/", "/Game/Jam/Characters/", ...]   (trailing slash preserved)
+python $MCP call EditorToolset.AssetToolset ListFolders '{"rootPath":"/Game/Jam","bRecursive":false}'
+
+# -> "InputMappingContext"   (a class NAME string, not a class object)
+python $MCP call EditorToolset.AssetToolset GetAssetClass '{"assetPath":"/Game/Jam/Input/IMC_Jam.IMC_Jam"}'
 ```
 
-`find_assets` takes a **folder path and a name filter**, not a glob. Use
-`name="Murdock"` with `folder_path="/Game"`.
+`FindAssets` takes **one filter struct, under the parameter name `filter`** — not keyword
+arguments, and not a glob. Its fields are `folderPath`, `name` (a case-insensitive
+substring: `"imc"` finds `IMC_Jam`), `assetType` (a class path such as
+`/Script/EnhancedInput.InputAction`), `bRecursive`, `maxResults`. **`maxResults`
+defaults to 100**, so pass `"maxResults": 0` for "no limit" — otherwise a whole-project
+search silently stops at 100 paths. Only assets **saved to disk** are in the registry.
 
 ### 5. Check the log for what the editor actually loaded
 
@@ -121,8 +126,15 @@ grep -iE "Mounting Engine plugin|LogModelContextProtocol: Tool search enabled" \
   "D:/UE/<project>/Saved/Logs/<Project>.log" | tail -20
 ```
 
-`Tool search enabled: registered 3 meta-tools (19 toolsets discoverable via
-list_toolsets)` tells you exactly how many toolsets the project has.
+The line is emitted once per toolset while they register, and this build reports **4**
+meta-tools, so read the **last** line rather than the first:
+
+```
+LogModelContextProtocol: Tool search enabled: registered 4 meta-tools (109 toolsets discoverable via list_toolsets)
+```
+
+That number is a snapshot of startup, not a limit on the session — `list_toolsets` against
+the live editor returned **115** toolsets. Do not hardcode either count; ask the server.
 
 ---
 
@@ -130,10 +142,11 @@ list_toolsets)` tells you exactly how many toolsets the project has.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `find_assets` returns nothing for a known asset | wrong folder root | use `/Game`, not the filesystem path |
-| `find_assets` name filter misses it | the filter is case-sensitive in practice | use `name=""` and filter yourself |
-| `AssetTools.get_asset_class` needed | to check what a path really is | `get_asset_class(asset_path=...)` |
-| `save_assets` says the asset does not exist | PIE is running | stop PIE first |
+| `FindAssets` returns nothing for a known asset | wrong folder root, or the asset is only in memory | use a content path (`/Game/...`), not a filesystem path; only assets saved to disk are indexed |
+| A whole-project search looks truncated | `maxResults` defaults to 100 | pass `"maxResults": 0` for no limit (496 assets in this project, against 100 by default) |
+| `FindAssets` name filter misses it | `name` is a case-insensitive substring — the old "case-sensitive in practice" note is wrong | `"imc"` finds `IMC_Jam`; check `folderPath` and that the asset is saved |
+| "what is this path really?" | — | `GetAssetClass(assetPath=...)` → `"InputMappingContext"`, a class **name** string |
+| A batch save | there is no `save_assets(list)` | `SaveAsset(assetPath)` — one path per call |
 | A referenced asset resolves oddly in a string dump | strings include noise | filter for the specific prefix you expect |
 
 **Cross-project reuse:** copying a `.uasset` file between projects works for

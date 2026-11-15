@@ -5,7 +5,7 @@ built-in ModelContextProtocol server.
 
 Usage:
     python mcp_call.py list_toolsets
-    python mcp_call.py describe_toolset EditorToolset.EditorAppToolset
+    python mcp_call.py describe_toolsets EditorToolset.EditorAppToolset
     python mcp_call.py call <toolset> <tool_name> ['{"arg":"value"}']
     python mcp_call.py meta <meta_tool_name> ['{"arg":"value"}']
     python mcp_call.py raw '{"jsonrpc":"2.0","id":99,"method":"tools/list"}'
@@ -84,10 +84,11 @@ class MCPClient:
     def call_tool(self, toolset_name, tool_name, arguments=None):
         """Dispatch through the `call_tool` meta-tool.
 
-        With bEnableToolSearch=True (the default) the server registers only the
-        three meta-tools (list_toolsets / describe_toolset / call_tool). The
-        individual toolset tools are NOT directly callable by name -- going
-        straight to tools/call with a toolset-qualified name returns HTTP 400.
+        With bEnableToolSearch=True (the default) the server registers the
+        meta-tools (list_toolsets / describe_toolsets / describe_tools /
+        call_tool). The individual toolset tools are NOT directly callable by
+        name -- going straight to tools/call with a toolset-qualified name
+        returns HTTP 400.
         """
         return self.tool("call_tool", {
             "toolset_name": toolset_name,
@@ -109,6 +110,13 @@ def as_text(result):
 
 
 def main(argv):
+    # Windows consoles default to cp1252; tool descriptions carry arrows and other
+    # non-ASCII, which killed `tools` with UnicodeEncodeError. Force UTF-8 output.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     if not argv:
         print(__doc__)
         return 1
@@ -122,8 +130,9 @@ def main(argv):
                          indent=2))
     elif cmd == "list_toolsets":
         print(as_text(client.tool("list_toolsets")))
-    elif cmd == "describe_toolset":
-        print(as_text(client.tool("describe_toolset", {"toolset_name": argv[1]})))
+    elif cmd in ("describe_toolsets", "describe_toolset"):
+        # the server registers describe_toolsets (plural); the singular name is not a tool
+        print(as_text(client.tool("describe_toolsets", {"toolset_names": [argv[1]]})))
     elif cmd == "tools":
         for t in client.tools().get("result", {}).get("tools", []):
             print(f"- {t['name']}: {t.get('description', '').splitlines()[0]}")

@@ -16,13 +16,14 @@ allowed-tools:
 
 ## Why this exists
 
-Unreal's `duplicate` is a plain file copy and **does not remap references**.
-A folder of copies therefore keeps pointing at the source assets, so it can
-never be self-contained, and migrating it brings the sources along as well.
+`EditorToolset.AssetToolset.Duplicate` is a plain copy and
+**does not remap references**. A folder of copies therefore keeps pointing at
+the source assets, so it can never be self-contained, and migrating it brings
+the sources along as well.
 
 The only mechanism that produces a folder which stands on its own is
-**relocation**: `move` renames a package and Unreal rewrites every reference
-to it, project-wide.
+**relocation**: `Move(path, newPath)` renames a package and Unreal rewrites
+every reference to it, project-wide.
 
 Relocation is also the thing users are rightly afraid of — "renaming assets
 breaks links and you can't repair them". It is not true, but only because of
@@ -95,18 +96,27 @@ item folder brings everything it needs in a single selection.
 
 ### 3. Move, one asset at a time
 
+The blocks in this procedure are the `content` of one `execute_python` call, so
+they run inside the editor and `await call_tool(...)` reaches the registered
+tool by its full name. The namespace does **not** survive between calls
+(`globals()` starts empty each time), so steps 3–6 below are one script,
+appended in order:
+
+```powershell
+python ...\mcp_call.py call editor_toolset.toolsets.python_scripting.PythonScriptingTools execute_python `
+  '{"script":{"content":"<the Python block below>","language":"Python"}}'
+```
+
 ```python
 moved, failed = [], []
 for src, dst in plan:
-    try:
-        r = T(AT + ".move", path=src, new_path=dst)
-    except Exception:
-        r = False
-    (moved if r else failed).append((src, dst))
-T(AT + ".save_assets", asset_paths=[])
+    if await call_tool("EditorToolset.AssetToolset.Move", path=src, newPath=dst):
+        moved.append((src, dst))
+    else:
+        failed.append((src, dst))
 ```
 
-`move` on a *folder* recurses, but only if the destination does not already
+`Move` on a *folder* recurses, but only if the destination does not already
 exist. Per-asset moves are slower but give exact control over the layout.
 
 Write progress to `Saved/` every N assets — a mass rename can run for several
@@ -115,30 +125,36 @@ minutes and the MCP call will background itself.
 ### 4. Resave everything
 
 **This is not optional.** After a mass rename the asset registry still holds
-the pre-move dependency data, so `get_dependencies` reports paths that no
+the pre-move dependency data, so `GetDependencies` reports paths that no
 longer exist. Resaving re-resolves the import tables and re-tags the packages:
 
 ```python
-T(AT + ".save_assets", asset_paths=[dst for _, dst in moved])
+for _, dst in moved:
+    await call_tool("EditorToolset.AssetToolset.SaveAsset", assetPath=dst)
 ```
 
-Resaving does **not** rewrite soft object paths (step 6).
+Resaving does **not** rewrite soft object paths (step 7).
 
 ### 5. Verify no reference was missed
 
-`get_referencers` on each **old** path must come back empty. Anything still
+`GetReferencers` on each **old** path must come back empty. Anything still
 listed there is a reference the rename manager could not rewrite, and it
 names the asset holding it:
 
 ```python
 stale = []
 for src, dst in moved:
-    if T(AT + ".get_referencers", asset_path=src):
+    if await call_tool("EditorToolset.AssetToolset.GetReferencers", assetPath=src):
         stale.append((src, dst))
 ```
 
 Expect a handful of stale referencers — usually Fab demo maps and test
 blueprints inside the folder being emptied. Those resolve through redirectors.
+
+The live tool for finishing that off is
+`FixUpRedirectors(path, bDeleteRedirectors=false)`: it rewires everything still
+pointing at a redirector and, with `bDeleteRedirectors=true`, removes it. Pass
+the emptied folder (searched recursively) or a single redirector path.
 
 ### 6. Verify the package is closed
 
@@ -146,18 +162,25 @@ Every `/Game` dependency of every relocated asset must resolve **inside** the
 new folder:
 
 ```python
-for dst in moved:
-    for d in deps(dst):
-        if d.startswith("/Game/") and not d.startswith("/Game/Assets/"):
+FOLDER = "/Game/Assets/"
+
+leaks, dangling = [], []
+for _, dst in moved:
+    for d in await call_tool("EditorToolset.AssetToolset.GetDependencies", assetPath=dst) or []:
+        if d.startswith("/Game/") and not d.startswith(FOLDER):
             if d in universe:
                 leaks.append((dst, d))      # points outside - must be zero
             else:
                 dangling.append((dst, d))   # broken link - must be zero
+len(leaks), len(dangling)
 ```
+
+One hop per asset is enough here — every asset in the folder is checked, so each
+one's own direct imports are covered.
 
 ### 7. Sweep the files — the check that actually catches soft references
 
-`get_dependencies` only reports **hard** dependencies. Soft object paths
+`GetDependencies` only reports **hard** dependencies. Soft object paths
 inside a package are invisible to it. Grep the raw `.uasset` bytes instead:
 
 ```bash
@@ -175,16 +198,15 @@ The known case: a **skeletal mesh** stores its material slots as
 rewritten by the rename manager or by a resave. The mesh then renders with
 default materials once the old folders are gone.
 
-`ObjectTools.set_properties` on the `materials` array does **not** fix it —
-it writes the resolved pointer and the serialized soft path stays stale. Use
-the dedicated tool, which writes through the proper UE path:
+`EditorToolset.ObjectToolset.SetProperties` on the `materials` array does **not**
+fix it — it writes the resolved pointer and the serialized soft path stays
+stale. Use the dedicated tool, which writes through the proper UE path:
 
 ```python
-SMT = "editor_toolset.toolsets.skeletal_mesh.SkeletalMeshTools"
 for slot, path in SLOTS.items():
-    T(SMT + ".set_material", mesh=mesh, slot_name=slot,
-      material={"refPath": path})
-T(AT + ".save_assets", asset_paths=[mesh_path])
+    await call_tool("EditorToolset.SkeletalMeshToolset.SetMaterial",
+                    mesh=mesh, slotName=slot, material={"refPath": path})
+await call_tool("EditorToolset.AssetToolset.SaveAsset", assetPath=mesh)
 ```
 
 Re-run the file sweep afterwards to confirm.
@@ -193,14 +215,14 @@ Re-run the file sweep afterwards to confirm.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `get_dependencies` reports paths that do not exist | stale asset registry after a mass rename | resave every moved package |
-| A copy still points at the source | `duplicate` does not remap | use `move`, not `duplicate` |
-| Old path still has a referencer | the rename manager could not rewrite it | UE left a redirector; it still resolves |
-| A skeletal mesh renders with default materials | its material slots are soft paths, untouched by rename/resave | `SkeletalMeshTools.set_material` per slot |
-| `set_properties` on a complex array silently does nothing | the array is a struct array | use the type-specific tool |
-| `move` on a folder returns false | the destination folder already exists | create it, or move per asset |
+| `GetDependencies` reports paths that do not exist | stale asset registry after a mass rename | resave every moved package |
+| A copy still points at the source | `Duplicate` does not remap | use `Move`, not `Duplicate` |
+| Old path still has a referencer | the rename manager could not rewrite it | UE left a redirector; it still resolves, and `FixUpRedirectors` clears it |
+| A skeletal mesh renders with default materials | its material slots are soft paths, untouched by rename/resave | `EditorToolset.SkeletalMeshToolset.SetMaterial(mesh, slotName, material)` per slot |
+| `SetProperties` on a complex array silently does nothing | the array is a struct array | use the type-specific tool |
+| `Move` on a folder returns false | the destination folder already exists | create it, or move per asset |
 | An asset cannot be moved at all | its class cannot be loaded (e.g. `URig` with the Control Rig plugin disabled) | exclude it; the log says `its class (Rig) does not exist` |
-| `asset_paths=[...]` rejected | outer `call_tool` mangles arrays into `{"item": [...]}` | use `execute_tool_script` with `json.dumps` |
+| A batch save | there is no `save_assets(list)`, and `execute_tool_script` does not exist in this build | `SaveAsset` per moved asset — one path per call |
 | A mass rename runs for minutes | one referencer sweep per asset | background it, write progress to `Saved/` |
 
 **Redirectors are the safety net, not debris.** UE creates one at an old path

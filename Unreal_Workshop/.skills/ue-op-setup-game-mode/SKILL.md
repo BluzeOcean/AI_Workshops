@@ -47,8 +47,14 @@ that map.
 
 ### 1. Check the current game mode
 
-```bash
-grep -n "GlobalDefaultGameMode" "D:/UE/<project>/Config/DefaultEngine.ini"
+```powershell
+Select-String -Path 'D:\UE\EpicJam2026\Config\DefaultEngine.ini' -Pattern 'GlobalDefaultGameMode' |
+  ForEach-Object { "$($_.LineNumber): $($_.Line)" }
+# 15: GlobalDefaultGameMode=/Game/Jam/Core/BP_MechGameMode.BP_MechGameMode_C
+
+# and confirm the asset it names actually exists
+python V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py call EditorToolset.AssetToolset FindAssets '{"filter":{"folderPath":"/Game/Jam/Core","name":"MechGameMode"}}'
+# {"returnValue":["/Game/Jam/Core/BP_MechGameMode.BP_MechGameMode"]}
 ```
 
 A dangling reference is common — a project pointing at `/Game/LabGameMode`
@@ -57,35 +63,26 @@ use the wrong (or default) game mode.
 
 ### 2. Create the GameMode blueprint
 
-```python
-import json
-
-def T(tool, **kw):
-    """Call a toolset tool from inside execute_tool_script and unwrap its
-    {'returnValue': ...} envelope.  Tool names are fully qualified, e.g.
-    'editor_toolset.toolsets.asset.AssetTools.load_asset'."""
-    r = execute_tool(tool, json.dumps(kw))
-    if isinstance(r, dict) and "returnValue" in r:
-        return r["returnValue"]
-    return r
-
-gm = T("editor_toolset.toolsets.blueprint.BlueprintTools.create",
-       folder_path="/Game/Lab",
-       asset_name="BP_LabGameMode",
-       asset_type="/Script/Engine.GameModeBase")
+```powershell
+# (write step — signature-verified, not executed)
+# skip this if step 1 already found a game mode asset: Create fails on an existing name
+python V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py `
+  call BlueprintToolsets.BlueprintToolset Create `
+  '{"folderPath":"/Game/Jam/Core","assetName":"BP_MechGameMode","assetType":"/Script/Engine.GameModeBase"}'
 ```
 
 ### 3. Set the classes
 
-```python
-cdo = T("editor_toolset.toolsets.blueprint.BlueprintTools.get_default_object", blueprint=gm)
-T("editor_toolset.toolsets.object.ObjectTools.set_properties", instance=cdo, values=json.dumps({
-    "DefaultPawnClass":      "/Game/Lab/Characters/BP_LabTPSCharacter.BP_LabTPSCharacter_C",
-    "PlayerControllerClass": "/Script/Engine.PlayerController",
-    "PlayerStateClass":      "/Script/Engine.PlayerState",
-    "GameStateClass":        "/Script/Engine.GameStateBase",
-    "HUDClass":              "/Script/Engine.HUD",
-}))
+```powershell
+# the blueprint class default object (read)
+python ...\mcp_call.py call BlueprintToolsets.BlueprintToolset GetDefaultObject `
+  '{"blueprint":"/Game/Jam/Core/BP_MechGameMode.BP_MechGameMode"}'
+# {"returnValue":{"refPath":"/Game/Jam/Core/BP_MechGameMode.Default__BP_MechGameMode_C"}}
+
+# (write step — signature-verified, not executed)
+# `values` is a JSON *string*, so it is escaped once inside the outer object
+python ...\mcp_call.py call EditorToolset.ObjectToolset SetProperties `
+  '{"instance":"/Game/Jam/Core/BP_MechGameMode.Default__BP_MechGameMode_C","values":"{\"DefaultPawnClass\":\"/Game/Jam/Core/BP_MechPawn.BP_MechPawn_C\",\"PlayerControllerClass\":\"/Game/Jam/Core/BP_MechController.BP_MechController_C\",\"PlayerStateClass\":\"/Script/Engine.PlayerState\",\"GameStateClass\":\"/Game/Jam/Core/BP_MechPlayerState.BP_MechPlayerState_C\",\"HUDClass\":\"/Game/Jam/Core/BP_MechHUD.BP_MechHUD_C\"}"}'
 ```
 
 **`DefaultPawnClass` takes a *class* path, not an asset path** — it must end
@@ -93,29 +90,48 @@ in the generated `_C` suffix:
 `/Game/Foo/BP_Foo.BP_Foo_C`, **not** `/Game/Foo/BP_Foo`.
 
 Read it back to confirm it took:
-`get_properties(instance=cdo, properties=["DefaultPawnClass"])`.
+
+```powershell
+python ...\mcp_call.py call EditorToolset.ObjectToolset GetProperties '{"instance":"/Game/Jam/Core/BP_MechGameMode.Default__BP_MechGameMode_C","properties":["DefaultPawnClass"]}'
+# {"returnValue":"{\"DefaultPawnClass\":{\"refPath\":\"/Game/Jam/Core/BP_MechPawn.BP_MechPawn_C\"}}"}
+```
 
 ### 4. Bind it to the level
 
-```python
-ws = T("editor_toolset.toolsets.scene.SceneTools.find_actors", name="WorldSettings", tag="",
-       collision_channels=[])[0]
-T("editor_toolset.toolsets.object.ObjectTools.set_properties", instance=ws,
-  values=json.dumps({"DefaultGameMode": "/Game/Lab/BP_LabGameMode.BP_LabGameMode_C"}))
+```powershell
+# the level's WorldSettings actor (read)
+python ...\mcp_call.py call EditorToolset.LevelToolset FindActors '{"filter":{"actorType":"/Script/Engine.WorldSettings"}}'
+# -> actorPath "/Game/Map/Mission1.Mission1:PersistentLevel.WorldSettings"
+
+# (write step — signature-verified, not executed)
+python ...\mcp_call.py call EditorToolset.ObjectToolset SetProperties '{"instance":"/Game/Map/Mission1.Mission1:PersistentLevel.WorldSettings","values":"{\"DefaultGameMode\":\"/Game/Jam/Core/BP_MechGameMode.BP_MechGameMode_C\"}"}'
 ```
 
-`find_actors` requires **all three** of `name`, `tag` and `collision_channels`
-even when you only want one. Use `name=""`, `tag=""`, `collision_channels=[]`
-to match everything.
+`FindActors` takes **one `filter` struct**, not keyword arguments. Its fields are
+`root`, `name` (a case-insensitive substring of the actor **label**), `actorType`
+(a class path), `tag`, `bounds`, `collisionChannels` and `dataLayer` — all optional.
+Passing `name`/`tag`/`collision_channels` at the top level is rejected:
+*"unrecognized parameter(s) [collision_channels, name, tag]. Valid parameters: [filter]"*.
+
+Read it back with `GetProperties` on the same `actorPath`: `{"DefaultGameMode":null}`
+means the level has **no** override and the project default is in force — that is the
+state of `/Game/Map/Mission1` today.
 
 ### 5. Save the level and the blueprint
 
-```python
-T("editor_toolset.toolsets.asset.AssetTools.save_assets", asset_paths=["/Game/Main", gm])
+```powershell
+# (write step — signature-verified, not executed)
+python ...\mcp_call.py call EditorToolset.EditorAppToolset IsPIERunning      # false = safe to save
+python ...\mcp_call.py call EditorToolset.AssetToolset SaveAsset '{"assetPath":"/Game/Jam/Core/BP_MechGameMode.BP_MechGameMode"}'
+python ...\mcp_call.py call EditorToolset.AssetToolset SaveAsset '{"assetPath":"/Game/Map/Mission1"}'
 ```
 
-**Stop PIE first** — `save_assets` fails with "Asset does not exist" while a
-PIE session is running.
+**One path per call.** There is no `save_assets(list)` in this build —
+*"Unknown tool save_assets in toolset EditorToolset.AssetToolset"*.
+
+**Stop PIE first** — the save does not go through while a PIE session is
+running. `IsPIERunning` is the check; `EditorToolset.EditorAppToolset.StopPIE`
+ends the session.
 
 ### 6. Point the project default at it too (optional)
 
@@ -125,7 +141,7 @@ the section is `[/Script/EngineSettings.GameMapsSettings]` in
 
 ```ini
 [/Script/EngineSettings.GameMapsSettings]
-GlobalDefaultGameMode=/Game/Lab/BP_LabGameMode.BP_LabGameMode_C
+GlobalDefaultGameMode=/Game/Jam/Core/BP_MechGameMode.BP_MechGameMode_C
 ```
 
 Do this for consistency; the level override is what makes it live now.
@@ -145,9 +161,11 @@ Do this for consistency; the level override is what makes it live now.
 | The ini edit did nothing | wrong section — it belongs on `UGameMapsSettings` | use `[/Script/EngineSettings.GameMapsSettings]`, not `[/Script/Engine.Engine]` |
 | `Login failed: PlayerState is null` | the active GameMode is wrong or half-configured | check `Game class is '...'` in the log |
 | `DefaultPawnClass` does not take | wrong path form | it needs the `_C` generated-class path |
-| The player does not spawn | no `PlayerStart` in the level | `find_actors` for `PlayerStart`; add one if missing |
+| The player does not spawn | no `PlayerStart` in the level | `FindActors '{"filter":{"name":"PlayerStart"}}'`; add one if missing |
 | The player spawns but is the wrong pawn | the GameMode in play is not the one you edited | read `LogLoad: Game class is '...'` in the log |
-| `save_assets` → "Asset does not exist" | PIE is running | stop PIE, then save |
+| `SaveAsset` → "Asset does not exist" | PIE is running | check `IsPIERunning`, `StopPIE`, then save |
+| `assetType` → "GameModeBase is not a valid object path for property 'AssetType'" | a bare class name was passed | pass the class path, `/Script/Engine.GameModeBase` |
+| `FindActors` → "unrecognized parameter(s) [name, tag, …]" | arguments passed as keywords | one `filter` struct: `{"filter":{"name":"…"}}` |
 
 **A GameMode spawns the player pawn at the level's `PlayerStart`
 automatically.** You do not need to place the character in the level — and
