@@ -1,0 +1,6 @@
+# Normalise line endings: LF in the index and in the working tree.
+#
+# Without this, an edit made on Windows with a tool that rewrites CRLF turns
+# every line of the file into a change, and the diff for a two-line edit
+# becomes the whole file.
+* text=auto eol=lf
