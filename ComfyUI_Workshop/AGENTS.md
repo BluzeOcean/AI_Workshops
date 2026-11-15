@@ -673,6 +673,9 @@ range and prompt shape were responsible.
 Write at least one entry per task that produced a durable fact. If genuinely nothing durable
 came out of a task, say so in the task summary instead of writing a filler file.
 
+**Then commit it** — see §8. One task, one commit, and only when something substantial
+landed.
+
 ### When to read
 
 **Only when it will pay for itself:**
@@ -719,7 +722,54 @@ Format for a "what worked" entry — same shape, different headings:
 
 ---
 
-## 8. Reference
+## 8. Commit policy
+
+**One commit per substantial change, committed at the end of a task.** This repository is a
+working record, not a commit stream — a commit should mean *something meaningful changed*,
+not *the agent saved a file*.
+
+**Commit when something substantial lands:**
+
+- a new skill is added, or an existing skill is materially revised
+- a lesson is written — something cost time, money, or a wrong delivery
+- a decision is added, or an existing one is superseded
+- a recipe or a workflow is added
+- a tool is added, or a tool's behaviour changes
+- a rule in this file changes
+
+**Do not commit:**
+
+- a typo, a reformat, a whitespace change
+- scratch files (`work/` is git-ignored anyway)
+- a file that is still being edited in this task
+- the same entry rewritten three times while the agent is still figuring it out
+
+**Cadence: one task, one commit.** If a task produced three lessons, a new skill and a
+recipe, that is **one** commit, not five. If a task produced nothing substantial, do not
+commit at all — an empty commit is noise.
+
+**How:**
+
+```powershell
+cd V:\04_Projects\Workshops
+git status --short              # look before staging
+git add ComfyUI_Workshop        # ONLY the folder you worked in
+git commit -m "<type>(workshop): <what changed>"
+```
+
+- **Stage only your own workshop.** Other workshops usually have untracked files of their
+  own; `git add -A` would sweep them into your commit.
+- Commit on the branch you are on (`master`). This is a personal working repo — do not
+  create side branches unless the user asks.
+- Never commit media. The `.gitignore` already excludes it; verify with `git status` after
+  staging.
+
+**Message:** `<type>(workshop): <what changed in one line>`, where the type is `feat`,
+`docs`, `fix` or `chore`. Say *what* changed, not that something changed.
+
+---
+
+## 9. Reference
 
 | What | Where |
 |---|---|
