@@ -1,0 +1,27 @@
+{
+  "_comment": [
+    "The MCP client definition for the Unreal editor.",
+    "",
+    "This is exactly what the editor's own console command writes:",
+    "  ModelContextProtocol.GenerateClientConfig ClaudeCode",
+    "",
+    "Register it at USER scope so it is visible from every directory and needs no",
+    "approval:",
+    "  claude mcp add --scope user --transport http unreal-mcp http://127.0.0.1:8000/mcp",
+    "",
+    "Do NOT register it at project scope in a project that already has the user-scope",
+    "entry - a duplicate shows as 'Pending approval' and shadows the working one.",
+    "",
+    "The port is 8000 unless the editor was started with -ModelContextProtocolPort=N.",
+    "Every editor defaults to 8000, so a second editor needs its own port or it binds",
+    "nothing and the client silently stays on the first one.",
+    "",
+    "The MCP plugin ships with UE 5.8 and newer only. It does NOT exist in UE 5.5."
+  ],
+  "mcpServers": {
+    "unreal-mcp": {
+      "type": "http",
+      "url": "http://127.0.0.1:8000/mcp"
+    }
+  }
+}

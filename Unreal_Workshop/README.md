@@ -18,6 +18,12 @@ AGENTS.md        <- start here. the whole onboarding.
 tools/           <- the scripts (spec only for now — see tools/README.md)
 ```
 
+The workshop is **agent-agnostic**: markdown, plain JSON and small scripts. There is no
+`.claude/`, no `.cursor/`, no agent-tool config in the tree. A skill is a folder with a
+`SKILL.md` — any agent that can read a markdown file can use one. Where an agent needs a
+pointer into this workshop (a junction into its own skills directory, an MCP registration),
+that pointer lives in the **agent's own configuration**, not here.
+
 ## Quick start for an agent
 
 1. Read `AGENTS.md`. It covers the destination rule, the Unreal installs and how to resolve
@@ -78,22 +84,22 @@ for what they have to do and what they must not do.
 
 ## About the MCP bridge
 
-Unlike the Blender workshop, a working Unreal MCP bridge **already exists on this machine**:
-UE 5.8+ ships Epic's own `ModelContextProtocol` plugin, and it is registered with Claude Code
-at **user scope** — check it with:
+A working Unreal MCP bridge **already exists on this machine**: UE 5.8+ ships Epic's own
+`ModelContextProtocol` plugin, and it is registered with the agent at **user scope** — so
+every session in every directory connects automatically when an editor is up.
 
-```bash
-claude mcp list          # shows the server, its URL and whether it is connected
-```
+**The workshop carries no MCP configuration.** No `.mcp.json`, no `.mcp.json.example`. The
+client definition and the procedure for registering it live together in the skill that
+needs them:
 
-Because it is user scope, every Claude Code session in every directory sees it and connects
-automatically when an editor is up. **Do not add a project-scoped `.mcp.json`** — a duplicate
-in this folder would show as "⏸ Pending approval" and break that.
+- `.skills/ue-mcp-bridge/SKILL.md` — the procedure
+- `.skills/ue-mcp-bridge/references/client-config.json` — the server definition to register
 
-`.mcp.json.example` is therefore the **reserved slot**: it holds the server definition, for
-the case where the user-scope entry is missing or you need to point at a second editor on a
-different port. Read §4b and §4c of `AGENTS.md` before touching it — there are **two**
-Unreal MCP surfaces on this box and they are not interchangeable.
+Two things to know before you use it: **do not register the server at project scope** in a
+project that already has the user-scope entry — a duplicate shows as "⏸ Pending approval"
+and shadows the working one. And there are **two** Unreal MCP surfaces on this box which
+are not interchangeable; read §4b and §4c of `AGENTS.md`, or the skill, before assuming
+which one answered.
 
 ## Sister workshops
 

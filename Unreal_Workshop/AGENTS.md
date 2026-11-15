@@ -15,11 +15,24 @@ things are below.
 
 | Path | What it is |
 |---|---|
-| `.skills/` | **Procedures.** One folder per skill, each with a `SKILL.md`. A skill is a repeatable task — "import a skeletal mesh and bind a skeleton", "render a level sequence to PNG", "cook a web build". Read `.skills/README.md` before writing one. |
+| `.skills/` | **Procedures.** One folder per skill, each with a `SKILL.md`. A skill is a repeatable task — "import a skeletal mesh and bind a skeleton", "render a level sequence to PNG", "cook a web build", "reach the editor over MCP". Read `.skills/README.md` before writing one. |
 | `.vault/` | **The memory bank.** Unreal-specific facts worth carrying forward — lessons, decisions, model notes, recipes, workflows. It is **written after a task, not read before one** (see §6). Every entry must make a future agent **faster or safer**; generic house rules live in this file, not in the vault. The entries that will save you the most time are listed in §8. |
 | `tools/` | The scripts. Currently a **specification, not an implementation** — see `tools/README.md`. Whoever builds them owns this layer. |
-| `.mcp.json.example` | The reserved slot for an MCP bridge. The bridge already exists machine-wide at **user scope**; see §4b and the note in `README.md`. |
-| `.claude/settings.local.json` | Registers the project's MCP servers for agents that read it. |
+
+### The workshop is agent-agnostic
+
+**Nothing in this tree is specific to one agent tool.** No `.claude/`, no `.cursor/`, no
+editor config, no framework manifest, no agent-plugin directory. It is markdown, plain
+JSON and small scripts — an agent reads `AGENTS.md`, opens the skills it needs, and works.
+
+A skill is a folder with a `SKILL.md` (frontmatter + body). Any agent that can read a
+markdown file can use one.
+
+Where an agent needs a **pointer** into this workshop — a junction into its own skills
+directory, an MCP registration, a settings file — that pointer belongs **outside** this
+tree, in the agent's own configuration, or beside the skill that needs it (as
+`.skills/<name>/references/`). The workshop carries the content; the agent carries the
+wiring.
 
 **`.vault/` is a memory bank, not a checklist.** You do not read it at the start of a task —
 that would waste context on a log that is mostly irrelevant to what you are doing right now.
@@ -208,6 +221,10 @@ act, and re-read after anything slow.
 
 ### 4b. MCP — Epic's built-in ModelContextProtocol plugin
 
+> **The procedure for this is the skill `.skills/ue-mcp-bridge/SKILL.md`** — it covers
+> resolving the engine, finding the editor, proving which server answered, and registering
+> a client. This section is the reference behind it.
+
 UE **5.8 and newer** ship Epic's own MCP server as an engine plugin:
 
 ```
@@ -395,7 +412,9 @@ scope**, so it is visible from every directory on the machine:
 claude mcp list          # shows the server, its URL and whether it is connected
 ```
 
-The endpoint it points at is the editor's own MCP route, `http://127.0.0.1:8000/mcp`.
+The endpoint it points at is the editor's own MCP route, `http://127.0.0.1:8000/mcp`. The
+definition to register is in `.skills/ue-mcp-bridge/references/client-config.json`, and
+`.skills/ue-mcp-bridge/SKILL.md` is the procedure for registering it.
 
 **Verify the port before you trust a tool.** One command:
 
@@ -477,10 +496,11 @@ It has 30 skill folders (29 `ue-op-*` plus `ue-mcp-connect`):
 `ue-op-tripo-triage-asset`, `ue-op-extract-to-skill`.
 
 **Read the matching `SKILL.md` directly from disk** — that is the intended access path. It is
-deliberately outside `~/.claude/skills` and registered project-scoped, so agents working in
-non-UE projects never load it.
+deliberately kept outside any agent's skills directory and registered per project, so
+agents working in non-UE projects never load it.
 
-To make them callable as `/ue-op-<name>` inside a UE project, junction them project-scoped:
+To make them callable inside a UE project, junction them into that project's skills
+directory (the convention most agents use is `.claude/skills`; others differ):
 
 ```powershell
 New-Item -ItemType Junction -Path "D:\UE\<Project>\.claude\skills\<name>" `
@@ -842,7 +862,7 @@ git push origin master          # then push it
 | `.vault/decisions/2026-11-15-the-unit-scale-is-decided-at-export-time.md` | The ×100 Blender/Unity → Unreal scale, decided at export, not at import |
 | `.vault/decisions/2026-11-15-the-unreal-version-is-resolved-not-pinned.md` | Why the launcher registry cannot be trusted here |
 | `.vault/decisions/2026-11-15-the-two-unreal-mcp-surfaces-are-not-interchangeable.md` | Telling Epic's plugin from the canvas bridge |
-| `.vault/decisions/2026-11-15-no-project-scoped-mcp-json-in-this-workshop.md` | Not breaking the one bridge that already works |
+| `.vault/decisions/2026-11-15-this-workshop-carries-no-mcp-configuration.md` | Why the workshop ships no MCP config, and where the client definition lives instead |
 | `.vault/lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md` | The resolver trap, with the scan command |
 | `.vault/lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md` | "Connected but about the wrong project" |
 | `.vault/lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md` | Why an old engine has no MCP at all |

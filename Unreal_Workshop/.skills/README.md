@@ -79,12 +79,12 @@ is wrong is worse than no skill, because agents trust it.
 
 ## Skills available now
 
-None yet. A workshop accumulates its skills from real use — this table is the index of what
-the workspace can currently do, and it is kept current as skills are forged.
+A workshop accumulates its skills from real use — this table is the index of what the
+workspace can currently do, and it is kept current as skills are forged.
 
 | Skill | What it covers |
 |---|---|
-| _(none yet)_ | |
+| [`ue-mcp-bridge`](ue-mcp-bridge/SKILL.md) | Reaching the running Unreal editor over MCP: resolving the engine, finding the editor and its project, proving which of the two MCP servers answered, registering a client, and starting a second editor without colliding on port 8000. |
 
 ## The external `ue-op-*` skillset
 
