@@ -428,7 +428,7 @@ Format for a "what worked" entry — same shape, different headings:
 
 ## 7. Commit policy
 
-**One commit per substantial change, committed at the end of a task.** This repository is a
+**One commit per substantial change, committed and pushed at the end of a task.** This repository is a
 working record, not a commit stream — a commit should mean *something meaningful changed*,
 not *the agent saved a file*.
 
@@ -459,10 +459,15 @@ cd V:\04_Projects\Workshops
 git status --short              # look before staging
 git add Blender_Workshop        # ONLY the folder you worked in
 git commit -m "<type>(workshop): <what changed>"
+git push origin master          # then push it
 ```
 
 - **Stage only your own workshop.** Other workshops usually have untracked files of their
   own; `git add -A` would sweep them into your commit.
+- **Push after every commit.** The remote is `origin`
+  (`https://github.com/BluzeOcean/AI_Workshops.git`) and `master` tracks `origin/master`.
+  A commit that stays local is work the next machine does not have. If the push fails,
+  report it — **never force-push**.
 - Commit on the branch you are on (`master`). This is a personal working repo — do not
   create side branches unless the user asks.
 - Never commit media. The `.gitignore` already excludes it; verify with `git status` after
