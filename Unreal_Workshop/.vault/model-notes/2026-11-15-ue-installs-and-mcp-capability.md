@@ -81,7 +81,7 @@ install. Resolve them (§ above), never hardcode them.**
 | Unreal Canvas / merlin build | `C:\Users\Bluze\AppData\Local\UnrealCanvas\Builds\v0.21.0\` |
 | Unreal Canvas version | `…\v0.21.0\merlin-version.txt` |
 | Unreal projects | `D:\UE\<Project>\<Project>.uproject` |
-| Original skillset (still wired into the UE projects) | `D:\UE\.ue-op-skillset\<name>\SKILL.md` |
+| Original skillset — **deprecated** | `D:\UE\.ue-op-skillset\` — no longer wired into anything; the workshop at `V:\04_Projects\Workshops\Unreal_Workshop\.skills\` is the only copy |
 
 ## Reuse when
 

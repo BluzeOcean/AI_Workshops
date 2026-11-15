@@ -12,6 +12,12 @@ mechanism for revoking one existed (`Supersedes:`), but **nothing recorded the r
 back into the table.** A decision revoked tomorrow would still be listed in `AGENTS.md` as
 live, and `AGENTS.md` is loaded at every session start.
 
+The same shape turned up twice more in the same tree: the bootstrap skill
+`ue-op-mcp-connect` carried its own table of the `ue-op-*` skills, which had drifted to
+listing 20 of the workshop's 32, and the deprecated skillset folder held an older copy of
+every skill — so a duplicate scan found a match for almost anything it was asked to
+forge.
+
 **Cause:** A copy with no owner. The table was written once, as a convenience, and then
 every future update to the vault had to be applied in two places — and the second place
 had no rule attached to it, so it silently did not happen. The supersession mechanism also
@@ -30,6 +36,10 @@ being handed the replacement.
 - **The back-link is not optional.** `Supersedes` points forward from the replacement;
   `Superseded by` points back from the revoked entry. Without the back-link, an agent
   reading the old file learns that it is dead and nothing else.
+- **A skill that has to carry a catalogue should point at the catalogue.** The bootstrap
+  skill now names the path of `skill_catalog.md` instead of listing skills, and the
+  duplicate scan no longer walks the deprecated folder — a scan that finds this
+  workshop's own past is not finding a duplicate.
 
 **Applies when:** anything in the workshop is duplicated in more than one place, whenever
 an entry's truth can change, and whenever a table of contents is maintained by hand in a

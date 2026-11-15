@@ -17,16 +17,18 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | superseded → [`agents-md-is-a-router-not-a-manual.md`](decisions/2026-11-15-agents-md-is-a-router-not-a-manual.md) | [`decisions/2026-11-15-the-workshop-is-loaded-lazily-and-pruned.md`](decisions/2026-11-15-the-workshop-is-loaded-lazily-and-pruned.md) — two indexes, lazy loading, and why the vault is pruned; now merged into the router decision |
 | active | [`decisions/2026-11-15-agents-md-is-a-router-not-a-manual.md`](decisions/2026-11-15-agents-md-is-a-router-not-a-manual.md) | What `AGENTS.md` may contain, the two indexes, the lazy-load discipline, and the rule for deciding where a new rule, fact, lesson or procedure goes |
 | active | [`decisions/2026-11-15-working-in-a-live-unreal-project.md`](decisions/2026-11-15-working-in-a-live-unreal-project.md) | Confirm the destination before writing, and the rules that stop an agent destroying the user's work |
+| active | [`decisions/2026-11-15-the-workshop-is-the-only-copy-of-the-skillset.md`](decisions/2026-11-15-the-workshop-is-the-only-copy-of-the-skillset.md) | The workshop is the only copy; a project consumes a skill by copying it, and the copy is a snapshot to re-copy |
 | active | [`lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md`](lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md) | The resolver trap, with the scan command |
 | active | [`lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md`](lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md) | "Connected but about the wrong project" |
 | active | [`lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md`](lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md) | Why an old engine has no MCP at all |
 | active | [`lessons/2026-11-15-a-copied-index-goes-stale-without-an-owner.md`](lessons/2026-11-15-a-copied-index-goes-stale-without-an-owner.md) | A hand-copied table of contents has no owner, so a revoked decision stays listed as live forever |
+| active | [`lessons/2026-11-15-a-skill-that-pins-the-engine-version-fails-on-the-next-install.md`](lessons/2026-11-15-a-skill-that-pins-the-engine-version-fails-on-the-next-install.md) | Two skills hardcoded `UE_5.8` paths and kept working — against the wrong engine |
 | active | [`model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md`](model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md) | `editor_toolset` absent; base64-wrapped images; the sandbox limits; `mcp_call.py` |
 | active | [`model-notes/2026-11-15-ue-installs-and-mcp-capability.md`](model-notes/2026-11-15-ue-installs-and-mcp-capability.md) | Which engine can do what; verified commandlets; reusable engine assets |
 | active | [`model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md`](model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md) | Ports, protocol versions, config keys, console commands |
 | active | [`workflows/2026-11-15-identify-which-unreal-mcp-answered.md`](workflows/2026-11-15-identify-which-unreal-mcp-answered.md) | The copy-pasteable "which server answered" sequence |
 
-**16 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**18 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are

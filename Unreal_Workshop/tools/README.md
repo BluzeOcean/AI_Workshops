@@ -26,6 +26,7 @@ workshop is missing, in the order an agent is most likely to want them. They are
 | `mcp_call` | A dependency-free MCP client for the endpoint — initialize, track `Mcp-Session-Id`, send `notifications/initialized`, then `tools/list` / `tools/call`. | Mirrors `V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py`, which already works. Prefer reusing that over writing a new one. |
 | `run_commandlet` | Run `UnrealEditor-Cmd.exe -run=<Commandlet>` against a named project, with the engine resolved at run time. | Must refuse to start while the target port is held by another editor — commandlets skip MCP auto-start and would race it. |
 | `run_editor_python` | Run a Python script inside the editor (`-ExecutePythonScript=`) with the engine and project resolved. | `import unreal` is only available inside the editor; the standalone `python.exe` cannot import it. |
+| `sync_skills` | Copy the workshop's skills into a UE project's `.claude\skills\`, replacing older copies. Reports what changed, what was added, and what is stale. | The workshop is the only copy of the skillset; a project consumes a skill by **copying** it, so a copy is a snapshot that must be refreshed. Never junctions — a junction lets a project silently edit the workshop. See `.vault/decisions/2026-11-15-the-workshop-is-the-only-copy-of-the-skillset.md`. |
 
 ## Rules every tool obeys
 

@@ -96,23 +96,32 @@ Naming: every folder is `ue-op-<verb-noun>` — see the convention in
 The absolute path the skills use is
 `V:\04_Projects\Workshops\Unreal_Workshop\.skills\` — the skills are runnable as written.
 
-## Two copies exist
+## One copy — this workshop
 
-The original set lives at `D:\UE\.ue-op-skillset\`, and the UE projects still junction from
-there (`D:\UE\EpicJam2026\.claude\skills\`). **The workshop copy is the canonical one**; when
-you change a skill here, change it there too, or move the junction:
+**This workshop is the only copy of the skillset.** The original set at
+`D:\UE\.ue-op-skillset\` is **deprecated**: no longer wired into the UE projects, no
+longer maintained, and a duplicate scan that finds it is finding this workshop's own
+past. Change a skill here.
+
+A UE project consumes a skill by **copying** it in:
 
 ```powershell
-New-Item -ItemType Junction -Path "D:\UE\<Project>\.claude\skills\<name>" `
-  -Target "V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>"
+Copy-Item -Recurse -Force `
+  "V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>" `
+  "D:\UE\<Project>\.claude\skills\<name>"
 ```
 
-**Two folders were renamed on the way in**, to satisfy the naming convention. The original
-names still apply to the copy at `D:\UE\.ue-op-skillset\`:
+**A copy is a snapshot** — re-copy a skill into every project that has it when it
+changes here.
 
-| Workshop (canonical) | Original at `D:\UE\.ue-op-skillset\` |
+**Three folders are new or renamed since the deprecated copy** — the naming convention
+requires the `ue-op-` prefix, and two procedures did not exist when the original set
+was forged:
+
+| Workshop (canonical) | Original (deprecated) |
 |---|---|
 | `ue-op-mcp-connect` | `ue-mcp-connect` |
 | `ue-op-mcp-diagnose` | *(new here — no original)* |
+| `ue-op-run-headless` | *(new here — no original)* |
 
 **New skills are forged here**, into `.skills/ue-op-<name>/SKILL.md`.

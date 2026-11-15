@@ -41,14 +41,18 @@ the original case but searches ignore it.
 
 ### 2. Search the engine
 
-The engine ships reusable content worth reusing instead of authoring:
+The engine ships reusable content worth reusing instead of authoring. **Resolve the engine
+first — never pin a version**, because the templates and the plugin inventory differ
+between installs:
 
 ```bash
+ENGINE=$(find "C:/Program Files/Epic Games" -maxdepth 1 -name "UE_*" -type d | sort -V | tail -1)
+
 # Enhanced Input assets + the canonical third-person template
-find "C:/Program Files/Epic Games/UE_5.8/Templates" -iname "IA_*.uasset" -o -iname "IMC_*.uasset"
+find "$ENGINE/Templates" -iname "IA_*.uasset" -o -iname "IMC_*.uasset"
 
 # engine plugins that provide toolsets
-grep -rl "ToolsetRegistry" "C:/Program Files/Epic Games/UE_5.8/Engine/Plugins" --include="*.uplugin"
+grep -rl "ToolsetRegistry" "$ENGINE/Engine/Plugins" --include="*.uplugin"
 ```
 
 The `Templates/TemplateResources/High/Input/` folder holds Epic's canonical

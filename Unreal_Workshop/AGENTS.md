@@ -94,16 +94,24 @@ wiring.**
 - A skill that exists but is not in the catalog is a skill nobody will find. A vault
   entry with no index row is an entry nobody will find — and the next prune deletes it.
 
-### Two copies of the skillset
+### One copy of the skillset — this workshop
 
-The original set lives at `D:\UE\.ue-op-skillset\`, and the UE projects still junction
-from there. **This copy is the canonical one.** When you change a skill here, change it
-there too, or move the junction:
+**This workshop is the only copy.** The original set at `D:\UE\.ue-op-skillset\` is
+**deprecated**: no longer wired into anything, no longer maintained, and a hit against it
+is a hit against this workshop's own past — not a skill to upgrade.
+
+A UE project consumes a skill by **copying** it in, not by linking it:
 
 ```powershell
-New-Item -ItemType Junction -Path "D:\UE\<Project>\.claude\skills\<name>" `
-  -Target "V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>"
+Copy-Item -Recurse -Force `
+  "V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>" `
+  "D:\UE\<Project>\.claude\skills\<name>"
 ```
+
+**A copy is a snapshot.** When a skill changes here, re-copy it into every project that
+has it — a project running an older copy is a project running a skill that no longer
+exists. The single global entry point, `ue-op-mcp-connect`, lives flat in
+`~/.claude/skills` and points at the catalog rather than carrying a copy of it.
 
 ---
 

@@ -62,13 +62,17 @@ an existing one rather than a new topic.
 **Step 2a — inventory every skill**
 
 ```bash
-for d in "V:/04_Projects/Workshops/Unreal_Workshop/.skills" "D:/UE/.ue-op-skillset" "D:/Godot/skills" "C:/Users/Bluze/.claude/skills"; do
+for d in "V:/04_Projects/Workshops/Unreal_Workshop/.skills" "D:/Godot/skills" "C:/Users/Bluze/.claude/skills"; do
   find "$d" -name "SKILL.md" 2>/dev/null | while read f; do
     echo "== $(grep -m1 '^name:' "$f" | sed 's/name: *//')  <- $f"
     grep -m1 '^description:' "$f" | cut -c14-160
   done
 done
 ```
+
+> **Do not scan `D:/UE/.ue-op-skillset`** — it is the deprecated original of this
+> workshop's skillset and holds an **older copy of every skill here**. A match there is
+> not a duplicate to upgrade; it is this workshop's own past.
 
 **Step 2b — read the bodies of every candidate, not just their descriptions**
 
@@ -202,26 +206,30 @@ Rules:
 `V:\04_Projects\Workshops\Unreal_Workshop\.skills` is deliberately **outside** `~/.claude/skills` so that
 non-UE agents never load these skills. Keep it that way.
 
-**Do not flat-junction into `~/.claude/skills` unless the skill is the single
-UE entry point.** Nested skills are not discovered — a junction
+**Do not flat-install into `~/.claude/skills` unless the skill is the single
+UE entry point.** Nested skills are not discovered — a folder
 `~/.claude/skills/ue -> V:\04_Projects\Workshops\Unreal_Workshop\.skills` does *not* expose the skills inside it
 (verified: a skill written there stays invisible).
 
-Register UE-operation skills **project-scoped**, so only sessions in a UE
-project see them:
+Install UE-operation skills **project-scoped**, so only sessions in a UE
+project see them. **Copy, do not junction** — a junction makes the project read
+the workshop's folder, which hides the project's own edits and drifts in the
+other direction:
 
 ```bash
-cmd //c "mklink /J D:\UE\<Project>\.claude\skills\<name> V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>"
+powershell -NoProfile -Command "Copy-Item -Recurse -Force 'V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>' 'D:\UE\<Project>\.claude\skills\<name>'"
 ```
 
 For each UE project the user works in, that one command makes the skill
-callable as `/<name>`. A plain directory copy must be deleted before
-junctioning, or the copy silently shadows the source and drifts.
+callable as `/<name>`.
 
-The single global UE entry point (`ue-op-mcp-connect`) stays flat-junctioned in
-`~/.claude/skills` — it is the bootstrap, and its body carries the catalogue
-of the `ue-op-*` skills so they can be found on demand even in a project that
-has not been wired yet.
+**A copy is a snapshot.** When the workshop's skill changes, re-copy it into every
+project that has it.
+
+The single global UE entry point (`ue-op-mcp-connect`) stays flat in
+`~/.claude/skills` — it is the bootstrap, and it points at
+`.skills/skill_catalog.md` so the catalogue can be found on demand even in a
+project that has not been wired yet.
 
 ### 6. Add it to the catalog
 
@@ -234,7 +242,7 @@ others: the name as a link, what it does, and when to use it.
 ### 7. Verify
 
 ```bash
-cmd //c "dir /AL D:\UE\<Project>\.claude\skills" | findstr /I "<name>"
+ls "D:/UE/<Project>/.claude/skills/<name>/SKILL.md"
 ```
 
 Then confirm the skill appears in the available-skills list (it is announced

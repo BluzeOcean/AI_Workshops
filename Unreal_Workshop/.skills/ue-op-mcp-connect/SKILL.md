@@ -201,10 +201,12 @@ netstat -ano | grep ":8000"
 
 If the port is bound by that editor, you are done — go to Step 6.
 
-If not, start it with the MCP server forced on:
+If not, start it with the MCP server forced on. **Resolve the engine first — never pin a
+version**, because a project saved by a newer engine will not open in an older one:
 
 ```bash
-"C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe" \
+ENGINE=$(find "C:/Program Files/Epic Games" -maxdepth 1 -name "UE_*" -type d | sort -V | tail -1)
+"$ENGINE/Engine/Binaries/Win64/UnrealEditor.exe" \
   "D:/UE/<project>/<project>.uproject" -ModelContextProtocolStartServer
 ```
 
@@ -429,48 +431,33 @@ open("shot.png", "wb").write(raw)
 
 Once the bridge is up, the actual work happens in the **`ue-op-*` skills**.
 They live in `V:\04_Projects\Workshops\Unreal_Workshop\.skills\` — deliberately **outside**
-`~/.claude/skills`, and registered **project-scoped** so that agents working
+`~/.claude/skills`, and installed **project-scoped** so that agents working
 in non-UE projects never load them.
 
-**Read the matching skill's `SKILL.md` directly from disk** when the task
-calls for it — that is the intended access path:
+**The catalogue is `V:\04_Projects\Workshops\Unreal_Workshop\.skills\skill_catalog.md`** — one row per skill, with what it does and
+when to use it. **Read it; do not copy it.** A list of skill names written into this file
+is a second copy that goes stale the moment a skill is added or renamed — and this file is
+copied into projects, so a stale copy is stale in every project at once.
 
-| Skill | Do this when |
-|---|---|
-| `ue-op-inspect-blueprint` | read a blueprint's graphs, components, variables, parent class |
-| `ue-op-setup-input` | bind keys so a character responds (legacy axis/action mappings) |
-| `ue-op-create-blueprint` | make a new blueprint — a child of an existing one, or from a base class |
-| `ue-op-add-component` | add/configure a component on a blueprint (spring arm, camera, mesh) |
-| `ue-op-wire-graph` | create, connect or delete blueprint graph nodes |
-| `ue-op-fix-compile-error` | a blueprint will not compile, or the editor is wedged behind the modal |
-| `ue-op-setup-game-mode` | make a level spawn a particular pawn |
-| `ue-op-test-pie` | run PIE, inject input, verify runtime state |
-| `ue-op-find-assets` | locate project/engine assets, including inside `.uasset` binaries |
-| `ue-op-find-dependencies` | compute an asset's transitive dependency closure |
-| `ue-op-clone-assets` | copy a curated asset set into a structured export folder for migration |
-| `ue-op-relocate-assets` | move a curated asset set so the folder is self-contained for migration |
-| `ue-op-capture-editor` | screenshot the editor or viewport through MCP |
-| `ue-op-setup-playable-character` | make a character controllable end to end (composite) |
-| `ue-op-build-web` | cook, package and stage a UE 5.9 Wasm/WebGPU web build |
-| `ue-op-verify-web` | prove a staged web build boots in a real browser |
-| `ue-op-ship-web` | zip a verified stage for hosting (launcher, COOP/COEP, itch.io) |
-| `ue-op-bake-mesh-partition` | get Mesh Terrain geometry into a cooked build |
-| `ue-op-editor-script` | drive the live editor with Python when its MCP tools fall short |
-| `ue-op-extract-to-skill` | capture a finished operation as a new/reusable skill |
+**Read the matching skill's `SKILL.md` directly from disk** when the task calls for it —
+that is the intended access path:
 
-Base path: `V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>\SKILL.md`
+```
+V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>\SKILL.md
+```
 
-To make them callable as `/ue-op-<name>` inside a UE project, junction them
+To make a skill callable as `/ue-op-<name>` inside a UE project, **copy** it
 project-scoped:
 
 ```bash
-powershell -NoProfile -Command "New-Item -ItemType Junction -Path 'D:\UE\<Project>\.claude\skills\<name>' -Target 'V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>'"
+powershell -NoProfile -Command "Copy-Item -Recurse -Force 'V:\04_Projects\Workshops\Unreal_Workshop\.skills\<name>' 'D:\UE\<Project>\.claude\skills\<name>'"
 ```
 
-`D:\UE\FabAssets\.claude\skills\` is already wired for all twelve.
-`D:\UE\EpicJam2026\.claude\skills\` is wired for the web-build set
-(`ue-op-build-web`, `ue-op-verify-web`, `ue-op-ship-web`,
-`ue-op-bake-mesh-partition`).
+**A copy is a snapshot, not a link.** When the workshop's skill changes, the copy in the
+project is stale until it is copied again — so re-copy the skills a project uses after any
+change to them. (Do not leave a junction behind to "fix" this: a junction makes the
+project's skill invisible to the workshop's own edits, and the two drift apart in the
+other direction.)
 
 ## Related
 

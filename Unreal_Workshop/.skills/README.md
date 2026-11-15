@@ -124,12 +124,13 @@ folder and the original set at `D:\UE\.ue-op-skillset\`.
 
 ## Where these came from
 
-The 29 `ue-op-*` skills and `ue-op-mcp-connect` were **vendored in** from the working
-skillset at `D:\UE\.ue-op-skillset\` — a set forged over real Unreal work on this machine.
-They are now part of the workshop, so they travel with it in git.
+The `ue-op-*` skills were **vendored in** from the working skillset at
+`D:\UE\.ue-op-skillset\` — a set forged over real Unreal work on this machine, and now
+part of the workshop, so they travel with it in git.
 
-**Two folders were renamed on the way in**, to satisfy the naming convention:
-`ue-mcp-connect` → `ue-op-mcp-connect`, and the bridge-diagnostics skill →
-`ue-op-mcp-diagnose`. The original names still apply to the copy at
-`D:\UE\.ue-op-skillset\`. The full mapping, the helper paths and the two-copy caveat are in
+**That original set is deprecated.** It is no longer wired into the UE projects and no
+longer maintained; **this workshop is the only copy.** Two folders were renamed on the
+way in to satisfy the naming convention (`ue-mcp-connect` → `ue-op-mcp-connect`, and the
+bridge-diagnostics skill → `ue-op-mcp-diagnose`), and `ue-op-run-headless` was forged here
+afterwards. The mapping, the helper paths and the copy policy are in
 [`skill_catalog.md`](skill_catalog.md).
