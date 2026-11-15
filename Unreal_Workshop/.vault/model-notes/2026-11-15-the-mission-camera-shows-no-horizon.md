@@ -25,6 +25,14 @@ At 16:9 that is a **vertical** field of 18.45 deg, so the top edge of the frame 
 - Anything standing beyond that ~2990 cm point is **above the top edge of the frame at
   every height** - a tall object further away does not 'poke into' the shot.
 
+## Correction, later the same day: the numbers were tuned
+
+The pitch moved **-38 -> -32** and the mission width **5200 -> 6400** after the
+first play look: at 5200 the deck filled the frame and the fortress sat under
+the HUD strip. Both are Blueprint values now - pitch on BP_CameraPawn, width on
+BP_MechGameMode - so re-derive the numbers above from those two, not from this
+note. The geometry argument below is unchanged; only the constants moved.
+
 ## What a far-scenery backdrop has to be
 
 A **ground-plane plate, not a standing billboard.** Past the deck's far edge the view rays
