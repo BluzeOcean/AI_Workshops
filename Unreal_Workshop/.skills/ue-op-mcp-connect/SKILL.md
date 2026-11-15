@@ -425,6 +425,12 @@ python mcp_call.py call EditorToolset.EditorAppToolset SelectActors '{"names":["
 It handles the `initialize` → `notifications/initialized` handshake, tracks
 the `Mcp-Session-Id` header, and sends the correct `Accept` header.
 
+**Do not `import mcp_call` from inside this folder**: Python writes
+`__pycache__/mcp_call.cpython-*.pyc` next to it, and a `.pyc` is a binary in a
+tree that must stay text (it got committed once, on 2026-11-15). If you need the
+class, set `sys.dont_write_bytecode = True` before the import and delete the
+folder afterwards, or run the client as a subprocess instead.
+
 **Image tools** (`CaptureEditorImage`, `CaptureViewport`, `CaptureAssetImage`)
 return a base64 PNG inside a JSON-wrapped text block, not an image content
 block. Unwrap it and decode:
