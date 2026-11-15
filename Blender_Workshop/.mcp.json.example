@@ -1,0 +1,24 @@
+{
+  "_comment": [
+    "RESERVED SLOT — copy to .mcp.json once an MCP bridge exists.",
+    "",
+    "The bridge is not built yet. It has to expose the Blender MCP extension",
+    "(C:\\Users\\Bluze\\AppData\\Roaming\\Blender Foundation\\Blender\\5.3\\extensions\\lab_blender_org\\mcp)",
+    "as a streamable-HTTP MCP endpoint.",
+    "",
+    "The Blender MCP server can be started in background mode with:",
+    "  blender.exe --background <file.blend> --command blender_mcp --port <PORT>",
+    "",
+    "Port 9876 is already taken by the DSH bridge (which speaks a JSON command",
+    "protocol, NOT MCP). Use a free port such as 9877.",
+    "",
+    "Until then: delete this file's contents or leave it as it is — Claude Code",
+    "only reads .mcp.json, never this example."
+  ],
+  "mcpServers": {
+    "blender-mcp-server": {
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:9877/mcp"
+    }
+  }
+}

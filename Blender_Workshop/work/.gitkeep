@@ -1,0 +1,7 @@
+# Scratch space.
+#
+# Build artifacts, throwaway scripts and logs live here. This folder is
+# git-ignored — see ../.gitignore.
+#
+# Nothing here is worth keeping. What is worth keeping goes in
+# ../.vault/recipes/ as text: the script, the settings, the version.

@@ -1,0 +1,100 @@
+# =============================================================================
+# Blender_Workshop — this workspace holds NO media.
+#
+# It contains instructions (AGENTS.md), skills (.skills/), a memory bank
+# (.vault/) and the tools (tools/). Blender scenes, renders, textures and
+# exports live in the DESTINATION the user confirmed, outside this tree.
+#
+# See .vault/decisions/2026-11-15-workspace-holds-no-media.md
+# =============================================================================
+
+# --- scratch: scripts and logs, reproducible from the recipes -----------------
+work/*
+!work/.gitkeep
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# --- Blender scenes: binary, absolute paths, and the user's work --------------
+*.blend
+*.blend1
+*.blend2
+*.blend3
+*.blend@
+*.blend_backup
+
+# --- renders and images -------------------------------------------------------
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.bmp
+*.tiff
+*.tif
+*.ico
+*.svg
+*.psd
+*.exr
+*.hdr
+*.tga
+*.dpx
+*.openexr
+
+# --- textures and image maps used by the scene --------------------------------
+# (kept separate so a texture sweep cannot smuggle media in under a .blend-adjacent
+#  name)
+textures/
+*.tex
+*.vtex
+
+# --- exports ------------------------------------------------------------------
+*.fbx
+*.obj
+*.gltf
+*.glb
+*.abc
+*.usd
+*.usda
+*.usdc
+*.usdz
+*.stl
+*.ply
+*.dae
+*.3ds
+*.mtl
+
+# --- caches and Blender scratch ------------------------------------------------
+*.cache
+*.blendcache/
+cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- archives -----------------------------------------------------------------
+*.zip
+*.7z
+*.tar.gz
+
+# --- language / editor caches --------------------------------------------------
+node_modules/
+.vscode/
+.idea/
+
+# --- secrets: this workspace needs none, so refuse them all -------------------
+.env
+.env.*
+!.env.example
+
+# --- OS / editor noise --------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+desktop.ini.*
+$RECYCLE.BIN/
