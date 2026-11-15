@@ -38,8 +38,8 @@ workshop is missing, in the order an agent is most likely to want them. They are
    destination as an argument and refuses to guess one.
 4. **Resolve the version, never pin it.** Find the newest install and use it; do not
    hardcode a version or a path that a later update invalidates.
-5. **No media in the workspace.** Tools write into the destination. Scratch goes to
-   `work/` (git-ignored). Nothing binary lands in this tree.
+5. **No media in the workspace.** Tools write into the destination. Scratch goes to the
+   project's `Saved/` folder. Nothing binary lands in this tree.
 6. **Fail loudly.** A tool that cannot reach Unreal says so and says what it tried. A
    tool that half-succeeded is worse than one that failed.
 

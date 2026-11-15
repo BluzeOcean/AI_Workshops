@@ -26,24 +26,33 @@ that would waste context on a log that is mostly irrelevant to what you are doin
 You *write* to it when a task ends, and you *search* it when something breaks or the user asks
 whether it has happened before.
 
-### This workspace holds no media
+### This workshop holds text only
 
-**No `.uasset`, no `.umap`, no renders, no textures, no cooked builds, no caches — ever.** This
-workspace is instructions, skills and a memory bank. Unreal output goes to the **destination
-outside this folder**, and the workspace only ever keeps the *text* that describes how it was
-made.
+**This workshop holds skills, the vault (memory) and the tool layer. It holds no Unreal media
+assets and no media files of any kind — no `.uasset`, no `.umap`, no pictures, no renders, no
+textures, no audio, no video, no cooked builds, no archives, and no other large or binary
+file.**
+
+Everything in this tree is text an agent can read: markdown, JSON, and small scripts. That is
+the point — the workshop travels between machines in git, and a repository of text is
+reviewable, diffable and cheap to clone. A binary in the tree breaks all three.
 
 Concretely:
 
-- Never write a `.uasset`, a `.umap`, a `.png` render, a `.fbx`/`.glb` import or a cooked
-  `Saved/Cooked` tree into this tree.
+- Never write a `.uasset`, a `.umap`, a `.png`/`.jpg`/`.exr` image, a `.fbx`/`.glb` import, a
+  `.wav`, a `.pak`, a cooked `Saved/Cooked` tree or a `.zip` into this tree — **not in a
+  subfolder, not as a "temporary" one, not as an example**.
+- **There is no `.gitignore` here, on purpose.** Nothing needs excluding, because nothing
+  that belongs here is media. Do not add one. If a file you are about to write would need a
+  `.gitignore` rule to keep it out of the tree, that file does not belong here.
 - A recipe in `.vault/recipes/` is **text**: the command, the import settings, the sequence.
   Not the asset it produced.
-- Intermediate scripts and JSON are scratch. Build them in `work/` (git-ignored), not in
-  `.vault/`.
-- `.uasset` and `.umap` files are especially tempting to keep here because they are "the
-  work". They are not. A `.uasset` is a binary package with absolute paths and a source-control
-  revision; it belongs next to the project it is for, inside `Content/`.
+- Scratch scripts and intermediate JSON do not belong here either. They go in the
+  **project's `Saved/` folder** (engine-owned and disposable, and where the UE skills already
+  put their scripts), or next to the skill they serve, in `.skills/<name>/scripts/`.
+- A `.uasset` is especially tempting to keep here because it is "the work". It is not. It is a
+  binary package with absolute paths and a source-control revision; it belongs next to the
+  project it is for, inside `Content/`.
 
 ---
 
@@ -92,8 +101,8 @@ There are two hard rules on top of that, and they are the ones that actually cos
 | **The scratch area** | `Saved/`, `Intermediate/`, `DerivedDataCache/` — engine-owned, disposable | inside the project |
 
 Scripts, intermediate JSON, captured results and editor logs belong in the project's
-`Saved/` folder, **not** in `Content/` and **not** in this workshop. `Saved/` is git-ignored
-by convention and the engine deletes it freely. Never put a deliverable in `Saved/`.
+`Saved/` folder, **not** in `Content/` and **not** in this workshop. `Saved/` is engine-owned:
+the project ignores it and the engine prunes it freely. Never put a deliverable in `Saved/`.
 
 ---
 
@@ -763,7 +772,7 @@ not *the agent saved a file*.
 **Do not commit:**
 
 - a typo, a reformat, a whitespace change
-- scratch files (`work/` is git-ignored anyway)
+- scratch files (they belong in the project's `Saved/` folder, not in this tree)
 - a file that is still being edited in this task
 - the same entry rewritten three times while the agent is still figuring it out
 
@@ -789,8 +798,8 @@ git push origin master          # then push it
   report it — **never force-push**.
 - Commit on the branch you are on (`master`). This is a personal working repo — do not
   create side branches unless the user asks.
-- Never commit media. The `.gitignore` already excludes it; verify with `git status` after
-  staging.
+- Never commit media. It does not belong in this workshop in the first place — check
+  `git status` after staging, and if something binary shows up, move it to the destination.
 
 **Message:** `<type>(workshop): <what changed in one line>`, where the type is `feat`,
 `docs`, `fix` or `chore`. Say *what* changed, not that something changed.

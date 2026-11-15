@@ -6,8 +6,10 @@ A workspace that gives any agent the ability to drive Unreal Engine.
 reads `AGENTS.md`, picks up the tools and skills that exist, and does the work — with no
 tutorial, no prior context, and no hand-holding.
 
-It contains no media. It contains the **instructions**, the **skills**, the **tools**, and the
-**memory**.
+It contains **no media**. It holds only the **instructions**, the **skills**, the **vault
+(memory)** and the **tools** — text an agent can read. No Unreal assets, no pictures, no
+renders, no large or binary files of any kind, and deliberately **no `.gitignore`**:
+nothing that belongs here needs excluding, because media does not come here at all.
 
 ```
 AGENTS.md        <- start here. the whole onboarding.
@@ -31,8 +33,8 @@ tools/           <- the scripts (spec only for now — see tools/README.md)
    - headless: `UnrealEditor-Cmd.exe -run=<Commandlet>` or `-ExecutePythonScript=`,
    - the external `ue-op-*` skillset in `D:\UE\.ue-op-skillset\`,
    - or the tools in `tools/`, once they do.
-5. Build the script in `work/` (git-ignored) or the project's `Saved/` folder. Save into the
-   destination.
+5. Build the script in the **project's `Saved/` folder** (or next to the skill it serves, in
+   `.skills/<name>/scripts/`). Save the result into the destination.
 6. **Log the memory** in `.vault/` when the task is done — and turn what worked into a
    skill. See `.vault/README.md` and §6 of `AGENTS.md`.
 
