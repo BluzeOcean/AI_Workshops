@@ -35,8 +35,10 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`lessons/2026-11-15-forward-shading-priority-does-not-silence-the-light-warning.md`](lessons/2026-11-15-forward-shading-priority-does-not-silence-the-light-warning.md) | Three directional lights warn on screen and priority does not stop it; one sun plus a SkyLight does |
 | active | [`lessons/2026-11-15-a-translucent-decal-lands-on-a-stencil.md`](lessons/2026-11-15-a-translucent-decal-lands-on-a-stencil.md) | Translucent decals ignore material response and receives-decals and test a custom-depth stencil; a replacement floor loses it |
 | active | [`model-notes/2026-11-15-the-mission-camera-shows-no-horizon.md`](model-notes/2026-11-15-the-mission-camera-shows-no-horizon.md) | The -38 deg / 32 deg mission rig never sees the horizon: why far scenery must be a ground plate, and how far out it must reach |
+| active | [`lessons/2026-11-16-a-modal-dialog-blocks-every-editor-tool.md`](lessons/2026-11-16-a-modal-dialog-blocks-every-editor-tool.md) | Delete-then-create over a referenced asset raises Slate's "Overwrite Existing Object?" — and every editor tool then answers "not run" while the dialog is up |
+| active | [`lessons/2026-11-16-in-a-top-down-arena-the-floor-is-the-mood.md`](lessons/2026-11-16-in-a-top-down-arena-the-floor-is-the-mood.md) | Why the sun barely touches a top-down deck: the SkyLight and the floor's albedo tint ARE the mood, and where the post-process/sky-atmosphere dials live in Python |
 
-**26 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**28 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are
