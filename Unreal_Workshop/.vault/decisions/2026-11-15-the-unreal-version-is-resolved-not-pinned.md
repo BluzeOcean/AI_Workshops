@@ -15,3 +15,4 @@ then produces assets the 5.9 editor cannot load. The version matters because the
 format is forward-locked to the engine that wrote it, and because the Python API and
 Blueprint node ids change between releases.
 **Supersedes:** —
+**Superseded by:** —

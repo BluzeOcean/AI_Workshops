@@ -1,5 +1,7 @@
 # The launcher registry does not list UE 5.9
 
+**Status:** active
+
 **Date:** 2026-11-15
 **Symptom:** A version resolver built on the Epic launcher registry reports **5.8** as the
 installed engine, while `UnrealEditor.exe` is demonstrably running from

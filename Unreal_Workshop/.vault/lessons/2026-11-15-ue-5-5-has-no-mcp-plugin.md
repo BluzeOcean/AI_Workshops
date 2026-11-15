@@ -1,5 +1,7 @@
 # UE 5.5 has no MCP plugin
 
+**Status:** active
+
 **Date:** 2026-11-15
 **Symptom:** A project set to `EngineAssociation` 5.5 has no MCP endpoint, no
 `mcp__unreal-mcp__*` tools, and nothing listening on 8000 — while the same commands work

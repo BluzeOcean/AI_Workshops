@@ -7,6 +7,10 @@ in `.vault/lessons/`.
 **The catalog of what exists is [`skill_catalog.md`](skill_catalog.md).** Read it to find the
 skill you need; this file is about the format and the naming rule.
 
+The workshop has **two maps** and they are the only things an agent needs before it starts
+working: this catalog (procedures) and `.vault/vault_index.md` (memory). The folders they
+point at are fetched on demand — never read them end to end.
+
 ## Layout
 
 ```
@@ -107,7 +111,9 @@ To forge one:
 3. Name the folder `ue-op-<verb-noun>` — **the prefix is not optional** — and make the
    frontmatter `name:` match it exactly.
 4. Save any helper script next to the skill, in `scripts/`.
-5. If the task produced a lesson, write the lesson too — in `.vault/lessons/`.
+5. If the task produced a lesson, write the lesson too — in `.vault/lessons/` — **and add
+   its row to `.vault/vault_index.md`**. A vault file with no row does not exist: no agent
+   will find it, and the next prune deletes it.
 6. **Add it to `skill_catalog.md`.** An agent decides what to open by reading that file; a
    skill that is not listed is a skill nobody will find.
 

@@ -18,6 +18,11 @@ AGENTS.md        <- start here. the whole onboarding.
 tools/           <- the scripts (spec only for now — see tools/README.md)
 ```
 
+Two files are **maps**, and they are the only ones an agent needs before it starts working:
+`.skills/skill_catalog.md` (every skill, what it does, when to use it) and
+`.vault/vault_index.md` (every memory, its status, what it saves you). The folders they
+point at are fetched on demand.
+
 The workshop is **agent-agnostic**: markdown, plain JSON and small scripts. There is no
 `.claude/`, no `.cursor/`, no agent-tool config in the tree. A skill is a folder with a
 `SKILL.md` — any agent that can read a markdown file can use one. Where an agent needs a
@@ -32,7 +37,8 @@ that pointer lives in the **agent's own configuration**, not here.
    the user has not said, ask. Unreal projects live under `D:\UE\<Project>\`.
 3. Check what already exists: `.skills/skill_catalog.md` is the **index of 31 skills** —
    read the `When to use it` column and open the one that matches; `tools/README.md`
-   describes the tool layer; `.vault/` holds what past tasks learned.
+   describes the tool layer; `.vault/vault_index.md` is the **map of what past tasks
+   learned** — read the index, never the vault end to end.
 4. Talk to Unreal — see §4 of `AGENTS.md`:
    - the live editor process (find it with WMI, and read its command line for the project),
    - Epic's built-in MCP plugin on `127.0.0.1:8000/mcp` (UE 5.8+ only),
@@ -44,8 +50,9 @@ that pointer lives in the **agent's own configuration**, not here.
    - or the tools in `tools/`, once they do.
 5. Build the script in the **project's `Saved/` folder** (or next to the skill it serves, in
    `.skills/<name>/scripts/`). Save the result into the destination.
-6. **Log the memory** in `.vault/` when the task is done — and turn what worked into a
-   skill. See `.vault/README.md` and §6 of `AGENTS.md`.
+6. **Log the memory** in `.vault/` when the task is done — add its row to
+   `.vault/vault_index.md`, turn what worked into a skill, and prune what you touched.
+   See `.vault/README.md` and §6 of `AGENTS.md`.
 
 ## The workshop is not finished when it is created
 
@@ -64,12 +71,25 @@ That is what the `.vault/` is for. It is the self-learning mechanism:
   result can be reproduced.
 
 The index of what the workshop can currently do is `.skills/skill_catalog.md`. It is kept
-current as skills are forged, because an agent decides what to open by reading it.
+current as skills are forged, because an agent decides what to open by reading it. The
+memory has its own index, `.vault/vault_index.md`, kept current the same way.
+
+**The vault is pruned, not just grown.** Every task adds to it, so something has to take
+away. After a task that touched the vault, the agent runs one prune pass over the index:
+an entry no future task would ever read is a diary entry and is deleted; an entry about
+machine state that has stopped being true is marked `stale`; two entries answering the same
+question are merged; a procedure that keeps being repeated moves into `.skills/`. The
+procedure is `.vault/README.md` → *Maintenance*.
 
 Every skill folder is named `ue-op-<verb-noun>`, and the frontmatter `name:` matches the
 folder exactly — the convention is in `.skills/README.md`.
 
-## The three ideas
+## The ideas
+
+**Nothing is loaded until it is needed.** The catalog is the map of the skills; the index is
+the map of the memory. Reading either costs a page, not a library. Reading `AGENTS.md` and
+this file tells an agent *where* everything is and *when* to open it — it does not carry the
+31 skill bodies or the vault entries with it. Fetch the one you need, when you need it.
 
 **The destination is confirmed, never assumed.** Unreal will create assets in any project
 you point it at, so a guessed project means the work is in the wrong place and nothing tells
@@ -81,6 +101,12 @@ and running but is *not* in the registry. Scan `Engine/Build/Build.version` inst
 
 **The vault is a memory bank.** Written after each task, searched when something breaks. It
 is what stops the workspace from making the same mistake twice.
+
+**A decision that is revoked is superseded, in four places.** The replacement file, the old
+file's status, its `Superseded by:` back-link, and the index row — plus `AGENTS.md` if it
+quoted the old decision, because `AGENTS.md` is loaded at every session start. A decision
+revoked in the vault but still quoted in `AGENTS.md` has not actually been revoked. The
+procedure is `AGENTS.md` §6.
 
 ## State of the tool layer
 

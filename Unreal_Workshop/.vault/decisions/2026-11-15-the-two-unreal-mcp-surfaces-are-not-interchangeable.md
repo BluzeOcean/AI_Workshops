@@ -25,3 +25,4 @@ reverse — and never finds the cause. Worse, the canvas tools *look* callable: 
 tool that is listed but does nothing is a **missing frontend**, not a broken tool, and
 that is only visible in the `frontendBuild` note.
 **Supersedes:** —
+**Superseded by:** —

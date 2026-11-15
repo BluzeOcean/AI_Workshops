@@ -171,7 +171,7 @@ Then register that port as a second client entry.
 
 ## Related
 
-- `AGENTS.md` §4b and §4c — the two surfaces, in full
+- `AGENTS.md` §4b and §4c — the two surfaces, summarised (this skill is the procedure they point at)
 - `.vault/lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md`
 - `.vault/lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md`
 - `.vault/lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md`

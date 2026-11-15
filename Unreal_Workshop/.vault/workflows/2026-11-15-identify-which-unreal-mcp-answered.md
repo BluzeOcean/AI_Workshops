@@ -1,5 +1,7 @@
 # Workflow — establish which Unreal MCP answered, and which editor it is
 
+**Status:** active
+
 **Recorded:** 2026-11-15. **Run this before any write through MCP.**
 
 Two MCP servers can be live at once, and every editor defaults to port 8000. This

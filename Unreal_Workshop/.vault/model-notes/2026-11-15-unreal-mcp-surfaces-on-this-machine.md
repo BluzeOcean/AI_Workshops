@@ -1,5 +1,7 @@
 # The Unreal MCP surfaces — reference facts
 
+**Status:** active
+
 **Recorded:** 2026-11-15, by probing the running UE 5.9 editor and the canvas server.
 The *rule* about telling them apart is in
 `.vault/decisions/2026-11-15-the-two-unreal-mcp-surfaces-are-not-interchangeable.md`;

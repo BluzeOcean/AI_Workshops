@@ -16,7 +16,7 @@ things are below.
 | Path | What it is |
 |---|---|
 | `.skills/` | **Procedures.** One folder per skill, each with a `SKILL.md`, always named `ue-op-<verb-noun>`. 31 skills covering blueprint authoring, input, PIE, asset search and migration, capture, the web build pipeline, skeletal import and more. `.skills/skill_catalog.md` is the index — read it to find the one you need; `.skills/README.md` has the format and the naming rule. |
-| `.vault/` | **The memory bank.** Unreal-specific facts worth carrying forward — lessons, decisions, model notes, recipes, workflows. It is **written after a task, not read before one** (see §6). Every entry must make a future agent **faster or safer**; generic house rules live in this file, not in the vault. The entries that will save you the most time are listed in §8. |
+| `.vault/` | **The memory bank.** Unreal-specific facts worth carrying forward — lessons, decisions, model notes, recipes, workflows. It is **written after a task, not read before one** (see §6). Every entry must make a future agent **faster or safer**; generic house rules live in this file, not in the vault. The **map** of it is `.vault/vault_index.md` — read that when you want to fetch wisdom, never the folders. |
 | `tools/` | The scripts. Currently a **specification, not an implementation** — see `tools/README.md`. Whoever builds them owns this layer. |
 
 ### The workshop is agent-agnostic
@@ -221,210 +221,73 @@ act, and re-read after anything slow.
 
 ### 4b. MCP — Epic's built-in ModelContextProtocol plugin
 
-> **The procedure for this is the skill `.skills/ue-op-mcp-diagnose/SKILL.md`** — it covers
-> resolving the engine, finding the editor, proving which server answered, and registering
-> a client. This section is the reference behind it.
+> **The procedure is the skill `.skills/ue-op-mcp-diagnose/SKILL.md`** — resolving the
+> engine, finding the editor, proving which server answered, registering a client. The raw
+> facts (the handshake payload, the `_meta` shape, the ini keys, the console commands) are
+> in `.vault/model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md`. Neither is
+> loaded unless you actually need it.
 
-UE **5.8 and newer** ship Epic's own MCP server as an engine plugin:
+UE **5.8 and newer** ship Epic's own MCP server as an engine plugin
+(`Engine/Plugins/Experimental/ModelContextProtocol/`). **It does not exist in 5.5** — a 5.5
+project has no MCP surface at all; use §4d.
 
-```
-C:\Program Files\Epic Games\UE_5.9\Engine\Plugins\Experimental\ModelContextProtocol\
-```
+It serves MCP over **HTTP (JSON-RPC 2.0)** at `http://127.0.0.1:8000/mcp` — no stdio bridge,
+nothing to install. Bound to `127.0.0.1` only.
 
-`ModelContextProtocol.uplugin` — FriendlyName "Unreal MCP", CreatedBy "Epic Games, Inc.",
-**It does not exist in 5.5.** Verified: `UE_5.5\Engine\Plugins\Experimental\` has no
-`ModelContextProtocol` entry. Do not point a 5.5 project at this surface.
+Four things about it bite, and all four are handled by the skill:
 
-It serves the Model Context Protocol over **HTTP (JSON-RPC 2.0)** at
-`http://127.0.0.1:8000/mcp` — there is no stdio bridge and nothing to install.
+- The `Accept` header must carry **both** `application/json` and `text/event-stream`; the
+  `Mcp-Session-Id` from `initialize` is **required** on every later call; and
+  `notifications/initialized` must precede `tools/list`.
+- **Every editor defaults to port 8000.** A second editor cannot bind it; its `StartServer`
+  hits `ensure(HttpRouter.IsValid())` and serves nothing while your client stays happily
+  connected to the **first** editor — healthy, answering promptly, about entirely different
+  content. Give each editor its own port:
+  `-ModelContextProtocolPort=8010 -ModelContextProtocolStartServer`.
+- The `initialize` reply's `_meta` block says **which editor and which project answered.**
+  Read it before you act on anything, and compare it against the `.uproject` in the running
+  editor's command line (§4a).
+- **`editor_toolset` is not registered in this build.** `editor_toolset.*` fails with
+  `Toolset 'editor_toolset.BlueprintTools' not found`, and retrying does not help. The
+  editor's own Python through the console-command bridge covers everything except Blueprint
+  **graph** authoring — which has no fallback here, so **say so** rather than silently
+  skipping the graph.
 
-**Verified handshake** (probed against the running 5.9 editor on 2026-11-15):
-
-```bash
-curl -s -X POST "http://127.0.0.1:8000/mcp" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"probe","version":"1"}}}'
-```
-
-The literal response, trimmed:
-
-```json
-{
-  "jsonrpc": "2.0", "id": 1,
-  "result": {
-    "protocolVersion": "2024-11-05",
-    "capabilities": { "resources": {}, "tools": { "listChanged": true } },
-    "serverInfo": { "name": "unreal-mcp", "version": "5.9.0-60351404" },
-    "_meta": {
-      "com.epicgames.unrealengine/instance": {
-        "instanceId": "2196bb3e-46a4-6c10-ed40-828a7d2f3ed9",
-        "processId": 38212,
-        "engineVersion": "5.9.0-60351404",
-        "engineBranch": "//UE5/Release-5.9",
-        "engineChangelist": 60351404,
-        "projectName": "EpicJam2026",
-        "engineDirectory": "C:/Program Files/Epic Games/UE_5.9/Engine/",
-        "projectDirectory": "D:/UE/EpicJam2026/",
-        "projectFile": "D:/UE/EpicJam2026/EpicJam2026.uproject"
-      }
-    }
-  }
-}
-```
-
-That `_meta` block is the single most useful thing about the protocol: **it tells you which
-editor and which project answered.** Read it before you act on anything.
-
-Three details this protocol will bite on:
-
-- The `Accept` header must include **both** `application/json` and `text/event-stream`.
-- The `Mcp-Session-Id` header returned by `initialize` is **required** on every subsequent
-  call.
-- `notifications/initialized` must be sent before `tools/list`, or the session is not fully
-  established.
-
-**Auto-start** is configured per project, per user, in a file that is *not* `Default*.ini`:
-
-```
-<project>\Saved\Config\WindowsEditor\EditorPerProjectUserSettings.ini
-```
-
-```ini
-[/Script/ModelContextProtocolEngine.ModelContextProtocolSettings]
-ServerUrlPath=/mcp
-ServerPortNumber=8000
-bAutoStartServer=True
-bEnableToolSearch=True
-```
-
-`bEnableToolSearch=True` (the default) registers **three meta-tools** instead of every
-toolset tool natively: `list_toolsets`, `describe_toolset`, `call_tool`. The individual
-toolset tools are **not** directly callable — `tools/call` with a name like
-`EditorToolset.EditorAppToolset.GetOpenAssets` returns **HTTP 400**. Go through the
-meta-tool instead:
-
-```json
-{ "method": "tools/call",
-  "params": { "name": "call_tool",
-              "arguments": { "toolset_name": "EditorToolset.EditorAppToolset",
-                             "tool_name": "GetOpenAssets",
-                             "arguments": {} } } }
-```
-
-`tool_name` is the bare name **without** the toolset prefix. Use `describe_toolset` first to
-get the exact names and input schemas.
-
-#### `editor_toolset` is not registered in this build
-
-The toolset registry on the live 5.9 editor carries the canvas toolset, **not** the
-editor's own Blueprint/Asset/Actor toolsets. Calls to `editor_toolset.*` fail with:
-
-```
-Toolset 'editor_toolset.BlueprintTools' not found
-```
-
-and retrying does not help — the toolset is simply absent.
-
-**What works instead:** the editor's own Python, driven through the MCP bridge's
-console-command bridge. That covers most editor work that is *not* Blueprint graph
-authoring. Blueprint graph authoring specifically still needs `editor_toolset` — if it is
-unavailable, **say so** rather than silently skipping the graph.
-
-Details and the ready-made fallback client:
-`.vault/model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md`.
-
-Useful console commands (editor Output Log, `~` key):
-
-| Command | Effect |
-|---|---|
-| `ModelContextProtocol.StartServer [port]` | start the HTTP server (optional port override) |
-| `ModelContextProtocol.StopServer` | stop it |
-| `ModelContextProtocol.RefreshTools` | rebuild the tool list, drop cached schemas |
-| `ModelContextProtocol.GenerateClientConfig <ClaudeCode\|Cursor\|VSCode\|Gemini\|Codex\|All>` | write client config files |
-
-CLI flags: `-ModelContextProtocolStartServer`, `-ModelContextProtocolPort=<N>`.
-
-**Auto-start is skipped in commandlets** — a cook or a build would race the editor for the
-port. Pass `-ModelContextProtocolStartServer` to force it on.
-
-**Every editor defaults to port 8000.** A second editor cannot bind it; its `StartServer`
-hits `ensure(HttpRouter.IsValid())` and serves nothing, while the client stays happily
-connected to the *first* editor. Give each editor its own port:
-
-```powershell
-UnrealEditor.exe "D:\UE\<Project>\<Project>.uproject" `
-  -ModelContextProtocolPort=8010 -ModelContextProtocolStartServer
-```
-
-The server binds `127.0.0.1` only — it is not reachable from the network.
+Auto-start is configured per project, per user, in
+`<project>\Saved\Config\WindowsEditor\EditorPerProjectUserSettings.ini` (not
+`Default*.ini`). It is **skipped in commandlets** — a cook or a build would race the editor
+for the port; pass `-ModelContextProtocolStartServer` to force it on (§5 rule 11).
 
 ### 4c. MCP — the Unreal Canvas bridge (a *different* server)
 
-**This is not the same thing as §4b, and confusing the two is expensive.** Epic's plugin and
-the Unreal Canvas bridge both expose tools over MCP, and on this machine both were live at
-once.
+**Not the same thing as §4b, and confusing the two is expensive.** Epic's plugin runs inside
+the editor; the Canvas bridge is a separate `unrealcanvas-server.exe` the editor spawns.
+Both speak MCP, and on this machine both were live at once.
 
-| | Epic's plugin (§4b) | Unreal Canvas / "merlin" |
+| | Epic's plugin (§4b) | Canvas / "merlin" |
 |---|---|---|
-| Process | `UnrealEditor.exe` (PID 38212) | `unrealcanvas-server.exe` (PID 32220) |
-| Build | part of the engine | `C:\Users\Bluze\AppData\Local\UnrealCanvas\Builds\v0.21.0\` |
-| Version string | `5.9.0-60351404` (the engine version) | `0.21.0` (`merlin-version.txt`) |
+| Process | `UnrealEditor.exe` | `unrealcanvas-server.exe` |
 | `serverInfo.name` | `unreal-mcp` | `merlin` |
-| Protocol version | negotiated: `2025-11-25`, `2025-06-18`, `2024-11-05` | `2025-03-26` |
-| Observed ports | `127.0.0.1:8000` | `127.0.0.1:58784`, `58785` |
 | Tool style | toolsets behind `list_toolsets` / `call_tool` | flat, task-shaped tools |
 
-The canvas server is spawned by the editor, and its command line shows what it was asked
-for and what it actually got:
+Canvas-shaped tools — `TriggerMRGRender`, `SpawnMeshAt`, `RunMeshOps`, `SetSkybox`,
+`SpawnGsplatFromPLY`, `ListCutouts`, `StartViewportStream`, the annotation tools — belong to
+**this** surface. If a canvas tool reports that no frontend is connected, or a render never
+starts, that is the bridge — not the editor, and not §4b. Its `/mcp` reply carries a
+`frontendBuild` note saying whether a frontend is attached; read it before calling.
 
-```
-unrealcanvas-server.exe --port 0 --parent-pid 38212
-  --python "<engine>\Engine\Binaries\ThirdParty\Python3\Win64\python.exe"
-  --mcp-port 8000 --viewport-port 58782
-  --pythonpath "<project>\Intermediate\PipInstall\Lib\site-packages"
-```
+`--mcp-port 8000` is a **request, not a reservation** — the canvas server landed on
+58784/58785 because the editor already held 8000. Always confirm with `netstat`.
 
-Note `--mcp-port 8000` was **requested** but the editor already held 8000 — the canvas
-server ended up on 58784/58785 instead. **`--mcp-port` is a request, not a guarantee; always
-confirm with `netstat`.**
+**Which one is the client pointed at?** The client is registered at **user scope**, so it is
+visible from every directory: `claude mcp list`. The endpoint it points at is the editor's
+own route, `http://127.0.0.1:8000/mcp`. The definition to register is in
+`.skills/ue-op-mcp-diagnose/references/client-config.json`.
 
-Probing the canvas server's `/mcp` returns a `frontendBuild` note that tells you its state:
+**Verify the port before you trust a tool** — §5 rule 10; the port-owner check is step 3 of
+the skill.
 
-```json
-"frontendBuild": { "known": false,
-  "why": "No Unreal Canvas frontend is connected, so nothing is executing tool calls. Open the Unreal Canvas panel." }
-```
-
-**Read that before calling it.** A canvas tool that is listed but not executing is a
-misconfigured frontend, not a broken tool.
-
-Canvas-style tools in a session (`TriggerMRGRender`, `SpawnMeshAt`, `RunMeshOps`,
-`SetSkybox`, `SpawnGsplatFromPLY`, `ListCutouts`, `StartViewportStream`, the annotation
-tools) are the canvas surface's vocabulary. If a canvas tool reports that no frontend is
-connected, or a render never starts, that is the canvas bridge — not the editor, and not
-§4b.
-
-**Which one is the Claude Code client pointed at?** The client is registered at **user
-scope**, so it is visible from every directory on the machine:
-
-```bash
-claude mcp list          # shows the server, its URL and whether it is connected
-```
-
-The endpoint it points at is the editor's own MCP route, `http://127.0.0.1:8000/mcp`. The
-definition to register is in `.skills/ue-op-mcp-diagnose/references/client-config.json`, and
-`.skills/ue-op-mcp-diagnose/SKILL.md` is the procedure for registering it.
-
-**Verify the port before you trust a tool.** One command:
-
-```powershell
-Get-NetTCPConnection -LocalPort 8000 -State Listen |
-  ForEach-Object { Get-CimInstance Win32_Process -Filter "ProcessId=$($_.OwningProcess)" } |
-  Select-Object Name, ProcessId, CommandLine
-```
-
-An MCP client loads servers **at session start**. A server registered after the session began
+An MCP client loads servers **at session start**: a server registered after the session began
 is not in the toolkit until `/mcp` reconnects it or Claude Code restarts.
 
 ### 4d. Headless — commandlets and the editor's Python
@@ -671,9 +534,10 @@ The distinction that matters:
 - A **workflow** is a known-good command sequence — the order of the commands.
 - A **tool** is a script — something that can be run rather than read.
 
-All five grow by use. The index of what exists is `.skills/skill_catalog.md`; **keep it
-current**, because an agent decides what to open by reading it. A skill that exists but is
-not in the catalog is a skill nobody will find.
+All five grow by use. The workshop has **two indexes**, and both must be kept current,
+because an agent decides what to open by reading them: `.skills/skill_catalog.md` for the
+procedures, and `.vault/vault_index.md` for the memory. A skill or an entry that exists but
+is not in its index is one nobody will find.
 
 **Every skill folder is named `ue-op-<verb-noun>`, and the frontmatter `name:` matches the
 folder exactly.** The prefix says which application the skill belongs to and keeps Unreal
@@ -727,6 +591,18 @@ too, it is a house rule, not a lesson from working on Unreal.
 Write at least one entry per task that produced a durable fact. If genuinely nothing durable
 came out of a task, say so in the task summary instead of writing a filler file.
 
+**Every new entry gets a row in `.vault/vault_index.md`, in the same commit.** A vault file
+with no row does not exist — no agent will find it, and the next prune deletes it.
+
+**Then prune what you touched.** The vault grows on every task, and growth is not the goal —
+a memory bank that only ever grows becomes a landfill. After any task that added or changed
+an entry, run one prune pass over `.vault/vault_index.md`: an entry no future task would
+ever read is a diary entry and gets deleted; an entry about machine state (an installed
+engine, a port, a PID, a plugin inventory) that has stopped being true gets marked
+`Status: stale`; two entries answering the same question get merged; a procedure that keeps
+being repeated moves to `.skills/`. The full procedure is in `.vault/README.md` →
+*Maintenance*. The trigger lives here; the procedure is fetched only when it runs.
+
 **Then commit it** — see §7. One task, one commit, and only when something substantial
 landed.
 
@@ -740,6 +616,10 @@ landed.
 - **You are about to repeat an expensive operation** (a cook, a big asset import, a render)
   and want to reuse a known-good setup.
 
+**Read `.vault/vault_index.md` first — it is the map.** It lists every entry with its status,
+one row each, and a row says enough to decide whether to open the file behind it. Then open
+the one entry you need.
+
 Search it with `grep`, not by reading it end to end:
 
 ```powershell
@@ -748,13 +628,16 @@ Select-String -Path .vault\lessons\*.md -Pattern 'port' -SimpleMatch
 
 ### Never overwrite a lesson
 
-Add a new one and mark the old decision `superseded`. A later agent has to be able to see
-what was true *then*, and why it stopped being true.
+Add a new one and link it. A later agent has to be able to see what was true *then*, and
+why it stopped being true. A **lesson** is never edited in place; a **decision** is revoked
+by supersession — see below.
 
 Format for a lesson:
 
 ```markdown
 # <one-line title>
+
+**Status:** active
 
 **Date:** YYYY-MM-DD
 **Symptom:** what was observed, literally.
@@ -768,11 +651,39 @@ Format for a "what worked" entry — same shape, different headings:
 ```markdown
 # <one-line title>
 
+**Status:** active
+
 **Date:** YYYY-MM-DD
 **What was run:** the exact command / script / settings.
 **Result:** what came out, and where it landed.
 **Reuse when:** the situation where this is the right starting point.
 ```
+
+### Revoking a decision — the four-step write-back
+
+**A decision is not deleted when it stops being true. It is superseded**, and the
+supersession is recorded in **four places, in one commit**. A decision that is revoked in
+the vault but still quoted in `AGENTS.md` has not actually been revoked — `AGENTS.md` is
+loaded at every session start, so a stale quote there is stale guidance handed to every
+future agent.
+
+1. **Write the replacement.** A new decision file, `Status: active`, with
+   `**Supersedes:** <the old file>`. Never edit the old one's content.
+2. **Mark the old one.** `Status: superseded` **and** `**Superseded by:** <the new file>`.
+   The back-link is what hands an agent who opens the old file the replacement instead of a
+   dead end. `Supersedes` points forward, `Superseded by` points back — both, always.
+3. **Update the index row.** `.vault/vault_index.md`: the old row becomes
+   `superseded → <new file>`, the new row becomes `active`. A row still reading `active` on
+   a revoked decision is worse than no index at all — the index is what an agent trusts.
+4. **Fix `AGENTS.md` in the same commit** if the old decision was quoted there.
+
+Steps 3 and 4 are the ones that get forgotten. Do them in the same commit as steps 1 and 2,
+not later.
+
+**A fact that quietly stops being true is different from a decision being revoked.** A
+model-note about an installed engine, a port, a PID or a plugin inventory expires on its
+own; mark it `Status: stale` with the date it stopped applying and why, rather than
+rewriting it. See `.vault/README.md` → *Maintenance*.
 
 ---
 
@@ -856,23 +767,20 @@ git push origin master          # then push it
 | Sister workshops | `../Blender_Workshop/`, `../Unity_Workshop/`, `../ComfyUI_Workshop/` |
 | The tool spec | `tools/README.md` |
 | Memory bank | `.vault/README.md` |
+| **The vault index — every entry, with its status** | **`.vault/vault_index.md`** |
 
-### The vault entries that will save you the most time
+### The vault index
 
-| File | What it saves you |
-|---|---|
-| `.vault/decisions/2026-11-15-where-unreal-artifacts-belong.md` | Content vs Saved vs export — where an artifact goes, and what must be created *through the editor* |
-| `.vault/decisions/2026-11-15-the-unit-scale-is-decided-at-export-time.md` | The ×100 Blender/Unity → Unreal scale, decided at export, not at import |
-| `.vault/decisions/2026-11-15-the-unreal-version-is-resolved-not-pinned.md` | Why the launcher registry cannot be trusted here |
-| `.vault/decisions/2026-11-15-the-two-unreal-mcp-surfaces-are-not-interchangeable.md` | Telling Epic's plugin from the canvas bridge |
-| `.vault/decisions/2026-11-15-this-workshop-carries-no-mcp-configuration.md` | Why the workshop ships no MCP config, and where the client definition lives instead |
-| `.vault/lessons/2026-11-15-the-launcher-registry-does-not-list-ue-5-9.md` | The resolver trap, with the scan command |
-| `.vault/lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md` | "Connected but about the wrong project" |
-| `.vault/lessons/2026-11-15-ue-5-5-has-no-mcp-plugin.md` | Why an old engine has no MCP at all |
-| `.vault/model-notes/2026-11-15-mcp-tool-surface-reality-in-this-build.md` | `editor_toolset` absent; base64-wrapped images; the sandbox limits; `mcp_call.py` |
-| `.vault/model-notes/2026-11-15-ue-installs-and-mcp-capability.md` | Which engine can do what; verified commandlets; reusable engine assets |
-| `.vault/model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md` | Ports, protocol versions, config keys, console commands |
-| `.vault/workflows/2026-11-15-identify-which-unreal-mcp-answered.md` | The copy-pasteable "which server answered" sequence |
+Every entry in `.vault/` is listed in **`.vault/vault_index.md`** — one row each, with its
+status (`active` / `superseded` / `stale`) and one line saying what it saves you. That file
+is the **map**; the folders are the territory. Read the index when you want to fetch wisdom,
+never the folders end to end.
+
+This file deliberately does **not** duplicate the index. A table copied here goes stale the
+moment a decision is revoked, and `AGENTS.md` is loaded at every session start — a stale
+copy is stale guidance handed to every future agent. §8 stays a reference to *places*; the
+index stays the reference to *entries*. The rule that keeps them in step is §6,
+*Revoking a decision*.
 
 > **The path to Unreal is not a constant.** It moves when the engine is updated, and the
 > launcher registry does not list every install. Resolve it (§3) instead of assuming the

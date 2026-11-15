@@ -1,5 +1,7 @@
 # The MCP tool surface in this build — what is actually there
 
+**Status:** active
+
 **Recorded:** 2026-11-15. **Facts about the live UE 5.9 editor on this machine, not a
 general statement about Unreal.**
 

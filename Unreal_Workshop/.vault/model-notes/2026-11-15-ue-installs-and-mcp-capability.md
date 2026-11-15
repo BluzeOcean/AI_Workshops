@@ -1,5 +1,7 @@
 # Engine capability matrix — what each installed version can do
 
+**Status:** active
+
 **Recorded:** 2026-11-15. Versions read from each install's `Engine/Build/Build.version`.
 
 | Install | Version | CL | MCP plugin | Python | Registry entry |

@@ -10,6 +10,8 @@ lessons/YYYY-MM-DD-short-slug.md
 ```markdown
 # <one-line title>
 
+**Status:** active
+
 **Date:** YYYY-MM-DD
 **Symptom:** what was observed, literally.
 **Cause:** why it happened.

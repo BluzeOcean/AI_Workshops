@@ -17,3 +17,4 @@ Catching it costs a rebuild; catching it at export costs one number.
 The scale is a property of the **source asset**, not of the destination — so it is decided
 when the source is produced, and recorded in the recipe that produced it.
 **Supersedes:** —
+**Superseded by:** —

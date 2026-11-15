@@ -1,5 +1,7 @@
 # Verify the port and its owner before trusting an MCP connection
 
+**Status:** active
+
 **Date:** 2026-11-15
 **Symptom:** Two failure modes with the same shape — the MCP client reports
 `✔ Connected`, every call succeeds, and the results are **about the wrong thing**.

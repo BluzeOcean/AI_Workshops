@@ -28,3 +28,4 @@ user-scope entry is lost, or to register a **second** editor on its own port (ev
 defaults to 8000, so a second one cannot bind it — see
 `.vault/lessons/2026-11-15-verify-the-port-and-its-owner-before-trusting-an-mcp-connection.md`).
 **Supersedes:** —
+**Superseded by:** —

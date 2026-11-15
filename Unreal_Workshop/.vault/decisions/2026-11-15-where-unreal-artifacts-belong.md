@@ -28,3 +28,4 @@ violation at commit time, after the file was already written where it does not b
 The Content/Saved split matters too: `Saved/` is engine-owned and disposable — it is pruned
 without warning — so a deliverable written there is lost.
 **Supersedes:** —
+**Superseded by:** —
