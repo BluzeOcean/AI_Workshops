@@ -8,9 +8,11 @@ agent needs to register lives with the procedure that uses it, in
 `.skills/ue-op-mcp-diagnose/references/client-config.json`, and the procedure itself is
 `.skills/ue-op-mcp-diagnose/SKILL.md`.
 
-The live bridge is registered with the agent at **user scope** — check it with
+The live bridge is registered with **Claude Code** at user scope — check it with
 `claude mcp list`; the entry is named `unreal-mcp` and points at the editor's own MCP
-route, `http://127.0.0.1:8000/mcp`.
+route, `http://127.0.0.1:8000/mcp`. That registration is **Claude Code's alone**: no other
+agent inherits it, and the route for an agent without one is `mcp_call.py` — see
+`lessons/2026-11-15-a-client-registration-is-per-agent-not-per-machine.md`.
 
 **Reason:** Two reasons, and the second is the important one.
 

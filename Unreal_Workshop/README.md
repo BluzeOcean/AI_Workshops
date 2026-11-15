@@ -109,8 +109,26 @@ for what they have to do and what they must not do.
 ## About the MCP bridge
 
 A working Unreal MCP bridge **already exists on this machine**: UE 5.8+ ships Epic's own
-`ModelContextProtocol` plugin, and it is registered with the agent at **user scope** — so
-every session in every directory connects automatically when an editor is up.
+`ModelContextProtocol` plugin, and it serves JSON-RPC over HTTP from inside the editor
+process — port **8000** unless that editor was started on another one.
+
+**A registration reaches one agent, not the machine.** The server is the editor's and is
+shared; the *client entry* that puts its tools into a session's toolkit lives in that
+agent's own configuration. On this box exactly one agent has it: **Claude Code**, at user
+scope (`~/.claude/.claude.json` → top-level `mcpServers` → `unreal-mcp`), which is why
+every Claude Code session in every directory connects automatically. **DSH, OpenCode and
+Codex carry no such entry** and never see `mcp__*` Unreal tools — that is the normal state,
+not a broken bridge (verified 2026-11-15).
+
+An agent without the entry is **not blocked, and must not re-register anything to fix it.**
+`mcp_call.py` is a dependency-free client for the same endpoint and needs no registration:
+
+```powershell
+python V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect\mcp_call.py list_toolsets
+```
+
+Registration is the optional path, and it is per agent — `ue-op-mcp-diagnose` step 5 picks
+between the two.
 
 **The workshop carries no MCP configuration.** No `.mcp.json`, no `.mcp.json.example`. The
 client definition and the procedure for registering it live together in the skill that
@@ -119,8 +137,8 @@ needs them:
 - `.skills/ue-op-mcp-diagnose/SKILL.md` — the procedure
 - `.skills/ue-op-mcp-diagnose/references/client-config.json` — the server definition to register
 
-Two things to know before you use it: **do not register the server at project scope** in a
-project that already has the user-scope entry — a duplicate shows as "⏸ Pending approval"
+Two things to know before you use it: **do not register the server at project scope** in an
+agent that already has the user-scope entry — a duplicate shows as "⏸ Pending approval"
 and shadows the working one. And there are **two** Unreal MCP surfaces on this box which
 are not interchangeable; read the `ue-op-mcp-diagnose` skill, or the vault decision *the
 two Unreal MCP surfaces are not interchangeable*, before assuming which one answered.

@@ -1,6 +1,6 @@
 ---
 name: ue-op-mcp-diagnose
-description: Use when an agent needs to reach a running Unreal editor over MCP — to check the bridge is alive, to tell Epic's built-in plugin from the Unreal Canvas bridge, to register an MCP client against the right port, or to start a second editor without colliding on port 8000. Skip when no editor is running (use commandlets instead) or when the engine is older than 5.8 (no MCP plugin exists).
+description: Use when an agent needs to reach a running Unreal editor over MCP — to check the bridge is alive, to tell Epic's built-in plugin from the Unreal Canvas bridge, to reach the server from an agent that has no MCP client entry (no registration needed), to register a client against the right port, or to start a second editor without colliding on port 8000. Skip when no editor is running (use commandlets instead) or when the engine is older than 5.8 (no MCP plugin exists).
 ---
 
 # ue-op-mcp-diagnose — reach the Unreal editor over MCP, and know which server answered
@@ -110,29 +110,60 @@ with its own port (step 6).
 
 ---
 
-## Step 5 — register a client (only if none is registered)
+## Step 5 — reach the server: registration is optional, and per agent
 
-Check first:
+**The server belongs to the editor; the client entry belongs to one agent.** A registration
+lives in that agent's own config and is invisible to every other agent on the machine — so
+"the bridge is healthy" and "my toolkit has the Unreal tools" are two different questions.
+
+Take the branch that matches your situation, and only that one:
+
+| Your situation | Do this |
+|---|---|
+| the Unreal tools are already in the toolkit (`mcp__unreal-mcp__*`, or the same toolsets under another agent's prefix) | nothing — step 4 already proved the connection |
+| no tools in the toolkit, but a shell is available | **5a** — `mcp_call.py`, no registration at all |
+| no tools, and this agent registers HTTP MCP servers itself | **5b** — register it in *this* agent's config |
+
+### 5a — the shell client (any agent, no registration)
+
+`mcp_call.py` speaks the same protocol to the same port and needs nothing installed:
+
+```powershell
+cd V:\04_Projects\Workshops\Unreal_Workshop\.skills\ue-op-mcp-connect
+python mcp_call.py list_toolsets
+python mcp_call.py call EditorToolset.LevelToolset GetCurrentLevel
+```
+
+A toolsets list back means the bridge is healthy **and this agent needs no registration**.
+This is the correct route for an agent whose client config has no Unreal entry — DSH,
+OpenCode and Codex on this box — and it is not a degraded one: it is the same server, the
+same protocol, the same tools. Do not "fix" the missing entry by adding one at project scope.
+Run it as a script, never `import` it: an import drops a `.pyc` into a text-only tree.
+
+### 5b — registering a native client
+
+Only if this agent's own configuration takes HTTP MCP servers. The definition is
+`references/client-config.json`; register it in **that agent's** config, at whatever scope
+means "every directory". For Claude Code, which already has it machine-wide:
 
 ```bash
 claude mcp list          # shows the server, its URL, and whether it is connected
 ```
 
-If the Unreal entry is missing, add it at **user scope** — user scope is visible from every
-directory and needs no approval:
+If the entry is missing, restore it at **user scope** — user scope is Claude Code's
+every-directory scope and needs no approval:
 
 ```bash
 claude mcp add --scope user --transport http unreal-mcp http://127.0.0.1:8000/mcp
 ```
 
-The server definition to register is in `references/client-config.json`. It is exactly what
-the plugin's own console command writes:
+The definition is exactly what the plugin's own console command writes:
 
 ```
 ModelContextProtocol.GenerateClientConfig ClaudeCode
 ```
 
-> **Never register this at project scope inside a project that already has the user-scope
+> **Never register this at project scope inside an agent that already has the user-scope
 > entry.** A duplicate shows as "⏸ Pending approval" and shadows the working one.
 
 ---

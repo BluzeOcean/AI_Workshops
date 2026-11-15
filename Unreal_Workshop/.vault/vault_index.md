@@ -28,8 +28,9 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md`](model-notes/2026-11-15-unreal-mcp-surfaces-on-this-machine.md) | Ports, protocol versions, config keys, console commands |
 | active | [`workflows/2026-11-15-identify-which-unreal-mcp-answered.md`](workflows/2026-11-15-identify-which-unreal-mcp-answered.md) | The copy-pasteable "which server answered" sequence |
 | active | [`lessons/2026-11-15-a-tool-name-is-not-a-capability.md`](lessons/2026-11-15-a-tool-name-is-not-a-capability.md) | Twelve skills died on one renamed dispatch mechanism, and a `not found` got recorded as a missing capability |
+| active | [`lessons/2026-11-15-a-client-registration-is-per-agent-not-per-machine.md`](lessons/2026-11-15-a-client-registration-is-per-agent-not-per-machine.md) | A "user scope" registration reaches one agent only — and the no-registration route that works for everyone else |
 
-**19 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**20 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are

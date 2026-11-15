@@ -1,6 +1,6 @@
 ---
 name: ue-op-mcp-connect
-description: Use when establishing or recovering an MCP bridge to an Unreal Engine 5.8+ editor — enables Epic's built-in ModelContextProtocol plugin in a project's .uproject, turns on auto-start, launches the editor, and verifies the HTTP MCP server so Claude Code can drive the editor. Skip for UE versions below 5.8 (the plugin does not exist there), for projects with no .uproject, or when the bridge is already healthy.
+description: Use when establishing or recovering an MCP bridge to an Unreal Engine 5.8+ editor — enables Epic's built-in ModelContextProtocol plugin in a project's .uproject, turns on auto-start, launches the editor, and verifies the HTTP MCP server so an MCP client can drive the editor. A client entry is per agent — an agent without one uses the sibling mcp_call.py and needs no registration. Skip for UE versions below 5.8 (the plugin does not exist there), for projects with no .uproject, or when the bridge is already healthy.
 user-invocable: true
 allowed-tools:
   - Bash
@@ -35,13 +35,16 @@ otherwise takes.
 |---|---|---|
 | 1 | Plugin enabled | `<project>/<project>.uproject` → `Plugins[]` |
 | 2 | Server auto-starts on editor boot | `Saved/Config/WindowsEditor/EditorPerProjectUserSettings.ini` → `[/Script/ModelContextProtocolEngine.ModelContextProtocolSettings]` → `bAutoStartServer=True` |
-| 3 | Claude Code knows the URL | `claude mcp add` (see Step 4) — machine-wide already, so usually nothing to do |
+| 3 | **Some** client knows the URL | that agent's own client config (Step 4). Claude Code has it machine-wide here; an agent without one uses `mcp_call.py` and registers nothing |
 
-Requirement 3 is already satisfied machine-wide on this box: a **user-scope**
-entry named `unreal-mcp` → `http://127.0.0.1:8000/mcp` lives in
-`C:\Users\Bluze\.claude\.claude.json`. Because it is user scope, every
-Claude Code session in every directory sees it and connects automatically
-when an editor is up. **Do not re-add it per project** — just verify it.
+Requirement 3 is **per agent**, and it is the one requirement this skill cannot satisfy for
+you: the entry lives in each agent's own configuration, and no other agent inherits it. On
+this box it is satisfied for **Claude Code** — a **user-scope** entry named `unreal-mcp` →
+`http://127.0.0.1:8000/mcp` in `C:\Users\Bluze\.claude\.claude.json` — so every Claude
+Code session in every directory connects automatically when an editor is up. DSH, OpenCode
+and Codex carry no such entry and are not broken: they reach the same server through
+`mcp_call.py` (see *Talking to the server without a registered MCP client*).
+**Do not re-add it per project** — just verify it, in the agent that has it.
 
 If that entry is ever missing, restore it with:
 
@@ -163,7 +166,7 @@ handle the indirection.
 the ini (and `bAutoStartServer` can stay `False`). Use this when the ini
 approach is unwanted — see Step 5.
 
-### 4. Confirm the Claude Code side
+### 4. Confirm the client side (Claude Code shown)
 
 ```bash
 claude mcp list
@@ -219,7 +222,7 @@ Run it in the background (`run_in_background: true`) so the session stays
 usable. First launch of a project takes a while (shader compile, DDC) —
 poll the log rather than sleeping a fixed amount.
 
-### 6. Verify the server before involving Claude Code
+### 6. Verify the server before involving any client
 
 Bypass the Claude Code client entirely. This tells you whether the *editor*
 is serving, independently of any client config:
@@ -407,11 +410,13 @@ CodeBlock struct (`content` + `language`), not a string.
 
 ---
 
-## Talking to the server without Claude Code's MCP client
+## Talking to the server without a registered MCP client
 
-`mcp_call.py` (next to this file) is a dependency-free client for the same
-endpoint. Useful when the MCP server is up but the tools are not in the
-current session's toolkit yet, or for scripted checks.
+`mcp_call.py` (next to this file) is a dependency-free client for the same endpoint. It needs
+no registration, so it is the normal route — not the fallback — for an agent whose client
+config has no Unreal entry (DSH, OpenCode and Codex on this box). It is also what you use
+when the MCP server is up but the tools are not in the current session's toolkit yet, or for
+scripted checks.
 
 ```bash
 cd V:/04_Projects/Workshops/Unreal_Workshop/.skills/ue-op-mcp-connect
