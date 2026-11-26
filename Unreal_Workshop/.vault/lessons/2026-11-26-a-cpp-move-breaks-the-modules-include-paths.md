@@ -33,6 +33,19 @@ compiler error per rebuild, run
 `.Build.cs` and separates project headers (broken) from engine headers and UHT
 `.generated.h` (fine). The authoritative include-path list is in
 `Intermediate/Build/Win64/x64/UnrealEditor/Development/<Module>/<Module>.Shared.rsp`.
+
+**Write the include paths as plain relative strings, so the checker can read them.**
+`check_cpp_includes.py` parses the `.Build.cs` for quoted strings and joins them onto
+the project's `Source/` directory. `Path.Combine(ModuleDirectory, "Public/Core")` is
+correct for UBT — it produces an absolute path — but the script only sees the string
+`"Public/Core"`, joins it onto `Source/`, and reports every header in the module as
+MISSING. That is a false alarm, not a broken build, and it looks exactly like the real
+failure this lesson is about. `"<Module>/Public/Core"` resolves identically for UBT
+(both forms are anchored to `Source/`) and the script resolves it correctly. The rule
+that follows: **a path the canonical verification tool cannot read is a path nobody
+checks.** A module that reports `missing=29` against a build that works is a script
+limitation; confirm which it is before chasing the headers.
+
 **Applies when:** Anyone creates a folder inside `Source/<Module>/` and moves
 `.cpp`/`.h` files into it — and to the reverse question, "is a C++ file move safe
 without touching the `.Build.cs`?" (no, unless the folder was already listed).

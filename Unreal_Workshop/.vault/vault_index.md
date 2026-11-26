@@ -42,8 +42,10 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`model-notes/2026-11-26-the-ofpa-package-path-rule.md`](model-notes/2026-11-26-the-ofpa-package-path-rule.md) | Where a map's external actor packages live: `MountPoint + "__ExternalActors__/" + PackagePath + ShortName`, read from `ULevel::GetExternalActorsPath` |
 | active | [`lessons/2026-11-26-a-cpp-move-breaks-the-modules-include-paths.md`](lessons/2026-11-26-a-cpp-move-breaks-the-modules-include-paths.md) | Moving `.cpp`/`.h` into a new module subfolder needs the `.Build.cs` include paths updated — the paths are relative to `Source/`, and the compiler only ever shows the first failure |
 | active | [`lessons/2026-11-26-a-content-move-leaves-empty-external-actor-trees.md`](lessons/2026-11-26-a-content-move-leaves-empty-external-actor-trees.md) | A content move leaves the old `__ExternalActors__` mount point behind as empty directories — invisible to git, and the sweep for them counts files per subtree, not directory entries |
+| active | [`lessons/2026-11-26-the-linker-cannot-overwrite-a-loaded-module-dll.md`](lessons/2026-11-26-the-linker-cannot-overwrite-a-loaded-module-dll.md) | LNK1104 on the module DLL because the editor has it open — and the scratch-copy build that verifies the link without closing the editor |
+| active | [`lessons/2026-11-26-uht-rejects-a-uproperty-of-an-unreflected-type.md`](lessons/2026-11-26-uht-rejects-a-uproperty-of-an-unreflected-type.md) | Two UHT errors wearing C++ error's clothes: a `UPROPERTY` of a plain struct, and a `UFUNCTION` parameter that shadows a base-class member |
 
-**32 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**34 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are

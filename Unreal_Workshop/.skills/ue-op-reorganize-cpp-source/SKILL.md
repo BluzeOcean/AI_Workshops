@@ -119,6 +119,16 @@ the include survives the *next* move:
 (a) is the smaller diff when the project already lists folders. (b) is more
 robust long-term and removes the need to keep the list in sync.
 
+**Write the paths as plain relative strings, not `Path.Combine`.** Both forms
+are correct for UBT — a relative include path is anchored to the project's
+`Source/` directory, so `"<Module>/Public/Core"` and
+`Path.Combine(ModuleDirectory, "Public/Core")` resolve to the same place. But
+`check_cpp_includes.py` only reads the quoted strings and joins them onto
+`Source/`, so it cannot model `Path.Combine` and will report every header in
+the module as MISSING. A module that reports `missing=29` against a build that
+works is the script's limitation, not the build's — and a path the canonical
+verification tool cannot read is a path nobody checks.
+
 ### 5. Build — with the editor closed
 
 The linker cannot overwrite a loaded `UnrealEditor-<Module>.dll`.
@@ -141,6 +151,42 @@ ENGINE=$(find "C:/Program Files/Epic Games" -maxdepth 1 -name "UE_*" -type d | s
 
 `Result: Succeeded` and zero `warning` lines is the bar. Relaunch the editor
 afterwards.
+
+### 5a. Verify the link WITHOUT closing the editor
+
+Sometimes the editor cannot be closed — it holds the user's unsaved work, and
+killing it is not yours to decide. The link still has to be verified, and it
+can be: **build a scratch copy of the project.** The editor never has those
+binaries open.
+
+```bash
+rm -rf "<Project>/Saved/LinkCheck"
+mkdir -p "<Project>/Saved/LinkCheck"
+cd "<Project>"
+cp <Project>.uproject "<Project>/Saved/LinkCheck/"
+cp -r Config "<Project>/Saved/LinkCheck/"
+mkdir -p "<Project>/Saved/LinkCheck/Source"
+cp -r Source/<Module> "<Project>/Saved/LinkCheck/Source/"
+cp Source/*.Target.cs "<Project>/Saved/LinkCheck/Source/"
+
+"$ENGINE/Engine/Build/BatchFiles/Build.bat" <Module>Editor Win64 Development \
+    -Project="<Project>/Saved/LinkCheck/<Project>.uproject" -WaitMutex -NoHotReloadFromIDE
+```
+
+The copy needs only the `.uproject`, `Config/` and `Source/` — no content, no
+assets. Put it under `Saved/`, which is gitignored and engine-owned.
+
+`-OutputDir=` is **not** an alternative: the module DLL's path is fixed by the
+target, so the build still writes `Binaries/Win64/UnrealEditor-<Module>.dll`
+and still fails with LNK1104. A Development **game** target is not an
+alternative either — only `DebugGame` and `Shipping` engine binaries ship
+with an installed engine, so a Development game target rebuilds the engine
+from source.
+
+This proves the module compiles **and** links. It does **not** load the new
+layout into the running editor: a module restructure still needs an editor
+restart. See the vault lesson *the linker cannot overwrite a loaded module
+DLL*.
 
 ---
 
