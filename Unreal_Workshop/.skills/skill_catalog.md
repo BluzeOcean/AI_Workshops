@@ -46,6 +46,8 @@ Naming: every folder is `ue-op-<verb-noun>` — see the convention in
 | [`ue-op-find-dependencies`](ue-op-find-dependencies/SKILL.md) | Computes an asset's transitive dependency closure | You need to know what an asset drags in |
 | [`ue-op-clone-assets`](ue-op-clone-assets/SKILL.md) | Copies a curated asset set into a structured export folder | Migrating a set of assets out |
 | [`ue-op-relocate-assets`](ue-op-relocate-assets/SKILL.md) | Moves a curated asset set so the folder is self-contained | Tidying a folder that has become entangled |
+| [`ue-op-restructure-content`](ue-op-restructure-content/SKILL.md) | Moves a project's whole content tree under a new root folder, in place — OFPA maps, the `.ini` paths a rename misses, the redirector purge | "Put everything under `ContentPack`" |
+| [`ue-op-verify-content-integrity`](ue-op-verify-content-integrity/SKILL.md) | Proves a bulk content operation lost nothing — actor counts against a baseline, a load-every-asset pass, the log sweep, and dangling paths classified | You are about to say a mass rename or restructure is done |
 | [`ue-op-bake-mesh-partition`](ue-op-bake-mesh-partition/SKILL.md) | Gets Mesh Terrain geometry into a cooked build — bakes the partition's section meshes to plain static meshes, with the triangle-winding fix | Mesh Terrain is missing from a packaged build |
 
 ## Characters and rigs
