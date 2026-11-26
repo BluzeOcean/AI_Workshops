@@ -40,8 +40,9 @@ row, and opens only that entry. **Never read the vault end to end** — grep it 
 | active | [`lessons/2026-11-16-a-default-on-cpp-overlay-ships-to-the-player.md`](lessons/2026-11-16-a-default-on-cpp-overlay-ships-to-the-player.md) | A `bDevMode = true` C++ default put DEV STATS in the browser build; gate on WITH_EDITOR / -JamDevMode, then rebuild wasm + recook |
 | active | [`lessons/2026-11-26-a-raw-file-move-strands-every-reference.md`](lessons/2026-11-26-a-raw-file-move-strands-every-reference.md) | Moving a `.uasset` on disk strands every reference — Unreal creates no redirector for a file it did not move itself, and `ObjectRedirector` is not constructible from Python |
 | active | [`model-notes/2026-11-26-the-ofpa-package-path-rule.md`](model-notes/2026-11-26-the-ofpa-package-path-rule.md) | Where a map's external actor packages live: `MountPoint + "__ExternalActors__/" + PackagePath + ShortName`, read from `ULevel::GetExternalActorsPath` |
+| active | [`lessons/2026-11-26-a-cpp-move-breaks-the-modules-include-paths.md`](lessons/2026-11-26-a-cpp-move-breaks-the-modules-include-paths.md) | Moving `.cpp`/`.h` into a new module subfolder needs the `.Build.cs` include paths updated — the paths are relative to `Source/`, and the compiler only ever shows the first failure |
 
-**30 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
+**31 entries.** Folder charters (`decisions/README.md`, `lessons/README.md`, and the rest)
 are **not** entries — they say how a folder is written, not what is known.
 
 The `skills` have their own index: `.skills/skill_catalog.md`. The two indexes together are

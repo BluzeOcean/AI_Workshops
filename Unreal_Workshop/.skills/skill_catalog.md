@@ -75,6 +75,7 @@ Naming: every folder is `ue-op-<verb-noun>` — see the convention in
 |---|---|---|
 | [`ue-op-fix-large-ue-sample-project`](ue-op-fix-large-ue-sample-project/SKILL.md) | Makes a heavy imported sample project or asset-pack demo map usable again — slow level opens, assets dumped on one spot, duplicate lights | A level takes minutes to open, or the editor is buried |
 | [`ue-op-python-gotchas`](ue-op-python-gotchas/SKILL.md) | Unreal Python that fails silently — struct write-back loss, renamed play-data fields, root-component moves, Live Coding limits | A Python snippet appears to do nothing |
+| [`ue-op-reorganize-cpp-source`](ue-op-reorganize-cpp-source/SKILL.md) | Moves C++ files into module subfolders without breaking the build — the `.Build.cs` include paths that a rename never updates, and a script that lists every unresolved `#include` at once | The project stopped compiling right after the source tree was reorganised |
 
 ## Forging new skills
 
